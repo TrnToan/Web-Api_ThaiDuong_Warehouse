@@ -1,12 +1,10 @@
-﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate
+﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate;
+public class ItemClass
 {
-    public class ItemClass
-    {
-        public string ItemClassId { get; private set; }
+    public string ItemClassId { get; private set; }
 
-        public ItemClass(string itemClassId)
-        {
-            ItemClassId = itemClassId;
-        }
+    public ItemClass(string itemClassId)
+    {
+        ItemClassId = itemClassId;
     }
 }

@@ -1,12 +1,11 @@
-﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.DepartmentAggregate
-{
-    public class Department : Entity, IAggregateRoot
-    {
-        public string Name { get; private set; }
+﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.DepartmentAggregate;
 
-        public Department(string name)
-        {
-            Name = name;
-        }
+public class Department : Entity, IAggregateRoot
+{
+    public string Name { get; private set; }
+
+    public Department(string name)
+    {
+        Name = name;
     }
 }

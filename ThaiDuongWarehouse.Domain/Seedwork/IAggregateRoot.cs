@@ -1,6 +1,4 @@
-﻿namespace ThaiDuongWarehouse.Domain.Seedwork
+﻿namespace ThaiDuongWarehouse.Domain.Seedwork;
+public interface IAggregateRoot
 {
-    public interface IAggregateRoot
-    {
-    }
 }

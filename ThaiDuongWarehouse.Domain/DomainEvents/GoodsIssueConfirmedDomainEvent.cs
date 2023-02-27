@@ -1,11 +1,9 @@
-﻿namespace ThaiDuongWarehouse.Domain.DomainEvents
+﻿namespace ThaiDuongWarehouse.Domain.DomainEvents;
+public class GoodsIssueConfirmedDomainEvent : INotification
 {
-    public class GoodsIssueConfirmedDomainEvent : INotification
+    public bool IsConfirmed { get; private set; }
+    public GoodsIssueConfirmedDomainEvent(bool isConfirmed)
     {
-        public bool IsConfirmed { get; private set; }
-        public GoodsIssueConfirmedDomainEvent(bool isConfirmed)
-        {
-            IsConfirmed = isConfirmed;
-        }
+        IsConfirmed = isConfirmed;
     }
 }

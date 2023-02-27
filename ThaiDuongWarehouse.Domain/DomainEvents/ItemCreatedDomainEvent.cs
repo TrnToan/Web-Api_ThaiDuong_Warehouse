@@ -1,11 +1,9 @@
-﻿namespace ThaiDuongWarehouse.Domain.DomainEvents
+﻿namespace ThaiDuongWarehouse.Domain.DomainEvents;
+public class ItemCreatedDomainEvent : INotification
 {
-    public class ItemCreatedDomainEvent : INotification
+    public Item Item { get; private set; }
+    public ItemCreatedDomainEvent(Item item)
     {
-        public Item Item { get; private set; }
-        public ItemCreatedDomainEvent(Item item)
-        {
-            Item = item;
-        }
+        Item = item;
     }
 }

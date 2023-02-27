@@ -1,7 +1,5 @@
-﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.AdjustmentAggregate
+﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.AdjustmentAggregate;
+public interface IAdjustmentRepository : IRepository<LotAdjustment>
 {
-    public interface IAdjustmentRepository : IRepository<LotAdjustment>
-    {
-        Task<IEnumerable<LotAdjustment>> GetAll();
-    }
+    Task<IEnumerable<LotAdjustment>> GetAll();
 }
