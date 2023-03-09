@@ -1,5 +1,5 @@
 ﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.StorageAggregate;
-public class Warehouse
+public class Warehouse : Entity, IAggregateRoot
 {
     public string WarehouseId { get; private set; }
     public string WarehouseName { get; private set; }

@@ -1,8 +1,8 @@
 ﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.StorageAggregate;
-public class Location
+public class Location : Entity
 {
     public string LocationId { get; private set; }
-    public IList<ItemLot> ItemLots { get; private set; }
+    public List<ItemLot> ItemLots { get; private set; }
 
     public Location(string locationId)
     {

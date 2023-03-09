@@ -1,12 +1,15 @@
 ﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.GoodsIssueAggregate;
 public class GoodsIssueEntry
 {
-    public Item Item { get; private set; }
+    public int Id { get; set; }              // Unique key of GoodsIssueEntry Table
+    public int GoodsIssueId { get; set; }    // Foreign Key
     public double? RequestedSublotSize { get; private set; }
     public double RequestedQuantity { get; private set; }
+    public Item Item { get; private set; }
     public List<GoodsIssueLot> Lots { get; private set; }
 
-    public GoodsIssueEntry(Item item, double? requestedSublotSize, double requestedQuantity)
+    private GoodsIssueEntry() { }
+    public GoodsIssueEntry(Item item, double? requestedSublotSize, double requestedQuantity) : this()
     {
         Item = item;
         RequestedSublotSize = requestedSublotSize;

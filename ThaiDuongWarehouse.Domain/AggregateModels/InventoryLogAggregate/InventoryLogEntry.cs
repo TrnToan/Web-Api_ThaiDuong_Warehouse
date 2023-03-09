@@ -1,18 +1,19 @@
 ﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
 public class InventoryLogEntry : Entity, IAggregateRoot
 {
-    public Item Item { get; private set; }
+    public int ItemId { get; private set; }
+    public int ItemLotId { get; private set; }
     public DateTime Timestamp { get; private set; }
     public double BeforeQuantity { get; private set; }
     public double ChangedQuantity { get; private set; }
-    public List<ItemLot> ItemLots { get; private set; }
+    public Item Item { get; private set; }
 
-    public InventoryLogEntry(Item item, DateTime timestamp, double beforeQuantity, double changedQuantity)
+    public InventoryLogEntry(int itemId, int itemLotId, DateTime timestamp, double beforeQuantity, double changedQuantity)
     {
-        Item = item;
+        ItemId = itemId;
+        ItemLotId = itemLotId;
         Timestamp = timestamp;
         BeforeQuantity = beforeQuantity;
         ChangedQuantity = changedQuantity;
-        ItemLots = new List<ItemLot>();
     }
 }

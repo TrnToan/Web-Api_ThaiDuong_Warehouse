@@ -16,15 +16,15 @@ public class GoodsReceipt : Entity, IAggregateRoot
         Lots = new List<GoodsReceiptLot>();
     }
 
-    public void Update(string lotId, double quantity, double sublotSize, string purchaseOrderNumber, Location location, 
-        DateTime productionDate, DateTime expirationDate)
+    public void Update(string lotId, double quantity, double sublotSize, string? purchaseOrderNumber, 
+        string locationId, DateTime productionDate, DateTime expirationDate)
     {
         var lot = Lots.FirstOrDefault(e => e.GoodsReceiptLotId == lotId);
         if (lot == null)
         {
-            throw new Exception("Lot doesn't exist in the current GoodsReceipt");
+            throw new WarehouseDomainException("Lot doesn't exist in the current GoodsReceipt");
         }
-        lot.Update(quantity, sublotSize, purchaseOrderNumber, location, productionDate, expirationDate);
+        lot.Update(quantity, sublotSize, purchaseOrderNumber, locationId, productionDate, expirationDate);
     }
     public void AddLot(GoodsReceiptLot goodsReceiptLot)
     {
@@ -42,8 +42,9 @@ public class GoodsReceipt : Entity, IAggregateRoot
         }
         Lots.Remove(lot);
     }
-    public void Confirm()
+    public void Confirm(DateTime timestamp)
     {
-        
+        IsConfirmed = true;
+        Timestamp = timestamp;
     }
 }

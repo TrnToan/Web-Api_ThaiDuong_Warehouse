@@ -1,10 +1,9 @@
 ﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate;
 public class Unit
 {
-    public string Name { get; private set; }
-
-    public Unit(string name)
+    public string UnitName { get; private set; }
+    public Unit(string unitName) 
     {
-        Name = name;
+        UnitName = unitName;
     }
 }

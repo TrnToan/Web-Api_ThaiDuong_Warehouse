@@ -8,8 +8,7 @@ public class GoodsIssue : Entity, IAggregateRoot
     public DateTime Timestamp { get; private set; }
     public List<GoodsIssueEntry> Entries { get; private set; }
 
-    public GoodsIssue(string goodsIssueId, string? purchaseOrderNumber, DateTime timestamp, 
-        string receiver)
+    public GoodsIssue(string goodsIssueId, string? purchaseOrderNumber, DateTime timestamp, string receiver)
     {
         GoodsIssueId = goodsIssueId;
         PurchaseOrderNumber = purchaseOrderNumber;
@@ -47,8 +46,10 @@ public class GoodsIssue : Entity, IAggregateRoot
         }
         entry.AddLot(goodsIssueLot);
     }
-    public void Confirm()
+    public void Confirm(DateTime timestamp)
     {
+        IsConfirmed = true; 
+        Timestamp = timestamp;
         this.AddDomainEvent(new GoodsIssueConfirmedDomainEvent(IsConfirmed));
     }
 }
