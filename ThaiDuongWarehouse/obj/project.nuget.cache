@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "C8avfjMB+/8h7QfsIm4ftn4uAw+YMrKUXcIca4feOZpBxwFQq0hX7zIae3ED1NoE6YDzvO4+DFrB0/nOM56YoQ==",
+  "dgSpecHash": "Q9NtigaUkI7TC43q6qHX+eWO8CZGCzYlrnjB9usTqG480P68pVElrhOvb2Mw8XUwUTZMMrw/ws9xLXTV/Zf+bQ==",
   "success": true,
   "projectFilePath": "D:\\Visual Studio PJs\\ThaiDuongWarehouse\\ThaiDuongWarehouse\\ThaiDuongWarehouse.Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\DELL\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\DELL\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.0\\automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

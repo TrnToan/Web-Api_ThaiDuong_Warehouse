@@ -19,6 +19,7 @@ global using ThaiDuongWarehouse.Domain.AggregateModels.DepartmentAggregate;
 global using ThaiDuongWarehouse.Domain.AggregateModels.InventoryLogAggregate;
 global using ThaiDuongWarehouse.Domain.AggregateModels.LotAggregate;
 global using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
+global using ChaWarehouseMicroservice.Infrastructure;
 
 
 

@@ -6,17 +6,21 @@ public class GoodsIssue : Entity, IAggregateRoot
     public string? PurchaseOrderNumber { get; private set; }
     public bool IsConfirmed { get; private set; }
     public DateTime Timestamp { get; private set; }
+    // ForeignKey
+    public int EmployeeId { get; private set; }
+    public Employee Employee { get; private set; }
     public List<GoodsIssueEntry> Entries { get; private set; }
 
-    public GoodsIssue(string goodsIssueId, string? purchaseOrderNumber, DateTime timestamp, string receiver)
+    public GoodsIssue(string goodsIssueId, string? purchaseOrderNumber, DateTime timestamp, string receiver, int employeeId)
     {
         GoodsIssueId = goodsIssueId;
         PurchaseOrderNumber = purchaseOrderNumber;
         Timestamp = timestamp;
         Receiver = receiver;
         Entries = new List<GoodsIssueEntry>();
+        EmployeeId = employeeId;
     }
-    void AddEntry(Item item, double? requestedSublotSize, double requestedQuantity)
+    public void AddEntry(Item item, double? requestedSublotSize, double requestedQuantity)
     {
         var entry = new GoodsIssueEntry(item, requestedSublotSize, requestedQuantity);
         foreach(var existedEntry in Entries)

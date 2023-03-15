@@ -1,4 +1,7 @@
-using Microsoft.Extensions.Options;
+using System.Reflection;
+using System.Text.Json.Serialization;
+using ThaiDuongWarehouse.Api.Applications.Mapping;
+using ThaiDuongWarehouse.Api.Applications.Queries.LotAdjustments;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,9 +12,26 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<WarehouseDbContext>(opt =>
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("Connect"), b => b.MigrationsAssembly("ThaiDuongWarehouse.Api")));
+{
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("Connect"), b => b.MigrationsAssembly("ThaiDuongWarehouse.Api"));
+    opt.EnableSensitiveDataLogging();
+});
+
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IItemRepository, ItemRepository>();
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+builder.Services.AddScoped<ILotAdjustmentRepository, LotAdjustmentRepository>();
+
+builder.Services.AddScoped<IEmployeeQueries, EmployeeQueries>();
+builder.Services.AddScoped<IItemQueries, ItemQueries>();
+builder.Services.AddScoped<IDepartmentQueries, DepartmentQueries>();
+builder.Services.AddScoped<ILotAdjustmentQueries, LotAdjustmentQueries>();
+
+builder.Services.AddAutoMapper(typeof(ModelToViewModelProfile).Assembly);
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
 var app = builder.Build();
+app.UseCors("AllowAll");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

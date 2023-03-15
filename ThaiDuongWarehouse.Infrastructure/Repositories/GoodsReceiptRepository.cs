@@ -5,8 +5,6 @@ public class GoodsReceiptRepository : BaseRepository, IGoodsReceiptRepository
     {
     }
 
-    public IUnitOfWork unitOfWork => throw new NotImplementedException();
-
     public GoodsReceipt Add(GoodsReceipt goodsReceipt)
     {
         throw new NotImplementedException();

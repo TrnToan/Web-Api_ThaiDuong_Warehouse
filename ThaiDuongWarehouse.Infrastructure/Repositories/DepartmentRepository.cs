@@ -5,13 +5,17 @@ public class DepartmentRepository : BaseRepository, IDepartmentRepository
     {
     }
 
-    public void Add(Department department)
+    public Department Add(Department department)
     {
-        throw new NotImplementedException();
+        if (department.IsTransient())
+        {
+            return _context.Departments.Add(department).Entity;
+        }
+        else return department;
     }
 
-    public Task<IEnumerable<Department>> GetAll()
+    public async Task<IEnumerable<Department>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await _context.Departments.ToListAsync();
     }
 }

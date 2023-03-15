@@ -6,5 +6,4 @@ public interface IGoodsReceiptRepository : IRepository<GoodsReceipt>
     void Update(GoodsReceipt goodsReceipt);
     Task<IEnumerable<GoodsReceipt>> GetAll();
     Task<IEnumerable<GoodsReceipt>> GetGoodsReceiptsById(string goodsReceiptId);
-
 }

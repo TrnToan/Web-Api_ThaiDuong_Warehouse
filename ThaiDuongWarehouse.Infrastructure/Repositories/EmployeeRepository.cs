@@ -5,25 +5,28 @@ public class EmployeeRepository : BaseRepository, IEmployeeRepository
     {
     }
 
-    public IUnitOfWork unitOfWork => throw new NotImplementedException();
-
-    public void Add(Employee employee)
+    public Employee Add(Employee employee)
     {
-        throw new NotImplementedException();
+        if (employee.IsTransient())
+        {
+            return _context.Employees.Add(employee).Entity;
+        }
+        else return employee;
     }
 
-    public Task<IEnumerable<Employee>> GetAllAsync()
+    public async Task<IEnumerable<Employee>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await _context.Employees.ToListAsync();
+        // Khi dùng tới lệnh ToListAsync Database gọi tới Queries
     }
 
-    public Task<Employee?> GetEmployeeById(string employeeId)
+    public async Task<Employee?> GetEmployeeById(string employeeId)
     {
-        throw new NotImplementedException();
+        return await _context.Employees.FirstOrDefaultAsync(e => e.EmployeeId == employeeId);
     }
 
-    public void Update(Employee employee)
+    public Employee Update(Employee employee)
     {
-        throw new NotImplementedException();
+        return _context.Employees.Update(employee).Entity;
     }
 }

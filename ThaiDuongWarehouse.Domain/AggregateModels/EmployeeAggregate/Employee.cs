@@ -9,4 +9,9 @@ public class Employee : Entity, IAggregateRoot
         EmployeeId = employeeId;
         EmployeeName = employeeName;
     }
+
+    public void Update(string employeeName)
+    {
+        EmployeeName = employeeName;
+    }
 }

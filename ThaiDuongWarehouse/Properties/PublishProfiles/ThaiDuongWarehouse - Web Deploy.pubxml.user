@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA3JN9miN5wUegJbxRw1iT9wAAAAACAAAAAAAQZgAAAAEAACAAAAD5QLcnSrzrl+O21ElvEq2d+pA0Gsb87P8vBxKmH/siywAAAAAOgAAAAAIAACAAAAB3v4ghd17OPqKQzUZONqq/Pv1InhL6vn7BfRHC/5f+DoAAAACFzzeCsrVy6zuVxWwNH2l+Qvmlw0SbDY3RSu2c6O20ooyLsKA6ZXVR1p6rDCh6jj9Y6SVhKKdjDCMDbAMbbXfmBnTnYBTPa/JypSJ5r/JbZL0paCM+OYlBC5svOJtY8Pkn7MPad/HYlrrNGVoEgrT4zeBzWgQCyrU0DgdVOWeZSkAAAACLVeGWQMURnknzKafzkl+C17G4lt6MTFzD6AjXztmKe8HzWvlrfkaBEziYyjqXefUDEp8fWTTwnUtAC6XZ3YIQ</EncryptedPassword>
+    <History>True|2023-03-10T06:46:32.8241373Z;True|2023-03-10T13:41:17.9632723+07:00;True|2023-03-10T13:36:13.2097144+07:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="Connect">
+      <Value>Server=tcp:thaiduongwarehousetest.database.windows.net%3bInitial Catalog=WMS%3bPersist Security Info=False%3bUser ID=toan%3bPassword=Viam12345678%3bMultipleActiveResultSets=False%3bEncrypt=True%3bTrustServerCertificate=False%3bConnection Timeout=30%3b</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+  <ItemGroup>
+    <EFMigrations Include="ThaiDuongWarehouse.Infrastructure.WarehouseDbContext">
+      <Value>Server=tcp:thaiduongwarehousetest.database.windows.net,1433%3bInitial Catalog=WMS%3bPersist Security Info=False%3bUser ID=toan%3bPassword=Viam12345678%3bMultipleActiveResultSets=False%3bEncrypt=True%3bTrustServerCertificate=False%3bConnection Timeout=30%3b</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>

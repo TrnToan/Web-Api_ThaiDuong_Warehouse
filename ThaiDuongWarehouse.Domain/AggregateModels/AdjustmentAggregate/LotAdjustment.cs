@@ -3,8 +3,6 @@
 public class LotAdjustment : Entity, IAggregateRoot
 {
     public string LotId { get; private set; }
-    public int ItemId { get; private set; }                  // ForeignKey
-    public int EmployeeId { get; private set; }              // ForeignKey
     public string NewPurchaseOrderNumber { get; private set; }
     public string OldPurchaseOrderNumber { get; private set; }
     public string? Note { get; private set; }
@@ -12,11 +10,14 @@ public class LotAdjustment : Entity, IAggregateRoot
     public double AfterQuantity { get; private set; }
     public bool IsConfirmed { get; private set; } = false;
     public DateTime Timestamp { get; private set; }
+    public int ItemId { get; private set; }                  // ForeignKey
+    public int EmployeeId { get; private set; }              // ForeignKey
+
     public Employee Employee { get; private set; }
     public Item Item { get; private set; }
 
     public LotAdjustment(string lotId, string newPurchaseOrderNumber, string oldPurchaseOrderNumber, 
-        string? note, double beforeQuantity, double afterQuantity, bool isConfirmed, DateTime timestamp, 
+        string? note, double beforeQuantity, double afterQuantity, DateTime timestamp, 
         int employeeId, int itemId)
     {
         LotId = lotId;
@@ -25,7 +26,6 @@ public class LotAdjustment : Entity, IAggregateRoot
         Note = note;
         BeforeQuantity = beforeQuantity;
         AfterQuantity = afterQuantity;
-        IsConfirmed = isConfirmed;
         Timestamp = timestamp;
         EmployeeId = employeeId;
         ItemId = itemId;

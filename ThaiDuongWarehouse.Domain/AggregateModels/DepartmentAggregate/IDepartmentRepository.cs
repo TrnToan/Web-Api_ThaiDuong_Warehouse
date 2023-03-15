@@ -1,7 +1,7 @@
 ﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.DepartmentAggregate;
 
-public interface IDepartmentRepository
+public interface IDepartmentRepository : IRepository<Department>
 {
-    Task<IEnumerable<Department>> GetAll();
-    void Add(Department department);
+    Task<IEnumerable<Department>> GetAllAsync();
+    Department Add(Department department);
 }

@@ -130,6 +130,9 @@ namespace ThaiDuongWarehouse.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("GoodsIssueId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -149,6 +152,8 @@ namespace ThaiDuongWarehouse.Api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EmployeeId");
+
                     b.HasIndex("GoodsIssueId")
                         .IsUnique();
 
@@ -163,6 +168,9 @@ namespace ThaiDuongWarehouse.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("GoodsReceiptId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -170,13 +178,12 @@ namespace ThaiDuongWarehouse.Api.Migrations
                     b.Property<bool>("IsConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("PurchaseOrderNumber")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("GoodsReceiptId")
                         .IsUnique();
@@ -207,8 +214,10 @@ namespace ThaiDuongWarehouse.Api.Migrations
                     b.Property<double>("MinimumStockLevel")
                         .HasColumnType("float");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<decimal?>("Price")
+                        .IsRequired()
+                        .HasPrecision(12, 2)
+                        .HasColumnType("decimal(12,2)");
 
                     b.Property<string>("UnitName")
                         .IsRequired()
@@ -396,6 +405,12 @@ namespace ThaiDuongWarehouse.Api.Migrations
 
             modelBuilder.Entity("ThaiDuongWarehouse.Domain.AggregateModels.GoodsIssueAggregate.GoodsIssue", b =>
                 {
+                    b.HasOne("ThaiDuongWarehouse.Domain.AggregateModels.EmployeeAggregate.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.OwnsMany("ThaiDuongWarehouse.Domain.AggregateModels.GoodsIssueAggregate.GoodsIssueEntry", "Entries", b1 =>
                         {
                             b1.Property<int>("Id")
@@ -465,7 +480,7 @@ namespace ThaiDuongWarehouse.Api.Migrations
                                     b2.HasOne("ThaiDuongWarehouse.Domain.AggregateModels.EmployeeAggregate.Employee", "Employee")
                                         .WithMany()
                                         .HasForeignKey("EmployeeId")
-                                        .OnDelete(DeleteBehavior.Cascade)
+                                        .OnDelete(DeleteBehavior.Restrict)
                                         .IsRequired();
 
                                     b2.WithOwner()
@@ -479,11 +494,19 @@ namespace ThaiDuongWarehouse.Api.Migrations
                             b1.Navigation("Lots");
                         });
 
+                    b.Navigation("Employee");
+
                     b.Navigation("Entries");
                 });
 
             modelBuilder.Entity("ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate.GoodsReceipt", b =>
                 {
+                    b.HasOne("ThaiDuongWarehouse.Domain.AggregateModels.EmployeeAggregate.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.OwnsMany("ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate.GoodsReceiptLot", "Lots", b1 =>
                         {
                             b1.Property<string>("GoodsReceiptLotId")
@@ -531,7 +554,7 @@ namespace ThaiDuongWarehouse.Api.Migrations
                             b1.HasOne("ThaiDuongWarehouse.Domain.AggregateModels.EmployeeAggregate.Employee", "Employee")
                                 .WithMany()
                                 .HasForeignKey("EmployeeId")
-                                .OnDelete(DeleteBehavior.Cascade)
+                                .OnDelete(DeleteBehavior.Restrict)
                                 .IsRequired();
 
                             b1.WithOwner()
@@ -547,6 +570,8 @@ namespace ThaiDuongWarehouse.Api.Migrations
 
                             b1.Navigation("Item");
                         });
+
+                    b.Navigation("Employee");
 
                     b.Navigation("Lots");
                 });

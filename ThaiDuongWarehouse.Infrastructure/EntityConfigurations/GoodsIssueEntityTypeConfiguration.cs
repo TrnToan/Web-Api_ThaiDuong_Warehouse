@@ -18,7 +18,11 @@ public class GoodsIssueEntityTypeConfiguration : IEntityTypeConfiguration<GoodsI
         builder
             .Property(g => g.Timestamp)
             .IsRequired();
-
+        builder
+            .HasOne(g => g.Employee)
+            .WithMany()
+            .HasForeignKey(g => g.EmployeeId);
+        
         builder.OwnsMany(g => g.Entries, ge =>
         {
             ge.WithOwner().HasForeignKey(ge => ge.GoodsIssueId);
@@ -28,16 +32,16 @@ public class GoodsIssueEntityTypeConfiguration : IEntityTypeConfiguration<GoodsI
             ge.Property(entry => entry.RequestedSublotSize);
             ge.Property(entry => entry.RequestedQuantity).IsRequired();
 
-            ge.HasOne(entry => entry.Item).WithOne().IsRequired(); // Kiểm tra lại mối quan hệ giữa Item và GoodsIssueEntry
+            ge.HasOne(entry => entry.Item).WithOne().IsRequired(); 
             ge.OwnsMany(entry => entry.Lots, lot =>
             {
                 lot.WithOwner();
-                lot.HasKey(p => p.GoodsIssueLotId);
-                lot.Property(p => p.Quantity).IsRequired();
-                lot.Property(p => p.SublotSize);
-                lot.Property(p => p.Note);
+                lot.HasKey(gil => gil.GoodsIssueLotId);
+                lot.Property(gil => gil.Quantity).IsRequired();
+                lot.Property(gil => gil.SublotSize);
+                lot.Property(gil => gil.Note);
 
-                lot.HasOne(e => e.Employee).WithMany().HasForeignKey(e => e.EmployeeId).IsRequired();
+                lot.HasOne(gil => gil.Employee).WithMany().HasForeignKey(gil => gil.EmployeeId).OnDelete(DeleteBehavior.Restrict).IsRequired();
             });
         });
         builder.Ignore(d => d.DomainEvents);

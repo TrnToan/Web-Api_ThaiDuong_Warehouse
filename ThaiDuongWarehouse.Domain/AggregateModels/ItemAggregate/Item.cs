@@ -6,12 +6,12 @@ public class Item : Entity, IAggregateRoot
     public string UnitName { get; private set; }                // ForeignKey
     public string ItemName { get; private set; }
     public double MinimumStockLevel { get; private set; }
-    public double Price { get; private set; }
+    public decimal? Price { get; private set; }
     public Unit Unit { get; private set; }
     public ItemClass ItemClass { get; private set; }
 
     public Item(string itemId, string itemClassId, string unitName, string itemName,
-        double minimumStockLevel, double price)
+        double minimumStockLevel, decimal? price)
     {
         ItemId = itemId;
         ItemClassId = itemClassId;
@@ -21,7 +21,7 @@ public class Item : Entity, IAggregateRoot
         Price = price;
     }
 
-    public void Update(Unit unit, double minimumStockLevel, double price)
+    public void Update(Unit unit, double minimumStockLevel, decimal price)
     {
         Unit = unit;
         MinimumStockLevel = minimumStockLevel;

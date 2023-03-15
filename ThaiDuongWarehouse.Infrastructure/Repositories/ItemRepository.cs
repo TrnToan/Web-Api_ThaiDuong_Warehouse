@@ -5,25 +5,28 @@ public class ItemRepository : BaseRepository, IItemRepository
     {
     }
 
-    public IUnitOfWork unitOfWork => throw new NotImplementedException();
-
     public Item Add(Item item)
     {
-        throw new NotImplementedException();
+        if (item.IsTransient())
+        {
+            return _context.Items.Add(item).Entity;
+        }
+        else return item;
     }
 
-    public Task<IEnumerable<Item>> GetAllAsync()
+    public async Task<IEnumerable<Item>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await _context.Items.ToListAsync();
     }
 
-    public Task<Item?> GetItemById(string itemId)
+    public async Task<Item?> GetItemById(string itemId)
     {
-        throw new NotImplementedException();
+        return await _context.Items
+            .FirstOrDefaultAsync(x => x.ItemId == itemId);
     }
 
     public Item Update(Item item)
     {
-        throw new NotImplementedException();
+        return _context.Items.Update(item).Entity;
     }
 }

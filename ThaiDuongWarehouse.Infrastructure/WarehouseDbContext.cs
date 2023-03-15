@@ -1,9 +1,8 @@
-﻿using ChaWarehouseMicroservice.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using ThaiDuongWarehouse.Infrastructure.EntityConfigurations;
 
 namespace ThaiDuongWarehouse.Infrastructure;
-public class WarehouseDbContext : DbContext
+public class WarehouseDbContext : DbContext, IUnitOfWork
 {
     public DbSet<LotAdjustment> LotAdjustments { get; set; }
     public DbSet<Department> Departments { get; set; }

@@ -7,7 +7,7 @@ public class ItemEntityTypeConfiguration : IEntityTypeConfiguration<Item>
         builder.HasIndex(i => i.ItemId).IsUnique();
         builder.Property(i => i.ItemName).IsRequired();
         builder.Property(i => i.MinimumStockLevel).IsRequired();
-        builder.Property(i => i.Price).IsRequired();
+        builder.Property(i => i.Price).HasPrecision(12, 2).IsRequired();
         builder.Ignore(d => d.DomainEvents);
 
         builder.HasOne(u => u.Unit).WithMany().HasForeignKey(i => i.UnitName);
