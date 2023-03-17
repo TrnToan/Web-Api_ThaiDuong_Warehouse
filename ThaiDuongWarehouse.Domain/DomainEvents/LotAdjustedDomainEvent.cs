@@ -1,9 +1,13 @@
 ﻿namespace ThaiDuongWarehouse.Domain.DomainEvents;
 public class LotAdjustedDomainEvent : INotification
 {
-    public bool IsConfirmed { get; private set; }
-    public LotAdjustedDomainEvent(bool isConfirmed)
+    public string LotId { get; private set; }
+    public double AfterQuantity { get; private set; }
+    public string NewPurchaseOrderNumber { get; private set; }
+    public LotAdjustedDomainEvent(string lotId, double afterQuantity, string newPurchaseOrderNumber)
     {
-        IsConfirmed = isConfirmed;
+        LotId = lotId;
+        AfterQuantity = afterQuantity;
+        NewPurchaseOrderNumber = newPurchaseOrderNumber;
     }
 }

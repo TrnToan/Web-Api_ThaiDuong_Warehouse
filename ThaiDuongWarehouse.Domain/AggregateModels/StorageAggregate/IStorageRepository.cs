@@ -1,7 +1,7 @@
 ﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.StorageAggregate;
-public interface IStorageRepository
+public interface IStorageRepository : IRepository<Warehouse>
 {
     Task<IEnumerable<Warehouse>> GetAll();
-    Task<IEnumerable<Warehouse>> GetWarehouseById(int warehouseId);
+    Task<Warehouse?> GetWarehouseById(string warehouseId);
     Location Add(Location location);
 }

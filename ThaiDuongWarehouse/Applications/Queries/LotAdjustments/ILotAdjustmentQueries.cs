@@ -5,5 +5,5 @@ namespace ThaiDuongWarehouse.Api.Applications.Queries.LotAdjustments;
 public interface ILotAdjustmentQueries
 {
     Task<IEnumerable<LotAdjustmentViewModel>> GetAll();
-    Task<IEnumerable<LotAdjustmentViewModel>> GetConfirmedAdjustments();
+    Task<IEnumerable<LotAdjustmentViewModel>> GetUnconfirmedAdjustments();
 }

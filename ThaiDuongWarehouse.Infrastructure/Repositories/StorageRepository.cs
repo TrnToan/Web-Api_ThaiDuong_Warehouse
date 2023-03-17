@@ -7,16 +7,18 @@ public class StorageRepository : BaseRepository, IStorageRepository
 
     public Location Add(Location location)
     {
-        throw new NotImplementedException();
+        return _context.Locations.Add(location).Entity;
     }
 
-    public Task<IEnumerable<Warehouse>> GetAll()
+    public async Task<IEnumerable<Warehouse>> GetAll()
     {
-        throw new NotImplementedException();
+        return await _context.Warehouses.ToListAsync();
     }
 
-    public Task<IEnumerable<Warehouse>> GetWarehouseById(int warehouseId)
+    public async Task<Warehouse?> GetWarehouseById(string warehouseId)
     {
-        throw new NotImplementedException();
+        return await _context.Warehouses
+            .Include(w => w.Locations)
+            .FirstOrDefaultAsync(w => w.WarehouseId == warehouseId);
     }
 }

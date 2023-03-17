@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <Folder Include="Applications\Commands\GoodsReceipts\" />
-    <Folder Include="Applications\DomainEventHandlers\" />
     <Folder Include="Applications\Queries\GoodsReceipts\" />
   </ItemGroup>
 

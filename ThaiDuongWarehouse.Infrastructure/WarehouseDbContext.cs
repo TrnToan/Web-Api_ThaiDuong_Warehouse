@@ -13,6 +13,7 @@ public class WarehouseDbContext : DbContext, IUnitOfWork
     public DbSet<Item> Items { get; set; }
     public DbSet<ItemLot> ItemLots { get; set; }
     public DbSet<Warehouse> Warehouses { get; set; }
+    public DbSet<Location> Locations { get; set; }
 
     private IDbContextTransaction? _currentTransaction;
     private readonly IMediator _mediator;

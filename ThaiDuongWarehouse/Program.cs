@@ -21,11 +21,14 @@ builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<ILotAdjustmentRepository, LotAdjustmentRepository>();
+builder.Services.AddScoped<IStorageRepository, StorageRepository>();
+builder.Services.AddScoped<IItemLotRepository, ItemLotRepository>();
 
 builder.Services.AddScoped<IEmployeeQueries, EmployeeQueries>();
 builder.Services.AddScoped<IItemQueries, ItemQueries>();
 builder.Services.AddScoped<IDepartmentQueries, DepartmentQueries>();
 builder.Services.AddScoped<ILotAdjustmentQueries, LotAdjustmentQueries>();
+builder.Services.AddScoped<IWarehouseQueries, WarehouseQueries>();
 
 builder.Services.AddAutoMapper(typeof(ModelToViewModelProfile).Assembly);
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));

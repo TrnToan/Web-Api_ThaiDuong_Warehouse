@@ -293,7 +293,7 @@ namespace ThaiDuongWarehouse.Api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("ExpirationDate")
+                    b.Property<DateTime?>("ExpirationDate")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("IsIsolated")
@@ -309,18 +309,16 @@ namespace ThaiDuongWarehouse.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("ProductionDate")
+                    b.Property<DateTime?>("ProductionDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PurchaseOrderNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Quantity")
                         .HasColumnType("float");
 
                     b.Property<double?>("SublotSize")
-                        .IsRequired()
                         .HasColumnType("float");
 
                     b.HasKey("Id");
@@ -357,7 +355,7 @@ namespace ThaiDuongWarehouse.Api.Migrations
 
                     b.HasIndex("WarehouseId");
 
-                    b.ToTable("Location");
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("ThaiDuongWarehouse.Domain.AggregateModels.StorageAggregate.Warehouse", b =>

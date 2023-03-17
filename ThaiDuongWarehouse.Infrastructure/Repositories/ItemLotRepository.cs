@@ -4,36 +4,33 @@ public class ItemLotRepository : BaseRepository, IItemLotRepository
     public ItemLotRepository(WarehouseDbContext context) : base(context)
     {
     }
-
-    public IUnitOfWork unitOfWork => throw new NotImplementedException();
-
     public void AddLot(ItemLot itemLot)
     {
-        throw new NotImplementedException();
+        _context.ItemLots.Add(itemLot);
     }
 
-    public Task<IEnumerable<ItemLot>> GetAll()
+    public async Task<IEnumerable<ItemLot>> GetAll()
     {
-        throw new NotImplementedException();
+        return await _context.ItemLots.ToListAsync();
     }
 
-    public Task<IEnumerable<ItemLot>> GetLotByItemId(string itemId)
+    public async Task<IEnumerable<ItemLot>> GetLotByItemId(string itemId)
     {
-        throw new NotImplementedException();
+        return await _context.ItemLots.Where(il => il.Item.ItemId == itemId).ToListAsync();
     }
 
-    public Task<IEnumerable<ItemLot>> GetLotByLotId(string lotId)
+    public async Task<ItemLot?> GetLotByLotId(string lotId)
     {
-        throw new NotImplementedException();
+        return await _context.ItemLots.FirstOrDefaultAsync(il => il.LotId == lotId);
     }
 
-    public Task<IEnumerable<ItemLot>> GetLotByPO(string purchaseOrderNumber)
+    public async Task<IEnumerable<ItemLot>> GetLotByPO(string purchaseOrderNumber)
     {
-        throw new NotImplementedException();
+        return await _context.ItemLots.Where(il => il.PurchaseOrderNumber == purchaseOrderNumber).ToListAsync();
     }
 
     public void UpdateLot(ItemLot itemLot)
     {
-        throw new NotImplementedException();
+        _context.ItemLots.Update(itemLot);
     }
 }

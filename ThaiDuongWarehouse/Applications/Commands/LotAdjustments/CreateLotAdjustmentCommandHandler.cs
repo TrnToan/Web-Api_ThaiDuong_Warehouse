@@ -1,20 +1,36 @@
-﻿namespace ThaiDuongWarehouse.Api.Applications.Commands.LotAdjustments;
+﻿
+namespace ThaiDuongWarehouse.Api.Applications.Commands.LotAdjustments;
 
 public class CreateLotAdjustmentCommandHandler : IRequestHandler<CreateLotAdjustmentCommand, bool>
 {
     private readonly ILotAdjustmentRepository _lotAdjustmentRepository;
-    public CreateLotAdjustmentCommandHandler(ILotAdjustmentRepository lotAdjustmentRepository)
+    private readonly IItemLotRepository _itemLotRepository;
+    private readonly IEmployeeRepository _employeeRepository;
+    public CreateLotAdjustmentCommandHandler(ILotAdjustmentRepository lotAdjustmentRepository, IItemLotRepository itemLotRepository, IEmployeeRepository employeeRepository)
     {
         _lotAdjustmentRepository = lotAdjustmentRepository;
+        _itemLotRepository = itemLotRepository;
+        _employeeRepository = employeeRepository;
     }
 
     public async Task<bool> Handle(CreateLotAdjustmentCommand request, CancellationToken cancellationToken)
     {
-        var adjustment = new LotAdjustment(request.LotId, request.NewPurchaseOrderNumber,
-            request.OldPurchaseOrderNumber, request.Note, request.BeforeQuantity, request.AfterQuantity,
-            request.Timestamp, request.Employee.Id, request.Item.Id);
+        var itemLot = _itemLotRepository.GetLotByLotId(request.LotId);
+        if (itemLot == null)
+        {
+            throw new EntityNotFoundException($"{itemLot} does not exist");
+        }
+        var employee = _employeeRepository.GetEmployeeByName(request.EmployeeName);
+        if (employee == null)
+        {
+            throw new EntityNotFoundException($"{employee} does not exist");
+        }
+        
+        var lotAdjustment = new LotAdjustment(request.LotId, request.OldPurchaseOrderNumber, request.Note, 
+            request.BeforeQuantity, DateTime.Now);
+        lotAdjustment.Update(request.AfterQuantity, request.NewPurchaseOrderNumber);
+        _lotAdjustmentRepository.Add(lotAdjustment);
 
-        _lotAdjustmentRepository.Add(adjustment);
         return await _lotAdjustmentRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
     }
 }

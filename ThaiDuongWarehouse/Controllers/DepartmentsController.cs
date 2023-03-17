@@ -5,11 +5,11 @@ namespace ThaiDuongWarehouse.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class DepartmentController : ControllerBase
+public class DepartmentsController : ControllerBase
 {
 	private readonly IDepartmentQueries _queries;
 	private readonly IMediator _mediator;
-	public DepartmentController(IDepartmentQueries queries, IMediator mediator)
+	public DepartmentsController(IDepartmentQueries queries, IMediator mediator)
     {
         _queries = queries;
         _mediator = mediator;

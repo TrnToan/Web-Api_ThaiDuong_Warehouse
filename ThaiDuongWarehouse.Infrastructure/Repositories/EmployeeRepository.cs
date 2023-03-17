@@ -25,6 +25,11 @@ public class EmployeeRepository : BaseRepository, IEmployeeRepository
         return await _context.Employees.FirstOrDefaultAsync(e => e.EmployeeId == employeeId);
     }
 
+    public async Task<Employee?> GetEmployeeByName(string employeeName)
+    {
+        return await _context.Employees.FirstOrDefaultAsync(e => e.EmployeeName == employeeName);
+    }
+
     public Employee Update(Employee employee)
     {
         return _context.Employees.Update(employee).Entity;

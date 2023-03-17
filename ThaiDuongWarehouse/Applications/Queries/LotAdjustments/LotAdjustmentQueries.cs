@@ -19,10 +19,10 @@ public class LotAdjustmentQueries : ILotAdjustmentQueries
         return viewmodels;
     }
 
-    public async Task<IEnumerable<LotAdjustmentViewModel>> GetConfirmedAdjustments()
+    public async Task<IEnumerable<LotAdjustmentViewModel>> GetUnconfirmedAdjustments()
     {
         var adjustments = await _context.LotAdjustments
-            .Where(la => la.IsConfirmed == true)
+            .Where(la => la.IsConfirmed == false)
             .ToListAsync();
         var viewmodels = _mapper.Map<IEnumerable<LotAdjustment>, IEnumerable<LotAdjustmentViewModel>>(adjustments);
 

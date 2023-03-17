@@ -23,7 +23,7 @@ public class EmployeesController : ControllerBase
 
 	[HttpGet]
 	[Route("{employeeId}")]
-	public async Task<EmployeeViewModel> GetAsync([FromRoute] string employeeId)
+	public async Task<EmployeeViewModel?> GetAsync([FromRoute] string employeeId)
 	{
 		return await _queries.GetEmployeeById(employeeId);
 	}

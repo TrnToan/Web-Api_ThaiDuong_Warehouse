@@ -7,5 +7,7 @@ public class ModelToViewModelProfile : Profile
 		CreateMap<Employee, EmployeeViewModel>();
 		CreateMap<Item, ItemViewModel>();
 		CreateMap<Department, DepartmentViewModel>();
+		CreateMap<Warehouse, WarehouseViewModel>();
+		CreateMap<Location, LocationViewModel>();
 	}
 }
