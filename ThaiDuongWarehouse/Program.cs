@@ -1,7 +1,6 @@
 using System.Reflection;
-using System.Text.Json.Serialization;
 using ThaiDuongWarehouse.Api.Applications.Mapping;
-using ThaiDuongWarehouse.Api.Applications.Queries.LotAdjustments;
+using ThaiDuongWarehouse.Domain.AggregateModels.InventoryLogAggregate;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,12 +22,14 @@ builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<ILotAdjustmentRepository, LotAdjustmentRepository>();
 builder.Services.AddScoped<IStorageRepository, StorageRepository>();
 builder.Services.AddScoped<IItemLotRepository, ItemLotRepository>();
+builder.Services.AddScoped<IInventoryLogEntryRepository, InventoryLogEntryRepository>();
 
 builder.Services.AddScoped<IEmployeeQueries, EmployeeQueries>();
 builder.Services.AddScoped<IItemQueries, ItemQueries>();
 builder.Services.AddScoped<IDepartmentQueries, DepartmentQueries>();
 builder.Services.AddScoped<ILotAdjustmentQueries, LotAdjustmentQueries>();
 builder.Services.AddScoped<IWarehouseQueries, WarehouseQueries>();
+builder.Services.AddScoped<IItemLotQueries, ItemLotQueries>();  
 
 builder.Services.AddAutoMapper(typeof(ModelToViewModelProfile).Assembly);
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));

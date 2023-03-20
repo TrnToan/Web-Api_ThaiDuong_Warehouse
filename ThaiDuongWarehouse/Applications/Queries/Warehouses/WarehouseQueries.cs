@@ -12,7 +12,9 @@ public class WarehouseQueries : IWarehouseQueries
 
     public async Task<IEnumerable<WarehouseViewModel>> GetAllWarehouses()
     {
-        var warehouses = await _context.Warehouses.ToListAsync();
+        var warehouses = await _context.Warehouses
+            .Include(w => w.Locations)
+            .ToListAsync();
         var viewmodels = _mapper.Map<IEnumerable<Warehouse>, IEnumerable<WarehouseViewModel>>(warehouses);
 
         return viewmodels;

@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <Folder Include="Applications\Commands\GoodsReceipts\" />
+    <Folder Include="Applications\Commands\ItemLots\" />
     <Folder Include="Applications\Queries\GoodsReceipts\" />
   </ItemGroup>
 

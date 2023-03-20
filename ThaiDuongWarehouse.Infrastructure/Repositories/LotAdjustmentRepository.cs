@@ -13,15 +13,21 @@ public class LotAdjustmentRepository : BaseRepository, ILotAdjustmentRepository
         else return lotAdjustment;
     }
 
-    public async Task<IEnumerable<LotAdjustment>> GetAll()
-    {
-        return await _context.LotAdjustments.ToListAsync();
-    }
-
-    public async Task<IEnumerable<LotAdjustment>> GetConfirmedAdjustments()
+    public async Task<LotAdjustment?> GetAdjustmentByLotId(string lotId)
     {
         return await _context.LotAdjustments
-            .Where(la => la.IsConfirmed == true)
+            .FirstOrDefaultAsync(la => la.LotId == lotId);
+    }
+
+    public async Task<IEnumerable<LotAdjustment>> GetUnConfirmedAdjustments()
+    {
+        return await _context.LotAdjustments
+            .Where(la => la.IsConfirmed == false)
             .ToListAsync();
+    }
+
+    public void RemoveAdjustment(LotAdjustment lotAdjustment)
+    {
+        _context.LotAdjustments.Remove(lotAdjustment);
     }
 }

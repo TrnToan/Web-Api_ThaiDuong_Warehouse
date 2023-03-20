@@ -8,7 +8,10 @@ public class InventoryLogEntryRepository : BaseRepository, IInventoryLogEntryRep
     {
     }
 
-    public IUnitOfWork unitOfWork => throw new NotImplementedException();
+    public void Add(InventoryLogEntry logEntry)
+    {
+        throw new NotImplementedException();
+    }
 
     public Task<IEnumerable<InventoryLogEntry>> GetAll()
     {

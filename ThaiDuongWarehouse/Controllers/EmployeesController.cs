@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ThaiDuongWarehouse.Api.Applications.Commands.Employees;
+﻿using ThaiDuongWarehouse.Api.Applications.Commands.Employees;
 using ThaiDuongWarehouse.Api.Applications.Queries.Employees;
 
 namespace ThaiDuongWarehouse.Api.Controllers;

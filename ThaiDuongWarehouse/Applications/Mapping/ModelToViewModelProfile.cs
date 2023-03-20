@@ -1,4 +1,6 @@
-﻿namespace ThaiDuongWarehouse.Api.Applications.Mapping;
+﻿using ThaiDuongWarehouse.Api.Applications.Queries.ItemLots;
+
+namespace ThaiDuongWarehouse.Api.Applications.Mapping;
 
 public class ModelToViewModelProfile : Profile
 {
@@ -9,5 +11,6 @@ public class ModelToViewModelProfile : Profile
 		CreateMap<Department, DepartmentViewModel>();
 		CreateMap<Warehouse, WarehouseViewModel>();
 		CreateMap<Location, LocationViewModel>();
+		CreateMap<ItemLot, ItemLotViewModel>();
 	}
 }

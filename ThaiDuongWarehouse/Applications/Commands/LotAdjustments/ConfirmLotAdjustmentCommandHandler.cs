@@ -15,14 +15,11 @@ public class ConfirmLotAdjustmentCommandHandler : IRequestHandler<ConfirmLotAdju
 
     public async Task<bool> Handle(ConfirmLotAdjustmentCommand request, CancellationToken cancellationToken)
     {
-        var item = await _itemRepository.GetItemById(request.ItemId);
-        var employee = await _employeeRepository.GetEmployeeById(request.EmployeeId);
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-        var lotAdjustment = new LotAdjustment(request.LotId, request.NewPurchaseOrderNumber,
-            request.AfterQuantity, request.Timestamp, request.Note, item.Id, employee.Id);
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-
-        lotAdjustment.Confirm(request.LotId, employee, request.Timestamp, request.AfterQuantity, request.NewPurchaseOrderNumber);
+        var lotAdjustment = await _lotAdjustmentRepository.GetAdjustmentByLotId(request.LotId);
+        if (lotAdjustment is null)
+            throw new ArgumentNullException(nameof(lotAdjustment));
+        lotAdjustment.Confirm(lotAdjustment.LotId, request.ItemId, lotAdjustment.Timestamp,
+            lotAdjustment.BeforeQuantity, lotAdjustment.AfterQuantity, lotAdjustment.NewPurchaseOrderNumber);
         return await _lotAdjustmentRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
     }
 }
