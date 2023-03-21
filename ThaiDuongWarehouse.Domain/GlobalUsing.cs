@@ -13,5 +13,6 @@ global using ThaiDuongWarehouse.Domain.AggregateModels.EmployeeAggregate;
 global using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
 global using ThaiDuongWarehouse.Domain.DomainEvents;
 global using ThaiDuongWarehouse.Domain.Exceptions;
+global using ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate;
 
 

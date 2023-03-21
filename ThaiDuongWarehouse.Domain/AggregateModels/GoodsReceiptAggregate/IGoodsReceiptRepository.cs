@@ -4,6 +4,7 @@ public interface IGoodsReceiptRepository : IRepository<GoodsReceipt>
 {
     GoodsReceipt Add(GoodsReceipt goodsReceipt);
     void Update(GoodsReceipt goodsReceipt);
-    Task<IEnumerable<GoodsReceipt>> GetAll();
-    Task<IEnumerable<GoodsReceipt>> GetGoodsReceiptsById(string goodsReceiptId);
+    Task<IEnumerable<GoodsReceipt>> GetConfirmedGoodsReceipt();
+    Task<IEnumerable<GoodsReceipt>> GetUnConfirmedGoodsReceipt();
+    Task<GoodsReceipt?> GetGoodsReceiptById(string goodsReceiptId);
 }

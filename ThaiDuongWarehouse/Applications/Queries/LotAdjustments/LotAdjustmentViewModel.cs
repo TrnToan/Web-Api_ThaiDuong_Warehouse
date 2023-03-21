@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-using ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate;
-using Unit = ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate.Unit;
+﻿using Unit = ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate.Unit;
 
 namespace ThaiDuongWarehouse.Api.Applications.Queries.LotAdjustments;
 

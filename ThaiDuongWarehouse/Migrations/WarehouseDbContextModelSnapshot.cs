@@ -272,8 +272,9 @@ namespace ThaiDuongWarehouse.Api.Migrations
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ItemLotId")
-                        .HasColumnType("int");
+                    b.Property<string>("ItemLotId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
@@ -523,7 +524,6 @@ namespace ThaiDuongWarehouse.Api.Migrations
                                 .HasColumnType("int");
 
                             b1.Property<string>("LocationId")
-                                .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<DateTime?>("ProductionDate")

@@ -14,6 +14,7 @@ public class GoodsReceiptEntityTypeConfiguration : IEntityTypeConfiguration<Good
             grl.WithOwner();
 
             grl.HasKey(lot => lot.GoodsReceiptLotId);
+            grl.Property(lot => lot.LocationId);
             grl.Property(lot => lot.Quantity).IsRequired();
             grl.Property(lot => lot.SublotSize);
             grl.Property(lot => lot.PurchaseOrderNumber);

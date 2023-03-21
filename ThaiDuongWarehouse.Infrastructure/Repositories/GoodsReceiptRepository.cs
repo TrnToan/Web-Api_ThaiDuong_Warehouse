@@ -7,21 +7,31 @@ public class GoodsReceiptRepository : BaseRepository, IGoodsReceiptRepository
 
     public GoodsReceipt Add(GoodsReceipt goodsReceipt)
     {
-        throw new NotImplementedException();
+        return _context.GoodsReceipts.Add(goodsReceipt).Entity;
     }
 
-    public Task<IEnumerable<GoodsReceipt>> GetAll()
+    public async Task<IEnumerable<GoodsReceipt>> GetConfirmedGoodsReceipt()
     {
-        throw new NotImplementedException();
+        return await _context.GoodsReceipts
+            .Where(gr => gr.IsConfirmed == true)
+            .ToListAsync();
     }
 
-    public Task<IEnumerable<GoodsReceipt>> GetGoodsReceiptsById(string goodsReceiptId)
+    public async Task<IEnumerable<GoodsReceipt>> GetUnConfirmedGoodsReceipt()
     {
-        throw new NotImplementedException();
+        return await _context.GoodsReceipts
+            .Where(gr => gr.IsConfirmed == false)
+            .ToListAsync();
+    }
+
+    public async Task<GoodsReceipt?> GetGoodsReceiptById(string goodsReceiptId)
+    {
+        return await _context.GoodsReceipts
+            .FirstOrDefaultAsync(gr => gr.GoodsReceiptId == goodsReceiptId);
     }
 
     public void Update(GoodsReceipt goodsReceipt)
     {
-        throw new NotImplementedException();
+        _context.GoodsReceipts.Update(goodsReceipt);
     }
 }
