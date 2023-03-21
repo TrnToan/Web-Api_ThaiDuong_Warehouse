@@ -12,19 +12,19 @@ public class ItemLotsController : ControllerBase
 		_queries = queries;
 	}
 	[HttpGet]
-	[Route("{itemLotId}")]
+	[Route("GetItemLotByLotId/{itemLotId}")]
 	public async Task<ItemLotViewModel> GetItemLotByLotIdAsync(string itemLotId)
 	{
 		return await _queries.GetItemLotByLotId(itemLotId);
 	}
 	[HttpGet]
-	[Route("{itemId}")]
+	[Route("GetItemLotByItemId/{itemId}")]
 	public async Task<IEnumerable<ItemLotViewModel>> GetItemLotByItemIdAsync(string itemId)
 	{
 		return await _queries.GetItemLotsByItemId(itemId);
 	}
 	[HttpGet]
-	[Route("{purchaseOrderNumber}")]
+	[Route("GetItemlotByPO/{purchaseOrderNumber}")]
 	public async Task<IEnumerable<ItemLotViewModel>> GetItemLotByPoAsync(string purchaseOrderNumber)
 	{
 		return await _queries.GetItemLotsByPO(purchaseOrderNumber);

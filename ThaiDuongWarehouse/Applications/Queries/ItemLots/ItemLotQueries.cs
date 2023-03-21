@@ -12,7 +12,9 @@ public class ItemLotQueries : IItemLotQueries
 
     public async Task<ItemLotViewModel> GetItemLotByLotId(string lotId)
     {
-        var itemLot = await _context.ItemLots.FirstOrDefaultAsync(il => il.LotId == lotId);
+        var itemLot = await _context.ItemLots
+            .Include(il => il.Item)
+            .FirstOrDefaultAsync(il => il.LotId == lotId);
         var viewModel = _mapper.Map<ItemLot?, ItemLotViewModel>(itemLot);
         return viewModel;
     }
@@ -20,6 +22,7 @@ public class ItemLotQueries : IItemLotQueries
     public async Task<IEnumerable<ItemLotViewModel>> GetItemLotsByItemId(string itemId)
     {
         var itemLots = await _context.ItemLots
+            .Include(il => il.Item)
             .Where(il => il.Item.ItemId == itemId)
             .ToListAsync();
         var viewModels = _mapper.Map<IEnumerable<ItemLot>, IEnumerable<ItemLotViewModel>>(itemLots);
@@ -29,6 +32,7 @@ public class ItemLotQueries : IItemLotQueries
     public async Task<IEnumerable<ItemLotViewModel>> GetItemLotsByPO(string purchaseOrderNumber)
     {
         var itemLots = await _context.ItemLots
+            .Include(il => il.Item)
             .Where(il => il.PurchaseOrderNumber == purchaseOrderNumber)
             .ToListAsync();
         var viewModels = _mapper.Map<IEnumerable<ItemLot>, IEnumerable<ItemLotViewModel>>(itemLots);
