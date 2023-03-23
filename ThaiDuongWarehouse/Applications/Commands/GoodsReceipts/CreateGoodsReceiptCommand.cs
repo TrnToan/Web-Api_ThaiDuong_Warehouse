@@ -10,6 +10,8 @@ public class CreateGoodsReceiptCommand : IRequest<bool>
     [DataMember]
     public DateTime Timestamp { get; private set; }
     [DataMember]
+    public string? Supplier { get; private set; }
+    [DataMember]
     public EmployeeViewModel Employee { get; private set; }
     [DataMember]
     public List<GoodsReceiptLotViewModel> Lots { get; private set; }

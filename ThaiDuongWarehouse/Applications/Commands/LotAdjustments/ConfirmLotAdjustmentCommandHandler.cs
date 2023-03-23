@@ -20,6 +20,8 @@ public class ConfirmLotAdjustmentCommandHandler : IRequestHandler<ConfirmLotAdju
             throw new ArgumentNullException(nameof(lotAdjustment));
         lotAdjustment.Confirm(lotAdjustment.LotId, request.ItemId, lotAdjustment.Timestamp,
             lotAdjustment.BeforeQuantity, lotAdjustment.AfterQuantity, lotAdjustment.NewPurchaseOrderNumber);
+        
+        _lotAdjustmentRepository.Update(lotAdjustment);
         return await _lotAdjustmentRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
     }
 }

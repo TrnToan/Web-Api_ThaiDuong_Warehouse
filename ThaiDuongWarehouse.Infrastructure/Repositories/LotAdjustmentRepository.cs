@@ -30,4 +30,9 @@ public class LotAdjustmentRepository : BaseRepository, ILotAdjustmentRepository
     {
         _context.LotAdjustments.Remove(lotAdjustment);
     }
+
+    public LotAdjustment Update(LotAdjustment lotAdjustment)
+    {
+        return _context.LotAdjustments.Update(lotAdjustment).Entity;
+    }
 }
