@@ -14,6 +14,12 @@ public class GoodsReceiptsController : ControllerBase
         _mediator = mediator;
     }
     [HttpGet]
+    [Route("{goodsReceiptId}")]
+    public async Task<GoodsReceiptViewModel?> GetGoodsReceiptByIdAsync(string goodsReceiptId)
+    {
+        return await _queries.GetGoodsReceiptById(goodsReceiptId);
+    }
+    [HttpGet]
     [Route("ConfirmedGoodsReceipts")]
     public async Task<IEnumerable<GoodsReceiptViewModel>> GetConfirmedGoodsReceiptsAsync()
     {

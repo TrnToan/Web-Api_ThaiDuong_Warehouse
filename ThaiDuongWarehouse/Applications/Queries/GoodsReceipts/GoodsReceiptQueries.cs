@@ -1,5 +1,4 @@
-﻿
-namespace ThaiDuongWarehouse.Api.Applications.Queries.GoodsReceipt;
+﻿namespace ThaiDuongWarehouse.Api.Applications.Queries.GoodsReceipt;
 
 public class GoodsReceiptQueries : IGoodsReceiptQueries
 {
@@ -15,6 +14,11 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
     {
         var goodsReceipts = await _context.GoodsReceipts
             .AsNoTracking()
+            .Include(gr => gr.Employee)
+            .Include(gr => gr.Lots)
+                .ThenInclude(grl => grl.Item)
+            .Include(gr => gr.Lots)
+                .ThenInclude(grl => grl.Employee)
             .Where(gr => gr.IsConfirmed == true)
             .ToListAsync();
 
@@ -24,6 +28,12 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
     public async Task<GoodsReceiptViewModel?> GetGoodsReceiptById(string goodsReceiptId)
     {
         var goodsReceipt = await _context.GoodsReceipts
+            .AsNoTracking()
+            .Include(gr => gr.Employee)
+            .Include(gr => gr.Lots)
+                .ThenInclude(grl => grl.Item)
+            .Include(gr => gr.Lots)
+                .ThenInclude(grl => grl.Employee)
             .FirstOrDefaultAsync(gr => gr.GoodsReceiptId == goodsReceiptId);
 
         return _mapper.Map<GoodsReceiptViewModel?>(goodsReceipt);
@@ -33,9 +43,15 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
     {
         var goodsReceipts = await _context.GoodsReceipts
             .AsNoTracking()
+            .Include(gr => gr.Employee)
+            .Include(gr => gr.Lots)
+                .ThenInclude(grl => grl.Item)
+            .Include(gr => gr.Lots)
+                .ThenInclude(grl => grl.Employee)
             .Where(gr =>
             gr.Timestamp.CompareTo(query.StartTime) > 0 &&
             gr.Timestamp.CompareTo(query.EndTime) < 0)
+            .Where(gr => gr.IsConfirmed == true)
             .ToListAsync();
         goodsReceipts = (List<Domain.AggregateModels.GoodsReceiptAggregate.GoodsReceipt>)goodsReceipts.OrderByDescending(gr => gr.Timestamp);
 
@@ -46,6 +62,11 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
     {
         var goodsReceipts = await _context.GoodsReceipts
             .AsNoTracking()
+            .Include(gr => gr.Employee)
+            .Include(gr => gr.Lots)
+                .ThenInclude(grl => grl.Item)
+            .Include(gr => gr.Lots)
+                .ThenInclude(grl => grl.Employee)
             .Where(gr => gr.IsConfirmed == false)
             .ToListAsync();
 
