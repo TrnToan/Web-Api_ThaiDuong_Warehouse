@@ -4,6 +4,7 @@ namespace ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate;
 public class GoodsReceipt : Entity, IAggregateRoot
 {
     public string GoodsReceiptId { get; private set; }
+    public string? Supplier { get; private set; }
     public DateTime Timestamp { get; private set; }
     public bool IsConfirmed { get; private set; } = false;
     public Employee Employee { get; private set; }
@@ -13,13 +14,15 @@ public class GoodsReceipt : Entity, IAggregateRoot
     private GoodsReceipt() { }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-    public GoodsReceipt(string goodsReceiptId, DateTime timestamp, bool isConfirmed, Employee employee)
+    public GoodsReceipt(string goodsReceiptId, DateTime timestamp, bool isConfirmed, 
+        Employee employee, string? supplier)
     {
         GoodsReceiptId = goodsReceiptId;
         Timestamp = timestamp;
         IsConfirmed = isConfirmed;
         Lots = new List<GoodsReceiptLot>();
         Employee = employee;
+        Supplier = supplier;
     }
 
     public void UpdateLot(string lotId, double quantity, double sublotSize, string? purchaseOrderNumber,

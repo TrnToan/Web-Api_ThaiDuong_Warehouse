@@ -5,6 +5,7 @@ public class GoodsReceiptEntityTypeConfiguration : IEntityTypeConfiguration<Good
     {
         builder.HasKey(gr => gr.Id);
         builder.HasIndex(gr => gr.GoodsReceiptId).IsUnique();
+        builder.Property(gr => gr.Supplier);
         builder.Property(gr => gr.Timestamp).IsRequired();
         builder.Property(gr => gr.IsConfirmed).IsRequired();
         builder.HasOne(gr => gr.Employee).WithMany();
