@@ -1,5 +1,4 @@
 ﻿using Unit = ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate.Unit;
-
 namespace ThaiDuongWarehouse.Api.Applications.Queries.LotAdjustments;
 
 public class LotAdjustmentViewModel
@@ -11,9 +10,11 @@ public class LotAdjustmentViewModel
     public string OldPurchaseOrderNumber { get; private set; }
     public string NewPurchaseOrderNumber { get; private set; }
     public Unit Unit { get; private set; }
-    public string EmployeeName { get; private set; }
+    public EmployeeViewModel Employee { get; private set; }
     public string? Note { get; private set; }
-    public LotAdjustmentViewModel(string lotId, string itemId, double beforeQuantity, double afterQuantity, string oldPurchaseOrderNumber, string newPurchaseOrderNumber, Unit unit, string employeeName, string? note)
+    public LotAdjustmentViewModel(string lotId, string itemId, double beforeQuantity, 
+        double afterQuantity, string oldPurchaseOrderNumber, string newPurchaseOrderNumber, 
+        Unit unit, EmployeeViewModel employee, string? note)
     {
         LotId = lotId;
         ItemId = itemId;
@@ -22,7 +23,13 @@ public class LotAdjustmentViewModel
         OldPurchaseOrderNumber = oldPurchaseOrderNumber;
         NewPurchaseOrderNumber = newPurchaseOrderNumber;
         Unit = unit;
-        EmployeeName = employeeName;
+        Employee = employee;
         Note = note;
+    }
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    public LotAdjustmentViewModel()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    {
+
     }
 }

@@ -10,7 +10,10 @@ public class ModelToViewModelProfile : Profile
 		CreateMap<Warehouse, WarehouseViewModel>();
 		CreateMap<Location, LocationViewModel>();
 		CreateMap<ItemLot, ItemLotViewModel>();
-		CreateMap<GoodsReceiptLot, GoodsReceiptLotViewModel>();
+		CreateMap<LotAdjustment, LotAdjustmentViewModel>()
+			.ForMember(dest => dest.Employee, opt => opt.MapFrom(src => src.Employee))
+			.ForMember(dest => dest.Unit, opt => opt.MapFrom(src => src.Item.Unit));
+        CreateMap<GoodsReceiptLot, GoodsReceiptLotViewModel>();
 		CreateMap<GoodsReceipt, GoodsReceiptViewModel>();
 	}
 }

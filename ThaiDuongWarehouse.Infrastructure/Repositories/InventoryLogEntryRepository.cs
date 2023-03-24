@@ -10,7 +10,7 @@ public class InventoryLogEntryRepository : BaseRepository, IInventoryLogEntryRep
 
     public void Add(InventoryLogEntry logEntry)
     {
-        throw new NotImplementedException();
+        _context.InventoryLogEntries.Add(logEntry);
     }
 
     public Task<IEnumerable<InventoryLogEntry>> GetAll()
