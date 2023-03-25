@@ -1,4 +1,7 @@
-﻿namespace ThaiDuongWarehouse.Api.Applications.Mapping;
+﻿using ThaiDuongWarehouse.Api.Applications.Queries.InventoryLogEntries;
+using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
+
+namespace ThaiDuongWarehouse.Api.Applications.Mapping;
 
 public class ModelToViewModelProfile : Profile
 {
@@ -15,5 +18,6 @@ public class ModelToViewModelProfile : Profile
 			.ForMember(dest => dest.Unit, opt => opt.MapFrom(src => src.Item.Unit));
         CreateMap<GoodsReceiptLot, GoodsReceiptLotViewModel>();
 		CreateMap<GoodsReceipt, GoodsReceiptViewModel>();
+		CreateMap<InventoryLogEntry, InventoryLogEntryViewModel>();
 	}
 }

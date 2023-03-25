@@ -1,6 +1,4 @@
-﻿using ThaiDuongWarehouse.Domain.DomainEvents;
-
-namespace ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate;
+﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate;
 public class GoodsReceipt : Entity, IAggregateRoot
 {
     public string GoodsReceiptId { get; private set; }
@@ -14,8 +12,8 @@ public class GoodsReceipt : Entity, IAggregateRoot
     private GoodsReceipt() { }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-    public GoodsReceipt(string goodsReceiptId, DateTime timestamp, bool isConfirmed, 
-        Employee employee, string? supplier)
+    public GoodsReceipt(string goodsReceiptId, string? supplier, DateTime timestamp, bool isConfirmed, 
+        Employee employee)
     {
         GoodsReceiptId = goodsReceiptId;
         Timestamp = timestamp;
@@ -35,22 +33,19 @@ public class GoodsReceipt : Entity, IAggregateRoot
         }
         lot.Update(quantity, sublotSize, purchaseOrderNumber, locationId, productionDate, expirationDate);
     }
-    public void AddLot(ItemLot itemLot)
+    public void AddLot(GoodsReceiptLot goodsReceiptLot)
     {
-        if (itemLot is null)
-            throw new ArgumentNullException(nameof(itemLot));
+        if (goodsReceiptLot is null)
+            throw new ArgumentNullException(nameof(goodsReceiptLot));
 
-        var goodsReceiptLot = new GoodsReceiptLot(itemLot.LotId, itemLot.Location?.LocationId, itemLot.Quantity, itemLot.SublotSize,
-            itemLot.PurchaseOrderNumber, itemLot.ProductionDate, itemLot.ExpirationDate, itemLot.Item);
         Lots.Add(goodsReceiptLot);
     }
-    public void AddLots(IEnumerable<ItemLot> itemLots)
+    public void AddLots(IEnumerable<GoodsReceiptLot> goodsReceiptLots)
     {
-        foreach(var lot in itemLots)
+        foreach(var lot in goodsReceiptLots)
         {
             AddLot(lot);    
         }
-        this.AddDomainEvent(new ItemLotsImportedDomainEvent(itemLots));
     }
     public void RemoveLot(string goodsReceiptLotId)
     {
@@ -61,9 +56,11 @@ public class GoodsReceipt : Entity, IAggregateRoot
         }
         Lots.Remove(lot);
     }
-    public void Confirm(DateTime timestamp)
+    public void Confirm(DateTime timestamp, IEnumerable<ItemLot> itemLots)
     {
         IsConfirmed = true;
         Timestamp = timestamp;
+
+        this.AddDomainEvent(new ItemLotsImportedDomainEvent(itemLots));
     }
 }

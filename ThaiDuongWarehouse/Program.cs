@@ -1,5 +1,6 @@
 using System.Reflection;
 using ThaiDuongWarehouse.Api.Applications.Mapping;
+using ThaiDuongWarehouse.Api.Applications.Queries.InventoryLogEntries;
 using ThaiDuongWarehouse.Domain.AggregateModels.InventoryLogAggregate;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,6 +44,7 @@ builder.Services.AddScoped<ILotAdjustmentQueries, LotAdjustmentQueries>();
 builder.Services.AddScoped<IWarehouseQueries, WarehouseQueries>();
 builder.Services.AddScoped<IItemLotQueries, ItemLotQueries>();
 builder.Services.AddScoped<IGoodsReceiptQueries, GoodsReceiptQueries>();
+builder.Services.AddScoped<IInventoryLogEntryQueries, InventoryLogEntryQueries>();
 
 builder.Services.AddAutoMapper(typeof(ModelToViewModelProfile).Assembly);
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));

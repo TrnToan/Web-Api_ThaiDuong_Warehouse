@@ -1,5 +1,4 @@
 ﻿using System.Runtime.Serialization;
-
 namespace ThaiDuongWarehouse.Api.Applications.Commands.GoodsReceipts;
 
 [DataContract]
@@ -12,16 +11,17 @@ public class CreateGoodsReceiptCommand : IRequest<bool>
     [DataMember]
     public string? Supplier { get; private set; }
     [DataMember]
-    public EmployeeViewModel Employee { get; private set; }
+    public List<CreateGoodsReceiptLotViewModel> GoodsReceiptLots { get; private set; }
     [DataMember]
-    public List<GoodsReceiptLotViewModel> Lots { get; private set; }
-
-    public CreateGoodsReceiptCommand(string goodsReceiptId, DateTime timestamp, 
-        EmployeeViewModel employee, List<GoodsReceiptLotViewModel> lots)
+    public Employee Employee { get; private set; }
+    
+    public CreateGoodsReceiptCommand(string goodsReceiptId, DateTime timestamp, string supplier,
+        Employee employee, List<CreateGoodsReceiptLotViewModel> lots)
     {
         GoodsReceiptId = goodsReceiptId;
         Timestamp = timestamp;
+        Supplier = supplier;
         Employee = employee;
-        Lots = lots;
+        GoodsReceiptLots = lots;
     }
 }

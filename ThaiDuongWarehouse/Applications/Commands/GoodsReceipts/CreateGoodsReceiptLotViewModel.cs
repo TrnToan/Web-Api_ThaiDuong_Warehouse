@@ -1,0 +1,24 @@
+﻿using System.Runtime.Serialization;
+
+namespace ThaiDuongWarehouse.Api.Applications.Commands.GoodsReceipts;
+
+[DataContract]
+public class CreateGoodsReceiptLotViewModel
+{
+    [DataMember]
+    public string GoodsReceiptLotId { get; private set; }
+    [DataMember]
+    public double Quantity { get; private set; }
+    [DataMember]
+    public string ItemId { get; private set; }
+    [DataMember]
+    public string EmployeeId { get; private set; }
+    public CreateGoodsReceiptLotViewModel(string goodsReceiptLotId, double quantity, 
+        string itemId, string employeeId)
+    {
+        GoodsReceiptLotId = goodsReceiptLotId;
+        Quantity = quantity;
+        ItemId = itemId;
+        EmployeeId = employeeId;
+    }
+}

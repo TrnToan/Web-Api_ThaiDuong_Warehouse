@@ -13,14 +13,16 @@ public class InventoryLogEntryRepository : BaseRepository, IInventoryLogEntryRep
         _context.InventoryLogEntries.Add(logEntry);
     }
 
-    public Task<IEnumerable<InventoryLogEntry>> GetAll()
+    public async Task<IEnumerable<InventoryLogEntry>> GetAll()
     {
-        throw new NotImplementedException();
+        return await _context.InventoryLogEntries.ToListAsync();
     }
 
-    public Task<IEnumerable<InventoryLogEntry>> GetByItem(string itemId)
+    public async Task<IEnumerable<InventoryLogEntry>> GetByItem(string itemId)
     {
-        throw new NotImplementedException();
+        return await _context.InventoryLogEntries
+            .Where(log => log.Item.ItemId == itemId)
+            .ToListAsync();
     }
 
     public Task<IEnumerable<InventoryLogEntry>> GetByTime(DateTime startTime, DateTime endTime)

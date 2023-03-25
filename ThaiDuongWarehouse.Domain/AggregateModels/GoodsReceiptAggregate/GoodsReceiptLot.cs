@@ -17,7 +17,7 @@ public class GoodsReceiptLot
     private GoodsReceiptLot() { }
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public GoodsReceiptLot(string goodsReceiptLotId, int itemId, Employee employee, 
-        string locationId, double quantity, double? sublotSize, string? purchaseOrderNumber, 
+        string? locationId, double quantity, double? sublotSize, string? purchaseOrderNumber, 
         DateTime? productionDate, DateTime? expirationDate) : this()
     {
         GoodsReceiptLotId = goodsReceiptLotId;
@@ -31,16 +31,12 @@ public class GoodsReceiptLot
         ExpirationDate = expirationDate;
     }
 
-    public GoodsReceiptLot(string goodsReceiptLotId, string? locationId, double quantity, double? sublotSize, 
-        string? purchaseOrderNumber, DateTime? productionDate, DateTime? expirationDate, Item item)
+    public GoodsReceiptLot(string goodsReceiptLotId, double quantity, Employee employee, 
+        Item item)
     {
         GoodsReceiptLotId = goodsReceiptLotId;
-        LocationId = locationId;
         Quantity = quantity;
-        SublotSize = sublotSize;
-        PurchaseOrderNumber = purchaseOrderNumber;
-        ProductionDate = productionDate;
-        ExpirationDate = expirationDate;
+        Employee = employee;
         Item = item;
     }
 

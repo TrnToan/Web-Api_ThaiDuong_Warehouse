@@ -1,4 +1,5 @@
-﻿using ThaiDuongWarehouse.Api.Applications.Queries;
+﻿using ThaiDuongWarehouse.Api.Applications.Commands.GoodsReceipts;
+using ThaiDuongWarehouse.Api.Applications.Queries;
 
 namespace ThaiDuongWarehouse.Api.Controllers;
 
@@ -35,5 +36,23 @@ public class GoodsReceiptsController : ControllerBase
     public async Task<IEnumerable<GoodsReceiptViewModel>> GetGoodsReceiptsAsync([FromQuery] TimeRangeQuery query)
     {
         return await _queries.GetGoodsReceiptsByTime(query);
+    }
+    [HttpPost]
+    public async Task<IActionResult> PostAsync([FromBody] CreateGoodsReceiptCommand command)
+    {
+        try
+        {
+            var result = await _mediator.Send(command);
+
+            if(!result)
+            {
+                return BadRequest();
+            }
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 }
