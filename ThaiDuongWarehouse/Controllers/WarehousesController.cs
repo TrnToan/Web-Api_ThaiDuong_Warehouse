@@ -26,7 +26,6 @@ public class WarehousesController : ControllerBase
 		return await _queries.GetWarehouseById(warehouseId);
 	}
 	[HttpPost]
-	[Route("{locationId}")]
 	public async Task<IActionResult> AddLocation(CreateLocationCommand command)
 	{
         try

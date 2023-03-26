@@ -10,7 +10,13 @@ public class CreateLocationCommandHandler : IRequestHandler<CreateLocationComman
 
     public async Task<bool> Handle(CreateLocationCommand request, CancellationToken cancellationToken)
     {
+        var warehouse = await _storageRepository.GetWarehouseById(request.WarehouseId);
+        if (warehouse is null)
+        {
+            throw new EntityNotFoundException($"{warehouse}");
+        }
         var location = new Location(request.LocationId);
+        warehouse.Locations.Add(location);
         _storageRepository.Add(location);
         return await _storageRepository.UnitOfWork.SaveEntitiesAsync();        
     }

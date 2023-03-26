@@ -27,7 +27,7 @@ public class GoodsReceiptsController : ControllerBase
         return await _queries.GetConfirmedGoodsReceipt(); 
     }
     [HttpGet]
-    [Route("UnconfirmedGoodsReceipt")]
+    [Route("UnconfirmedGoodsReceipts")]
     public async Task<IEnumerable<GoodsReceiptViewModel>> GetUnconfirmedGoodsReceiptsAsync()
     {
         return await _queries.GetUnConfirmedGoodsReceipt();
