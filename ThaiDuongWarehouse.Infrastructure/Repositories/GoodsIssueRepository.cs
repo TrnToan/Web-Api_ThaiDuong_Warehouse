@@ -5,16 +5,14 @@ public class GoodsIssueRepository : BaseRepository, IGoodsIssueRepository
     {
     }
 
-    public IUnitOfWork unitOfWork => throw new NotImplementedException();
-
     public GoodsIssue Add(GoodsIssue goodsIssue)
     {
-        throw new NotImplementedException();
+        return _context.GoodsIssues.Add(goodsIssue).Entity;
     }
 
-    public Task<GoodsIssue?> GetGoodsIssueById(string id)
+    public async Task<GoodsIssue?> GetGoodsIssueById(string id)
     {
-        throw new NotImplementedException();
+        return await _context.GoodsIssues.FirstOrDefaultAsync(gi => gi.GoodsIssueId == id);
     }
 
     public Task<IEnumerable<GoodsIssue>> GetListAsync(DateTime startTime, DateTime endTime)
@@ -24,6 +22,6 @@ public class GoodsIssueRepository : BaseRepository, IGoodsIssueRepository
 
     public GoodsIssue Update(GoodsIssue goodsIssue)
     {
-        throw new NotImplementedException();
+        return _context.GoodsIssues.Update(goodsIssue).Entity;
     }
 }

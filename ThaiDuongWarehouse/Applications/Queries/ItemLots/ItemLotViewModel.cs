@@ -9,10 +9,10 @@ public class ItemLotViewModel
     public string? PurchaseOrderNumber { get; private set; }
     public DateTime? ProductionDate { get; private set; }
     public DateTime? ExpirationDate { get; private set; }
-    public string LocationId { get; private set; }
+    public LocationViewModel? Location { get; private set; }
     public ItemViewModel Item { get; private set; }
     public ItemLotViewModel(string lotId, bool isIsolated, double quantity, double? sublotSize, string? purchaseOrderNumber, 
-        DateTime? productionDate, DateTime? expirationDate, string locationId, ItemViewModel item)
+        DateTime? productionDate, DateTime? expirationDate, LocationViewModel? location, ItemViewModel item)
     {
         LotId = lotId;
         IsIsolated = isIsolated;
@@ -21,7 +21,7 @@ public class ItemLotViewModel
         PurchaseOrderNumber = purchaseOrderNumber;
         ProductionDate = productionDate;
         ExpirationDate = expirationDate;
-        LocationId = locationId;
+        Location = location;
         Item = item;
     }
 }

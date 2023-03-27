@@ -553,3 +553,22 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230323164850_FixGoodsReceiptModel')
+BEGIN
+    ALTER TABLE [GoodsReceipts] ADD [Supplier] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230323164850_FixGoodsReceiptModel')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20230323164850_FixGoodsReceiptModel', N'7.0.3');
+END;
+GO
+
+COMMIT;
+GO
+
