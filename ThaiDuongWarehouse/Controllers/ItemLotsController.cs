@@ -12,6 +12,12 @@ public class ItemLotsController : ControllerBase
 		_queries = queries;
 	}
 	[HttpGet]
+	[Route("Isolated")]
+	public async Task<IEnumerable<ItemLotViewModel>> GetIsolatedItemLotsAsync()
+	{
+		return await _queries.GetIsolatedItemLots();
+	}
+	[HttpGet]
 	[Route("GetItemLotByLotId/{itemLotId}")]
 	public async Task<ItemLotViewModel> GetItemLotByLotIdAsync(string itemLotId)
 	{

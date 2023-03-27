@@ -10,6 +10,17 @@ public class ItemLotQueries : IItemLotQueries
         _mapper = mapper;
     }
 
+    public async Task<IEnumerable<ItemLotViewModel>> GetIsolatedItemLots()
+    {
+        var itemLots = await _context.ItemLots
+            .AsNoTracking()
+            .Where(il => il.IsIsolated == true)
+            .ToListAsync();
+
+        var viewModels = _mapper.Map<IEnumerable<ItemLot>, IEnumerable<ItemLotViewModel>>(itemLots);
+        return viewModels;
+    }
+
     public async Task<ItemLotViewModel> GetItemLotByLotId(string lotId)
     {
         var itemLot = await _context.ItemLots

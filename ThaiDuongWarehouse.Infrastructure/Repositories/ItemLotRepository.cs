@@ -11,7 +11,17 @@ public class ItemLotRepository : BaseRepository, IItemLotRepository
 
     public async Task<IEnumerable<ItemLot>> GetAll()
     {
-        return await _context.ItemLots.ToListAsync();
+        return await _context.ItemLots
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<ItemLot>> GetIsolatedItemLots()
+    {
+        return await _context.ItemLots
+            .AsNoTracking()
+            .Where(il => il.IsIsolated == true)
+            .ToListAsync();
     }
 
     public async Task<IEnumerable<ItemLot>> GetLotByItemId(string itemId)
