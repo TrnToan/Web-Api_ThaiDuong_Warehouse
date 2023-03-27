@@ -1,7 +1,4 @@
-﻿using AutoMapper.Internal;
-using System.Net.WebSockets;
-
-namespace ThaiDuongWarehouse.Api.Applications.Queries.Warnings;
+﻿namespace ThaiDuongWarehouse.Api.Applications.Queries.Warnings;
 
 public class WarningQueries : IWarningQueries
 {
@@ -27,7 +24,7 @@ public class WarningQueries : IWarningQueries
             if (lot.ExpirationDate == null)
                 continue;
             DateTime warningDate = lot.ExpirationDate.Value.AddMonths(-months);
-            if (lot.ExpirationDate - warningDate <= TimeSpan.Zero)
+            if (DateTime.Now - warningDate > TimeSpan.Zero)
             {
                 warningLots.Add(lot);
             }
