@@ -1,4 +1,5 @@
-﻿using ThaiDuongWarehouse.Api.Applications.Commands.GoodsReceipts;
+﻿using Microsoft.AspNetCore.Mvc;
+using ThaiDuongWarehouse.Api.Applications.Commands.GoodsReceipts;
 using ThaiDuongWarehouse.Api.Applications.Queries;
 
 namespace ThaiDuongWarehouse.Api.Controllers;
@@ -38,11 +39,13 @@ public class GoodsReceiptsController : ControllerBase
         return await _queries.GetGoodsReceiptsByTime(query);
     }
     [HttpPost]
-    public async Task<IActionResult> PostAsync([FromBody] CreateGoodsReceiptCommand command)
+    [Route("{goodsReceiptId}/{supplier}/{employeeId}/goodsIssueLots")]
+    public async Task<IActionResult> PostAsync(string goodsReceiptId, string? supplier, string employeeId, [FromBody] List<CreateGoodsReceiptLotViewModel> goodsReceiptLots)
     {
+        CreateGoodsReceiptCommand cmd = new (goodsReceiptId, supplier, employeeId, goodsReceiptLots);
         try
         {
-            var result = await _mediator.Send(command);
+            var result = await _mediator.Send(cmd);
 
             if(!result)
             {

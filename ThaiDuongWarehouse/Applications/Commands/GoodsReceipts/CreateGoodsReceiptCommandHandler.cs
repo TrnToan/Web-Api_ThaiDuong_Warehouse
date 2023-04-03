@@ -15,8 +15,9 @@ public class CreateGoodsReceiptCommandHandler : IRequestHandler<CreateGoodsRecei
 
     public async Task<bool> Handle(CreateGoodsReceiptCommand request, CancellationToken cancellationToken)
     {
+        var goodsReceiptEmployee = await _employeeRepository.GetEmployeeById(request.EmployeeId); 
         var goodsReceipt = new GoodsReceipt(request.GoodsReceiptId, request.Supplier,
-            request.Timestamp, false, request.Employee);
+            request.Timestamp, false, goodsReceiptEmployee);
         
         foreach (var receiptLotViewModel in request.GoodsReceiptLots)
         {
@@ -33,7 +34,7 @@ public class CreateGoodsReceiptCommandHandler : IRequestHandler<CreateGoodsRecei
             }
 
             var goodsReceiptLot = new GoodsReceiptLot(receiptLotViewModel.GoodsReceiptLotId,
-                receiptLotViewModel.Quantity, employee, item);
+                receiptLotViewModel.Quantity, receiptLotViewModel.Unit, employee, item);
             goodsReceipt.AddLot(goodsReceiptLot);
         }
         _goodsReceiptRepository.Add(goodsReceipt);

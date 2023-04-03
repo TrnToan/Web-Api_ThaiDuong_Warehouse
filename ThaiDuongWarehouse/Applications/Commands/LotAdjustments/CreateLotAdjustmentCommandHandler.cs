@@ -15,19 +15,19 @@ public class CreateLotAdjustmentCommandHandler : IRequestHandler<CreateLotAdjust
 
     public async Task<bool> Handle(CreateLotAdjustmentCommand request, CancellationToken cancellationToken)
     {
-        var itemLot = _itemLotRepository.GetLotByLotId(request.LotId);
-        if (itemLot == null)
+        var itemLot = await _itemLotRepository.GetLotByLotId(request.LotId);
+        if (itemLot is null)
         {
             throw new EntityNotFoundException($"{itemLot} does not exist");
         }
-        var employee = _employeeRepository.GetEmployeeByName(request.EmployeeName);
-        if (employee == null)
+        var employee = await _employeeRepository.GetEmployeeByName(request.EmployeeName);
+        if (employee is null)
         {
             throw new EntityNotFoundException($"{employee} does not exist");
         }
         
-        var lotAdjustment = new LotAdjustment(request.LotId, request.OldPurchaseOrderNumber, request.Note, 
-            request.BeforeQuantity, DateTime.Now);
+        var lotAdjustment = new LotAdjustment(request.LotId, request.OldPurchaseOrderNumber,  request.BeforeQuantity, 
+            request.Unit, request.Note, DateTime.Now);
         lotAdjustment.Update(request.AfterQuantity, request.NewPurchaseOrderNumber);
         _lotAdjustmentRepository.Add(lotAdjustment);
 

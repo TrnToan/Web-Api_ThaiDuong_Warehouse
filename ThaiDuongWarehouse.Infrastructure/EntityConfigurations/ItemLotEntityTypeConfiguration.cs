@@ -7,6 +7,7 @@ public class ItemLotEntityTypeConfiguration : IEntityTypeConfiguration<ItemLot>
         builder.HasIndex(l => l.LotId).IsUnique();
         builder.Property(l => l.IsIsolated).IsRequired();
         builder.Property(l => l.Quantity).IsRequired();
+        builder.Property(l => l.Unit).IsRequired();
         builder.Property(l => l.SublotSize);
         builder.Property(l => l.PurchaseOrderNumber);
         builder.Property(l => l.ProductionDate);

@@ -7,21 +7,21 @@ public class CreateGoodsReceiptCommand : IRequest<bool>
     [DataMember]
     public string GoodsReceiptId { get; private set; }
     [DataMember]
-    public DateTime Timestamp { get; private set; }
+    public DateTime Timestamp { get; private set; } = DateTime.Now;
     [DataMember]
     public string? Supplier { get; private set; }
     [DataMember]
-    public List<CreateGoodsReceiptLotViewModel> GoodsReceiptLots { get; private set; }
+    public string EmployeeId { get; private set; }
     [DataMember]
-    public Employee Employee { get; private set; }
-    
-    public CreateGoodsReceiptCommand(string goodsReceiptId, DateTime timestamp, string supplier,
-        Employee employee, List<CreateGoodsReceiptLotViewModel> lots)
+    public List<CreateGoodsReceiptLotViewModel> GoodsReceiptLots { get; private set; }
+
+    public CreateGoodsReceiptCommand(string goodsReceiptId, string supplier,
+        string employeeId, List<CreateGoodsReceiptLotViewModel> lots)
     {
         GoodsReceiptId = goodsReceiptId;
-        Timestamp = timestamp;
+        //Timestamp = timestamp;
         Supplier = supplier;
-        Employee = employee;
+        EmployeeId = employeeId;
         GoodsReceiptLots = lots;
     }
 }

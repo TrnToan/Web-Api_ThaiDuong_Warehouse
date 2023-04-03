@@ -20,3 +20,8 @@ global using ThaiDuongWarehouse.Api.Applications.Exceptions;
 global using ThaiDuongWarehouse.Api.Applications.Queries.LotAdjustments;
 global using ThaiDuongWarehouse.Api.Applications.Queries.GoodsReceipt;
 global using ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate;
+global using ThaiDuongWarehouse.Api.Applications.Queries.GoodsIssues;
+global using ThaiDuongWarehouse.Api.Applications.Queries.InventoryLogEntries;
+global using ThaiDuongWarehouse.Api.Applications.Queries.Warnings;
+global using ThaiDuongWarehouse.Domain.AggregateModels.GoodsIssueAggregate;
+global using ThaiDuongWarehouse.Domain.AggregateModels.InventoryLogAggregate;

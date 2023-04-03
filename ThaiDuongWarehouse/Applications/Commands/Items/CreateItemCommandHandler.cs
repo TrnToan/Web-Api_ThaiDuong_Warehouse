@@ -10,11 +10,10 @@ public class CreateItemCommandHandler : IRequestHandler<CreateItemCommand, bool>
 
     public async Task<bool> Handle(CreateItemCommand request, CancellationToken cancellationToken)
     {
-        var item = new Item(request.ItemId, request.ItemClassId, request.UnitName,
+        var item = new Item(request.ItemId, request.ItemClassId, request.Unit,
             request.ItemName, request.MinimumStockLevel, request.Price);
 
         _itemRepository.Add(item);
-        await _itemRepository.UnitOfWork.SaveEntitiesAsync();
-        return true;
+        return await _itemRepository.UnitOfWork.SaveEntitiesAsync();
     }
 }

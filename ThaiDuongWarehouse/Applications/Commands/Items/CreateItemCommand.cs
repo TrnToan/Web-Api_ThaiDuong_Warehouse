@@ -1,5 +1,4 @@
 ﻿using System.Runtime.Serialization;
-using Unit = ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate.Unit;
 
 namespace ThaiDuongWarehouse.Api.Applications.Commands.Items;
 
@@ -17,14 +16,14 @@ public class CreateItemCommand : IRequest<bool>
     [DataMember]
     public string ItemClassId { get; private set; }
     [DataMember]
-    public string UnitName { get; private set; }
+    public string Unit{ get; private set; }
 
-    public CreateItemCommand(string itemId, string itemClassId, string unitName, string itemName, 
+    public CreateItemCommand(string itemId, string itemClassId, string unit, string itemName, 
         double minimumStockLevel, decimal? price)
     {
         ItemId = itemId;
         ItemClassId = itemClassId;
-        UnitName = unitName;
+        Unit = unit;
         ItemName = itemName;
         MinimumStockLevel = minimumStockLevel;
         Price = price;

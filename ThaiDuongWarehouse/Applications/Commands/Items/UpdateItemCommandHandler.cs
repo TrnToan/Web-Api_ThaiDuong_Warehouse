@@ -1,6 +1,4 @@
-﻿using ThaiDuongWarehouse.Api.Applications.Exceptions;
-using Unit = ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate.Unit;
-namespace ThaiDuongWarehouse.Api.Applications.Commands.Items;
+﻿namespace ThaiDuongWarehouse.Api.Applications.Commands.Items;
 
 public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand, Item>
 {

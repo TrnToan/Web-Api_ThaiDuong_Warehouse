@@ -10,14 +10,17 @@ public class CreateGoodsReceiptLotViewModel
     [DataMember]
     public double Quantity { get; private set; }
     [DataMember]
+    public string Unit { get; private set; }
+    [DataMember]
     public string ItemId { get; private set; }
     [DataMember]
     public string EmployeeId { get; private set; }
-    public CreateGoodsReceiptLotViewModel(string goodsReceiptLotId, double quantity, 
+    public CreateGoodsReceiptLotViewModel(string goodsReceiptLotId, double quantity, string unit,
         string itemId, string employeeId)
     {
         GoodsReceiptLotId = goodsReceiptLotId;
         Quantity = quantity;
+        Unit = unit;
         ItemId = itemId;
         EmployeeId = employeeId;
     }

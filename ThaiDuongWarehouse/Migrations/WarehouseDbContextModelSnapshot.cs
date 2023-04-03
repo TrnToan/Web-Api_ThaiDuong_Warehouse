@@ -65,6 +65,10 @@ namespace ThaiDuongWarehouse.Api.Migrations
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EmployeeId");
@@ -222,7 +226,7 @@ namespace ThaiDuongWarehouse.Api.Migrations
                         .HasPrecision(12, 2)
                         .HasColumnType("decimal(12,2)");
 
-                    b.Property<string>("UnitName")
+                    b.Property<string>("Unit")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -230,10 +234,8 @@ namespace ThaiDuongWarehouse.Api.Migrations
 
                     b.HasIndex("ItemClassId");
 
-                    b.HasIndex("ItemId")
+                    b.HasIndex("ItemId", "Unit")
                         .IsUnique();
-
-                    b.HasIndex("UnitName");
 
                     b.ToTable("Items");
                 });
@@ -246,16 +248,6 @@ namespace ThaiDuongWarehouse.Api.Migrations
                     b.HasKey("ItemClassId");
 
                     b.ToTable("ItemClass");
-                });
-
-            modelBuilder.Entity("ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate.Unit", b =>
-                {
-                    b.Property<string>("UnitName")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("UnitName");
-
-                    b.ToTable("Unit");
                 });
 
             modelBuilder.Entity("ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate.InventoryLogEntry", b =>
@@ -281,6 +273,10 @@ namespace ThaiDuongWarehouse.Api.Migrations
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -324,6 +320,10 @@ namespace ThaiDuongWarehouse.Api.Migrations
 
                     b.Property<double?>("SublotSize")
                         .HasColumnType("float");
+
+                    b.Property<string>("Unit")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -433,6 +433,10 @@ namespace ThaiDuongWarehouse.Api.Migrations
                             b1.Property<double?>("RequestedSublotSize")
                                 .HasColumnType("float");
 
+                            b1.Property<string>("Unit")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
                             b1.HasKey("Id");
 
                             b1.HasIndex("GoodsIssueId");
@@ -541,6 +545,10 @@ namespace ThaiDuongWarehouse.Api.Migrations
                             b1.Property<double?>("SublotSize")
                                 .HasColumnType("float");
 
+                            b1.Property<string>("Unit")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
                             b1.HasKey("GoodsReceiptLotId");
 
                             b1.HasIndex("EmployeeId");
@@ -585,15 +593,7 @@ namespace ThaiDuongWarehouse.Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate.Unit", "Unit")
-                        .WithMany()
-                        .HasForeignKey("UnitName")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("ItemClass");
-
-                    b.Navigation("Unit");
                 });
 
             modelBuilder.Entity("ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate.InventoryLogEntry", b =>

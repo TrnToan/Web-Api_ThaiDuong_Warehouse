@@ -31,6 +31,7 @@ public class GoodsIssueEntityTypeConfiguration : IEntityTypeConfiguration<GoodsI
             ge.Property(entry => entry.Id).ValueGeneratedOnAdd().IsRequired();
             ge.Property(entry => entry.RequestedSublotSize);
             ge.Property(entry => entry.RequestedQuantity).IsRequired();
+            ge.Property(entry => entry.Unit).IsRequired();
 
             ge.HasOne(entry => entry.Item).WithOne().IsRequired(); 
             ge.OwnsMany(entry => entry.Lots, lot =>

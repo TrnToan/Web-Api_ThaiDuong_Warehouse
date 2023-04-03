@@ -3,25 +3,24 @@ public class Item : Entity, IAggregateRoot
 {
     public string ItemId { get; private set; }
     public string ItemClassId { get; private set; }             // ForeignKey
-    public string UnitName { get; private set; }                // ForeignKey
+    public string Unit { get; private set; }                
     public string ItemName { get; private set; }
     public double MinimumStockLevel { get; private set; }
     public decimal? Price { get; private set; }
-    public Unit Unit { get; private set; }
     public ItemClass ItemClass { get; private set; }
 
-    public Item(string itemId, string itemClassId, string unitName, string itemName,
+    public Item(string itemId, string itemClassId, string unit, string itemName,
         double minimumStockLevel, decimal? price)
     {
         ItemId = itemId;
         ItemClassId = itemClassId;
-        UnitName = unitName;
+        Unit = unit;
         ItemName = itemName;
         MinimumStockLevel = minimumStockLevel;
         Price = price;
     }
 
-    public void Update(Unit unit, double minimumStockLevel, decimal price)
+    public void Update(string unit, double minimumStockLevel, decimal price)
     {
         Unit = unit;
         MinimumStockLevel = minimumStockLevel;
@@ -29,6 +28,6 @@ public class Item : Entity, IAggregateRoot
     }
     public void ConfirmCreation()
     {
-        AddDomainEvent(new ItemCreatedDomainEvent(this));
+        //AddDomainEvent(new ItemLotInformationChangedDomainEvent());
     }
 }

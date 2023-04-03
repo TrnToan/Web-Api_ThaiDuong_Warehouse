@@ -18,7 +18,9 @@ public class WarehouseDbContext : DbContext, IUnitOfWork
     private IDbContextTransaction? _currentTransaction;
     private readonly IMediator _mediator;
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public WarehouseDbContext(DbContextOptions options) : base(options) { }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public IDbContextTransaction? GetCurrentTransaction() => _currentTransaction;
     public bool HasActiveTransaction => _currentTransaction != null;
     public WarehouseDbContext(DbContextOptions options, IMediator mediator) : base(options)
@@ -38,7 +40,6 @@ public class WarehouseDbContext : DbContext, IUnitOfWork
         modelBuilder.ApplyConfiguration(new ItemLotEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new WarehouseEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ItemClassEntityTypeConfiguration());
-        modelBuilder.ApplyConfiguration(new UnitEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new LocationEntityTypeConfiguration());
     }
     public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)

@@ -7,6 +7,7 @@ public class LotAdjustment : Entity, IAggregateRoot
     public string NewPurchaseOrderNumber { get; private set; }
     public double BeforeQuantity {  get; private set; }
     public double AfterQuantity { get; private set; }
+    public string Unit { get; private set; }
     public bool IsConfirmed { get; private set; } = false;
     public DateTime Timestamp { get; private set; } 
     public string? Note { get; private set; }
@@ -16,25 +17,31 @@ public class LotAdjustment : Entity, IAggregateRoot
     public Employee Employee { get; private set; }
     public Item Item { get; private set; }
 
-    public LotAdjustment(string lotId, string newPurchaseOrderNumber, double afterQuantity,
-        DateTime timestamp, string? note, int itemId, int employeeId)
+    public LotAdjustment(string lotId, string oldPurchaseOrderNumber, string newPurchaseOrderNumber, double beforeQuantity, 
+        double afterQuantity, string unit, bool isConfirmed, DateTime timestamp, string? note, 
+        int itemId, int employeeId)
     {
         LotId = lotId;
+        OldPurchaseOrderNumber = oldPurchaseOrderNumber;
         NewPurchaseOrderNumber = newPurchaseOrderNumber;
+        BeforeQuantity = beforeQuantity;
         AfterQuantity = afterQuantity;
+        Unit = unit;
+        IsConfirmed = isConfirmed;
         Timestamp = timestamp;
         Note = note;
         ItemId = itemId;
         EmployeeId = employeeId;
     }
 
-    public LotAdjustment(string lotId, string oldPurchaseOrderNumber, string? note, double beforeQuantity,
+    public LotAdjustment(string lotId, string oldPurchaseOrderNumber, double beforeQuantity, string unit, string? note,
         DateTime timestamp)
     {
         LotId = lotId;
         OldPurchaseOrderNumber = oldPurchaseOrderNumber;
         Note = note;
         BeforeQuantity = beforeQuantity;
+        Unit = unit;
         Timestamp = timestamp;
     }
 
@@ -43,11 +50,12 @@ public class LotAdjustment : Entity, IAggregateRoot
         AfterQuantity = quantity;
         NewPurchaseOrderNumber = purchaseOrderNumber;
     }
-    public void Confirm(string lotId, string itemId, DateTime timestamp, 
+    public void Confirm(string lotId, string itemId, string unit, DateTime timestamp, 
         double beforeQuantity , double afterQuanity, string newPurchaseOrderNumber)
     {
         IsConfirmed = true;
         Timestamp = timestamp;
-        this.AddDomainEvent(new LotAdjustedDomainEvent(lotId, itemId, beforeQuantity, afterQuanity, newPurchaseOrderNumber, timestamp));
+        this.AddDomainEvent(new LotAdjustedDomainEvent(lotId, itemId, beforeQuantity, afterQuanity, unit, 
+            newPurchaseOrderNumber, timestamp));
     }
 }

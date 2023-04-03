@@ -24,7 +24,7 @@ public class LotAdjustedDomainEventHandler : INotificationHandler<LotAdjustedDom
 
 #pragma warning disable CS8604 // Possible null reference argument.
         var inventoryLogEntry = new InventoryLogEntry(notification.Timestamp, notification.LotId, notification.BeforeQuantity,
-            changedQuantity, item);
+            changedQuantity, notification.Unit, item);
 #pragma warning restore CS8604 // Possible null reference argument.
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
         itemLot.Update(notification.AfterQuantity, notification.NewPurchaseOrderNumber);

@@ -17,12 +17,14 @@ public class CreateLotAdjustmentCommand : IRequest<bool>
     [DataMember]
     public string NewPurchaseOrderNumber { get; private set; }
     [DataMember]
+    public string Unit { get; private set; }
+    [DataMember]
     public string EmployeeName { get; private set; }
     [DataMember]
     public string? Note { get; private set; }
 
     public CreateLotAdjustmentCommand(string lotId, string itemId, double beforeQuantity, 
-        double afterQuantity, string oldPurchaseOrderNumber, string newPurchaseOrderNumber, 
+        double afterQuantity, string oldPurchaseOrderNumber, string newPurchaseOrderNumber, string unit,
         string employeeName, string? note)
     {
         LotId = lotId;
@@ -31,6 +33,7 @@ public class CreateLotAdjustmentCommand : IRequest<bool>
         AfterQuantity = afterQuantity;
         OldPurchaseOrderNumber = oldPurchaseOrderNumber;
         NewPurchaseOrderNumber = newPurchaseOrderNumber;
+        Unit = unit;
         EmployeeName = employeeName;
         Note = note;
     }

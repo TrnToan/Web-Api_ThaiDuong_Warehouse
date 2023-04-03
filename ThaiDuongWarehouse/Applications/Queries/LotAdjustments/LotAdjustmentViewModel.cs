@@ -1,5 +1,4 @@
-﻿using Unit = ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate.Unit;
-namespace ThaiDuongWarehouse.Api.Applications.Queries.LotAdjustments;
+﻿namespace ThaiDuongWarehouse.Api.Applications.Queries.LotAdjustments;
 
 public class LotAdjustmentViewModel
 {
@@ -9,12 +8,12 @@ public class LotAdjustmentViewModel
     public double AfterQuantity { get; private set; }
     public string OldPurchaseOrderNumber { get; private set; }
     public string NewPurchaseOrderNumber { get; private set; }
-    public Unit Unit { get; private set; }
+    public string Unit { get; private set; }
     public EmployeeViewModel Employee { get; private set; }
     public string? Note { get; private set; }
     public LotAdjustmentViewModel(string lotId, string itemId, double beforeQuantity, 
         double afterQuantity, string oldPurchaseOrderNumber, string newPurchaseOrderNumber, 
-        Unit unit, EmployeeViewModel employee, string? note)
+        string unit, EmployeeViewModel employee, string? note)
     {
         LotId = lotId;
         ItemId = itemId;

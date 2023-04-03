@@ -9,6 +9,7 @@ public class LotAdjustmentEntityTypeConfiguration : IEntityTypeConfiguration<Lot
         builder.Property(l => l.OldPurchaseOrderNumber).HasMaxLength(50).IsRequired();
         builder.Property(l => l.BeforeQuantity).IsRequired();
         builder.Property(l => l.AfterQuantity).IsRequired();
+        builder.Property(l => l.Unit).IsRequired();
         builder.Property(l => l.IsConfirmed).IsRequired();
         builder.Property(l => l.Timestamp).IsRequired();
         builder.Property(l => l.Note);

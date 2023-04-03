@@ -1,8 +1,5 @@
 using System.Reflection;
 using ThaiDuongWarehouse.Api.Applications.Mapping;
-using ThaiDuongWarehouse.Api.Applications.Queries.InventoryLogEntries;
-using ThaiDuongWarehouse.Api.Applications.Queries.Warnings;
-using ThaiDuongWarehouse.Domain.AggregateModels.InventoryLogAggregate;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +34,7 @@ builder.Services.AddScoped<IStorageRepository, StorageRepository>();
 builder.Services.AddScoped<IItemLotRepository, ItemLotRepository>();
 builder.Services.AddScoped<IInventoryLogEntryRepository, InventoryLogEntryRepository>();
 builder.Services.AddScoped<IGoodsReceiptRepository, GoodsReceiptRepository>();
+builder.Services.AddScoped<IGoodsIssueRepository, GoodsIssueRepository>();
 
 builder.Services.AddScoped<IEmployeeQueries, EmployeeQueries>();
 builder.Services.AddScoped<IItemQueries, ItemQueries>();
@@ -47,6 +45,7 @@ builder.Services.AddScoped<IItemLotQueries, ItemLotQueries>();
 builder.Services.AddScoped<IGoodsReceiptQueries, GoodsReceiptQueries>();
 builder.Services.AddScoped<IInventoryLogEntryQueries, InventoryLogEntryQueries>();
 builder.Services.AddScoped<IWarningQueries, WarningQueries>();
+builder.Services.AddScoped<IGoodsIssueQueries, GoodsIssueQueries>();
 
 builder.Services.AddAutoMapper(typeof(ModelToViewModelProfile).Assembly);
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
