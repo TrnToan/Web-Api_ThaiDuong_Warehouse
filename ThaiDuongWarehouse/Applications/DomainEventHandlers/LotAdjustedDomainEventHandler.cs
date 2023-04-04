@@ -19,16 +19,17 @@ public class LotAdjustedDomainEventHandler : INotificationHandler<LotAdjustedDom
     public async Task Handle(LotAdjustedDomainEvent notification, CancellationToken cancellationToken)
     {
         var itemLot = await _itemLotRepository.GetLotByLotId(notification.LotId);
-        var item = await _itemRepository.GetItemById(notification.ItemId);
+        if (itemLot is null)
+            throw new EntityNotFoundException(notification.LotId);
+
+        var item = await _itemRepository.GetItemById(notification.ItemId, notification.Unit);
         var changedQuantity = notification.AfterQuantity - notification.BeforeQuantity;
 
 #pragma warning disable CS8604 // Possible null reference argument.
         var inventoryLogEntry = new InventoryLogEntry(notification.Timestamp, notification.LotId, notification.BeforeQuantity,
-            changedQuantity, notification.Unit, item);
+            changedQuantity, itemLot.Unit, item);
 #pragma warning restore CS8604 // Possible null reference argument.
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
         itemLot.Update(notification.AfterQuantity, notification.NewPurchaseOrderNumber);
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
         _itemLotRepository.UpdateLot(itemLot);
         _inventoryLogEntryRepository.Add(inventoryLogEntry);

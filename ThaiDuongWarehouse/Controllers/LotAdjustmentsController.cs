@@ -19,7 +19,6 @@ public class LotAdjustmentsController : ControllerBase
         return await _queries.GetUnconfirmedAdjustments();
     }
     [HttpPost]
-    [Route("AddNewLotAdjustment")]
     public async Task<IActionResult> PostAsync([FromBody] CreateLotAdjustmentCommand command)
     {
         var result = await _mediator.Send(command);

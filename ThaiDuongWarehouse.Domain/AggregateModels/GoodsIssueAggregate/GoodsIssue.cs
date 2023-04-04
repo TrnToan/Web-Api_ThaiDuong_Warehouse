@@ -52,8 +52,7 @@ public class GoodsIssue : Entity, IAggregateRoot
         entry.AddLot(lot);
     }
     public void Confirm(DateTime timestamp, List<ItemLot> lots)
-    {
-        IsConfirmed = true; 
+    {       
         var completelyExportedLots = new List<ItemLot>();
         foreach (var lot in lots)
         {
@@ -67,9 +66,13 @@ public class GoodsIssue : Entity, IAggregateRoot
         }
         this.AddDomainEvent(new ItemLotsExportedDomainEvent(completelyExportedLots));
 
-        foreach(var entry in Entries)
-        {
-
+        foreach(GoodsIssueEntry entry in Entries)
+        {           
+            foreach(GoodsIssueLot lot in entry.Lots)
+            {
+                this.AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.GoodsIssueLotId, lot.Quantity, entry.Item, timestamp));
+            }
         }
+        IsConfirmed = true;
     }
 }

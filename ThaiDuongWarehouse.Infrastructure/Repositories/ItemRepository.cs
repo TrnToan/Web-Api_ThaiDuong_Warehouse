@@ -19,10 +19,12 @@ public class ItemRepository : BaseRepository, IItemRepository
         return await _context.Items.ToListAsync();
     }
 
-    public async Task<Item?> GetItemById(string itemId)
+    public async Task<Item?> GetItemById(string itemId, string unit)
     {
         return await _context.Items
-            .FirstOrDefaultAsync(x => x.ItemId == itemId);
+            .Where(x => x.ItemId == itemId)
+            .Where(x => x.Unit == unit)
+            .FirstOrDefaultAsync();
     }
 
     public Item Update(Item item)

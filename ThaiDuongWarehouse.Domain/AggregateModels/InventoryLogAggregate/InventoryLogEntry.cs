@@ -2,7 +2,7 @@
 public class InventoryLogEntry : Entity, IAggregateRoot
 {
     public int ItemId { get; private set; }
-    public string ItemLotId { get; private set; } 
+    public string ItemLotId { get; private set; }
     public double BeforeQuantity { get; private set; }
     public double ChangedQuantity { get; private set; }
     public string Unit { get; private set; }

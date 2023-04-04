@@ -1,6 +1,4 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate;
-
-namespace ThaiDuongWarehouse.Api.Applications.Queries.Items;
+﻿namespace ThaiDuongWarehouse.Api.Applications.Queries.Items;
 
 public class ItemQueries : IItemQueries
 {
@@ -20,9 +18,9 @@ public class ItemQueries : IItemQueries
         return viewModels;
     }
 
-    public async Task<ItemViewModel> GetItemByIdAsync(string itemId)
+    public async Task<ItemViewModel?> GetItemByIdAsync(string itemId, string unit)
     {
-        var item = await _itemRepository.GetItemById(itemId);
+        var item = await _itemRepository.GetItemById(itemId, unit);
         return _mapper.Map<Item?, ItemViewModel>(item);
     }
 }

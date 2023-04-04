@@ -23,10 +23,10 @@ public class ItemsController : ControllerBase
     }
 
     [HttpGet]
-    [Route("{itemId}")]
-    public async Task<ItemViewModel> GetItemById(string itemId)
+    [Route("{itemId}/{unit}")]
+    public async Task<ItemViewModel?> GetItemById([FromRoute]string itemId, [FromRoute]string unit)
     {
-        return await _queries.GetItemByIdAsync(itemId);
+        return await _queries.GetItemByIdAsync(itemId, unit);
     }
 
     [HttpPost]

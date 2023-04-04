@@ -6,16 +6,16 @@ namespace ThaiDuongWarehouse.Api.Applications.Commands.GoodsIssues;
 public class CreateGoodsIssueEntryViewModel
 {
     [DataMember]
-    public Item Item { get; private set; }
+    public string ItemId { get; private set; }
     [DataMember] 
     public string Unit { get; private set; }
     [DataMember]
     public double? RequestedSublotSize { get; private set; }
     [DataMember]
     public double RequestedQuantity { get; private set; }
-    public CreateGoodsIssueEntryViewModel(Item item, string unit, double? requestedSublotSize ,double requestedQuantity)
+    public CreateGoodsIssueEntryViewModel(string itemId, string unit, double? requestedSublotSize ,double requestedQuantity)
     {
-        Item = item;
+        ItemId = itemId;
         Unit = unit;
         RequestedSublotSize = requestedSublotSize;
         RequestedQuantity = requestedQuantity;

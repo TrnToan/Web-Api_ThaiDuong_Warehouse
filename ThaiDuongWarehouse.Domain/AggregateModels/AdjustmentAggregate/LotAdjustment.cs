@@ -50,8 +50,8 @@ public class LotAdjustment : Entity, IAggregateRoot
         AfterQuantity = quantity;
         NewPurchaseOrderNumber = purchaseOrderNumber;
     }
-    public void Confirm(string lotId, string itemId, string unit, DateTime timestamp, 
-        double beforeQuantity , double afterQuanity, string newPurchaseOrderNumber)
+    public void Confirm(string lotId, string itemId, string unit, DateTime timestamp, double beforeQuantity , double afterQuanity, 
+        string newPurchaseOrderNumber)
     {
         IsConfirmed = true;
         Timestamp = timestamp;

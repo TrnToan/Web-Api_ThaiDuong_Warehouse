@@ -3,6 +3,6 @@ public interface IItemRepository : IRepository<Item>
 {
     Item Add(Item item);
     Item Update(Item item);
-    Task<Item?> GetItemById(string itemId);
+    Task<Item?> GetItemById(string itemId, string unit);
     Task<IEnumerable<Item>> GetAllAsync();
 }

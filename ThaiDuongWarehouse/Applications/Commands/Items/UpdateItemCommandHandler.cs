@@ -10,7 +10,7 @@ public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand, Item>
 
     public async Task<Item> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
     {
-        var item = await _itemRepository.GetItemById(request.ItemId);
+        var item = await _itemRepository.GetItemById(request.ItemId, request.Unit);
 
         if(item is null)
         {

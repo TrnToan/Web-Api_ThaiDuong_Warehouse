@@ -21,7 +21,7 @@ public class CreateGoodsReceiptCommandHandler : IRequestHandler<CreateGoodsRecei
         
         foreach (var receiptLotViewModel in request.GoodsReceiptLots)
         {
-            var item = await _itemRepository.GetItemById(receiptLotViewModel.ItemId);
+            var item = await _itemRepository.GetItemById(receiptLotViewModel.ItemId, receiptLotViewModel.Unit);
             if (item is null)
             {
                 throw new EntityNotFoundException($"{item}");

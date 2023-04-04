@@ -1,7 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
-using ThaiDuongWarehouse.Api.Applications.Commands.GoodsIssues;
+﻿using ThaiDuongWarehouse.Api.Applications.Commands.GoodsIssues;
 using ThaiDuongWarehouse.Api.Applications.Queries;
-using ThaiDuongWarehouse.Api.Applications.Queries.GoodsIssues;
 
 namespace ThaiDuongWarehouse.Api.Controllers;
 
@@ -16,23 +14,27 @@ public class GoodsIssuesController : ControllerBase
         _queries = queries;
         _mediator = mediator;
     }
+
     [HttpGet]
     [Route("{goodsIssueId}")]
     public async Task<GoodsIssueViewModel?> GetGoodsIssueByIdAsync([FromRoute] string goodsIssueId)
     {
         return await _queries.GetGoodsIssueById(goodsIssueId);
     }
+
     [HttpGet]
     public async Task<IEnumerable<GoodsIssueViewModel>> GetGoodsIssuesAsync([FromQuery] TimeRangeQuery query)
     {
         return await _queries.GetConfirmedGoodsIssuesByTime(query);
     }
+
     [HttpGet]
     [Route("Unconfirmed")]
     public async Task<IEnumerable<GoodsIssueViewModel>> GetUnconfirmedGoodsIssuesAsync()
     {
         return await _queries.GetUnconfirmedGoodsIssues();
     }
+
     [HttpPost]
     public async Task<IActionResult> PostAsync([FromBody] CreateGoodsIssueCommand command)
     {
@@ -52,6 +54,7 @@ public class GoodsIssuesController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
     [HttpPatch]
     [Route("{goodsIssueId}/goodsIssueLots")]
     public async Task<IActionResult> AddLotsAsync([FromRoute] string goodsIssueId, [FromBody] List<CreateGoodsIssueLotViewModel> goodsIssueLots)
@@ -66,6 +69,25 @@ public class GoodsIssuesController : ControllerBase
                 return BadRequest();
             }
 
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPatch]
+    [Route("Confirm")]
+    public async Task<IActionResult> ConfirmGoodsIssue([FromBody] ConfirmExportingGoodsIssueLotsCommand command)
+    {
+        bool result = await _mediator.Send(command);
+        try
+        {
+            if (result != true)
+            {
+                return BadRequest(result);
+            }
             return Ok();
         }
         catch (Exception ex)

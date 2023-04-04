@@ -24,9 +24,12 @@ public class ItemLotRepository : BaseRepository, IItemLotRepository
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<ItemLot>> GetLotByItemId(string itemId)
+    public async Task<IEnumerable<ItemLot>> GetLotsByItemId(string itemId, string unit)
     {
-        return await _context.ItemLots.Where(il => il.Item.ItemId == itemId).ToListAsync();
+        return await _context.ItemLots
+            .Where(il => il.Item.ItemId == itemId)
+            .Where(il => il.Unit == unit)
+            .ToListAsync();
     }
 
     public async Task<ItemLot?> GetLotByLotId(string lotId)
@@ -39,9 +42,10 @@ public class ItemLotRepository : BaseRepository, IItemLotRepository
         return await _context.ItemLots.Where(il => il.PurchaseOrderNumber == purchaseOrderNumber).ToListAsync();
     }
 
-    public void RemoveLot(ItemLot itemLot)
+    public void RemoveLots(IEnumerable<ItemLot> itemLots)
     {
-        _context.ItemLots.Remove(itemLot);
+        _context.ItemLots.RemoveRange(itemLots);
+        
     }
 
     public void UpdateLot(ItemLot itemLot)

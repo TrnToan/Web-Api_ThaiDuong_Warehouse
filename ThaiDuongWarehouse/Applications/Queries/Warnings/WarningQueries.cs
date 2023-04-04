@@ -12,14 +12,14 @@ public class WarningQueries : IWarningQueries
 
     public async Task<IEnumerable<ItemLotViewModel>> ExpirationWarnings(int months)
     {
-        var lots = await _context.ItemLots
+        List<ItemLot> lots = await _context.ItemLots
             .AsNoTracking()
             .Include(il => il.Location)
             .Include(il => il.Item)
             .ToListAsync();
 
         List<ItemLot> warningLots = new();
-        foreach (var lot in lots)
+        foreach (ItemLot lot in lots)
         {
             if (lot.ExpirationDate == null)
                 continue;
@@ -35,15 +35,15 @@ public class WarningQueries : IWarningQueries
 
     public async Task<IEnumerable<ItemLotViewModel>> StockLevelWarnings(string itemClassId)
     {
-        var items = await _context.Items
+        List<Item> items = await _context.Items
             .AsNoTracking()
             .Where(gi => gi.ItemClassId == itemClassId)
             .ToListAsync();
 
         List<ItemLot> itemLots = new();
-        foreach (var item in items)
+        foreach (Item item in items)
         {
-            var lots = await _context.ItemLots
+            List<ItemLot> lots = await _context.ItemLots
                 .AsNoTracking()
                 .Include(il => il.Location)
                 .Include(il => il.Item)
@@ -51,7 +51,7 @@ public class WarningQueries : IWarningQueries
                 .ToListAsync();
 
             double totalQuantity = 0;
-            foreach (var lot in lots)
+            foreach (ItemLot lot in lots)
             {
                 totalQuantity += lot.Quantity;
             }

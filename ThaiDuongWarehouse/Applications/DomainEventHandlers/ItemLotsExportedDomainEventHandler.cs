@@ -13,10 +13,8 @@ public class ItemLotsExportedDomainEventHandler : INotificationHandler<ItemLotsE
     public Task Handle(ItemLotsExportedDomainEvent notification, CancellationToken cancellationToken)
     {
         var removedLots = notification.ItemLots;
-        foreach(var lot in removedLots)
-        {
-            _itemLotRepository.RemoveLot(lot);
-        }
+
+        _itemLotRepository.RemoveLots(removedLots);
         return Task.CompletedTask;
     }
 }

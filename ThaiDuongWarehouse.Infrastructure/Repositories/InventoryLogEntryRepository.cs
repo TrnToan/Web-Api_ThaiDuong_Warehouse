@@ -29,4 +29,12 @@ public class InventoryLogEntryRepository : BaseRepository, IInventoryLogEntryRep
     {
         throw new NotImplementedException();
     }
+
+    public async Task<InventoryLogEntry?> GetLatestLogEntry(int itemId)
+    {
+        return await _context.InventoryLogEntries
+            .OrderByDescending(log => log.Timestamp)
+            .Include(log => log.Item)
+            .FirstOrDefaultAsync(log => log.Item.Id == itemId);
+    }
 }

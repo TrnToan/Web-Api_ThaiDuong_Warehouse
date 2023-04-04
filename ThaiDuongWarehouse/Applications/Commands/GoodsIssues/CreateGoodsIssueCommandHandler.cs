@@ -25,7 +25,7 @@ public class CreateGoodsIssueCommandHandler : IRequestHandler<CreateGoodsIssueCo
 
         foreach (var entry in request.Entries)
         {
-            var item = await _itemRepository.GetItemById(entry.Item.ItemId);
+            var item = await _itemRepository.GetItemById(entry.ItemId, entry.Unit);
             if (item is null)
             {
                 throw new EntityNotFoundException($"{item} doesn't exist.");
