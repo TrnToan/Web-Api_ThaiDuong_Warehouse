@@ -21,7 +21,7 @@ public class InventoryLogEntryChangedDomainEventHandler : INotificationHandler<I
             return;
         }
         double tempQuantity = latestEntry.BeforeQuantity + latestEntry.ChangedQuantity;
-        InventoryLogEntry newEntry = new InventoryLogEntry(notification.Item.Id, notification.ItemLotId, notification.Timestamp,
+        InventoryLogEntry newEntry = new (notification.Item.Id, notification.ItemLotId, notification.Timestamp,
             tempQuantity, notification.Quantity, notification.Item.Unit);
 
         _inventoryLogEntryRepository.Add(newEntry);

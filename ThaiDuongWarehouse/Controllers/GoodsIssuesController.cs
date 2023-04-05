@@ -78,9 +78,10 @@ public class GoodsIssuesController : ControllerBase
     }
 
     [HttpPatch]
-    [Route("Confirm")]
-    public async Task<IActionResult> ConfirmGoodsIssue([FromBody] ConfirmExportingGoodsIssueLotsCommand command)
+    [Route("Confirm/{goodsIssueId}")]
+    public async Task<IActionResult> ConfirmGoodsIssue([FromRoute] string goodsIssueId)
     {
+        ConfirmExportingGoodsIssueLotsCommand command = new(goodsIssueId);
         bool result = await _mediator.Send(command);
         try
         {
