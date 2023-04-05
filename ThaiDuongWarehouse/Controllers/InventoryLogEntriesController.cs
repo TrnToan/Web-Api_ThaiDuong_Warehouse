@@ -13,18 +13,12 @@ public class InventoryLogEntriesController : ControllerBase
 		_queries = queries;
 	}
 	[HttpGet]
-	public async Task<IEnumerable<InventoryLogEntryViewModel>> GetAllAsync()
-	{
-		return await _queries.GetAll();
-	}
-	[HttpGet]
 	[Route("{itemId}")]
-	public async Task<IEnumerable<InventoryLogEntryViewModel>> GetByItemIdAsync([FromRoute] string itemId)
+	public async Task<IEnumerable<InventoryLogEntryViewModel>> GetByItemIdAsync([FromRoute] string itemId,[FromQuery] TimeRangeQuery query)
 	{
-		return await _queries.GetByItem(itemId);
+		return await _queries.GetByItem(itemId, query);
 	}
 	[HttpGet]
-	[Route("GetInventoryLogEntriesByTime")]
 	public async Task<IEnumerable<InventoryLogEntryViewModel>> GetByTimeAsync([FromQuery] TimeRangeQuery query)
 	{
 		return await _queries.GetByTime(query);	

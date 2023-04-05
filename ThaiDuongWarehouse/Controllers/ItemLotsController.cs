@@ -18,19 +18,19 @@ public class ItemLotsController : ControllerBase
 		return await _queries.GetIsolatedItemLots();
 	}
 	[HttpGet]
-	[Route("GetItemLotByLotId/{itemLotId}")]
+	[Route("{itemLotId}")]
 	public async Task<ItemLotViewModel> GetItemLotByLotIdAsync(string itemLotId)
 	{
 		return await _queries.GetItemLotByLotId(itemLotId);
 	}
 	[HttpGet]
-	[Route("GetItemLotByItemId/{itemId}")]
+	[Route("{itemId}")]
 	public async Task<IEnumerable<ItemLotViewModel>> GetItemLotByItemIdAsync(string itemId)
 	{
 		return await _queries.GetItemLotsByItemId(itemId);
 	}
 	[HttpGet]
-	[Route("GetItemlotByPO/{purchaseOrderNumber}")]
+	[Route("{purchaseOrderNumber}")]
 	public async Task<IEnumerable<ItemLotViewModel>> GetItemLotByPoAsync(string purchaseOrderNumber)
 	{
 		return await _queries.GetItemLotsByPO(purchaseOrderNumber);

@@ -22,12 +22,15 @@ public class InventoryLogEntryQueries : IInventoryLogEntryQueries
         return _mapper.Map<IEnumerable<InventoryLogEntry>, IEnumerable<InventoryLogEntryViewModel>>(logEntries);
     }
 
-    public async Task<IEnumerable<InventoryLogEntryViewModel>> GetByItem(string itemId)
+    public async Task<IEnumerable<InventoryLogEntryViewModel>> GetByItem(string itemId, TimeRangeQuery query)
     {
         var logEntries = await _context.InventoryLogEntries
             .AsNoTracking()
             .Include(log => log.Item)
             .Where(log => log.Item.ItemId == itemId)
+            .Where(log =>
+            log.Timestamp.CompareTo(query.StartTime) > 0 &&
+            log.Timestamp.CompareTo(query.EndTime) < 0)
             .ToListAsync();
 
         return _mapper.Map<IEnumerable<InventoryLogEntry>, IEnumerable<InventoryLogEntryViewModel>>(logEntries);

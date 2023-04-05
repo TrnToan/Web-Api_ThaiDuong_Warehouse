@@ -39,8 +39,9 @@ public class GoodsReceiptsController : ControllerBase
         return await _queries.GetGoodsReceiptsByTime(query);
     }
     [HttpPost]
-    [Route("{goodsReceiptId}/{supplier}/{employeeId}/goodsIssueLots")]
-    public async Task<IActionResult> PostAsync(string goodsReceiptId, string? supplier, string employeeId, [FromBody] List<CreateGoodsReceiptLotViewModel> goodsReceiptLots)
+    [Route("{goodsReceiptId}/goodsIssueLots")]
+    public async Task<IActionResult> PostAsync(string goodsReceiptId, [FromQuery]string? supplier, [FromQuery]string employeeId, 
+        [FromBody] List<CreateGoodsReceiptLotViewModel> goodsReceiptLots)
     {
         CreateGoodsReceiptCommand cmd = new (goodsReceiptId, supplier, employeeId, goodsReceiptLots);
         try
