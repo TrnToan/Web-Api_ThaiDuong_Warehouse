@@ -94,4 +94,24 @@ public class GoodsReceiptsController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
+    [HttpDelete]
+    [Route("{goodsReceiptId}")]
+    public async Task<IActionResult> RemoveAsync([FromRoute] RemoveGoodsReceiptCommand command)
+    {
+        try
+        {
+            var result = await _mediator.Send(command);
+
+            if (!result)
+            {
+                return BadRequest();
+            }
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }

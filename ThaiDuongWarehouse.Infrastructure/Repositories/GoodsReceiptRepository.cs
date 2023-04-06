@@ -34,4 +34,9 @@ public class GoodsReceiptRepository : BaseRepository, IGoodsReceiptRepository
     {
         _context.GoodsReceipts.Update(goodsReceipt);
     }
+
+    public void Remove(GoodsReceipt goodsReceipt)
+    {
+        _context.GoodsReceipts.Remove(goodsReceipt);
+    }
 }
