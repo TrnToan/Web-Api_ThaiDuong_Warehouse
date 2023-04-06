@@ -572,3 +572,136 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230329050315_GoodsIssueMigration')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20230329050315_GoodsIssueMigration', N'7.0.3');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230403045719_RemoveUnitTable_Migration')
+BEGIN
+    ALTER TABLE [Items] DROP CONSTRAINT [FK_Items_Unit_UnitName];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230403045719_RemoveUnitTable_Migration')
+BEGIN
+    DROP TABLE [Unit];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230403045719_RemoveUnitTable_Migration')
+BEGIN
+    DROP INDEX [IX_Items_ItemId] ON [Items];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230403045719_RemoveUnitTable_Migration')
+BEGIN
+    DROP INDEX [IX_Items_UnitName] ON [Items];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230403045719_RemoveUnitTable_Migration')
+BEGIN
+    EXEC sp_rename N'[Items].[UnitName]', N'Unit', N'COLUMN';
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230403045719_RemoveUnitTable_Migration')
+BEGIN
+    ALTER TABLE [LotAdjustments] ADD [Unit] nvarchar(max) NOT NULL DEFAULT N'';
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230403045719_RemoveUnitTable_Migration')
+BEGIN
+    ALTER TABLE [ItemLots] ADD [Unit] nvarchar(max) NOT NULL DEFAULT N'';
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230403045719_RemoveUnitTable_Migration')
+BEGIN
+    ALTER TABLE [InventoryLogEntries] ADD [Unit] nvarchar(max) NOT NULL DEFAULT N'';
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230403045719_RemoveUnitTable_Migration')
+BEGIN
+    ALTER TABLE [GoodsReceiptLot] ADD [Unit] nvarchar(max) NOT NULL DEFAULT N'';
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230403045719_RemoveUnitTable_Migration')
+BEGIN
+    ALTER TABLE [GoodsIssueEntry] ADD [Unit] nvarchar(max) NOT NULL DEFAULT N'';
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230403045719_RemoveUnitTable_Migration')
+BEGIN
+    CREATE UNIQUE INDEX [IX_Items_ItemId_Unit] ON [Items] ([ItemId], [Unit]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230403045719_RemoveUnitTable_Migration')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20230403045719_RemoveUnitTable_Migration', N'7.0.3');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230406072045_LocationTableMigration')
+BEGIN
+    ALTER TABLE [Locations] DROP CONSTRAINT [FK_Locations_Warehouses_WarehouseId];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230406072045_LocationTableMigration')
+BEGIN
+    DROP INDEX [IX_Locations_WarehouseId] ON [Locations];
+    DECLARE @var6 sysname;
+    SELECT @var6 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Locations]') AND [c].[name] = N'WarehouseId');
+    IF @var6 IS NOT NULL EXEC(N'ALTER TABLE [Locations] DROP CONSTRAINT [' + @var6 + '];');
+    EXEC(N'UPDATE [Locations] SET [WarehouseId] = 0 WHERE [WarehouseId] IS NULL');
+    ALTER TABLE [Locations] ALTER COLUMN [WarehouseId] int NOT NULL;
+    ALTER TABLE [Locations] ADD DEFAULT 0 FOR [WarehouseId];
+    CREATE INDEX [IX_Locations_WarehouseId] ON [Locations] ([WarehouseId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230406072045_LocationTableMigration')
+BEGIN
+    ALTER TABLE [Locations] ADD CONSTRAINT [FK_Locations_Warehouses_WarehouseId] FOREIGN KEY ([WarehouseId]) REFERENCES [Warehouses] ([Id]) ON DELETE CASCADE;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230406072045_LocationTableMigration')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20230406072045_LocationTableMigration', N'7.0.3');
+END;
+GO
+
+COMMIT;
+GO
+

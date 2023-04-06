@@ -93,3 +93,4 @@ D:\Visual Studio PJs\ThaiDuongWarehouse\ThaiDuongWarehouse\obj\Release\net6.0\re
 D:\Visual Studio PJs\ThaiDuongWarehouse\ThaiDuongWarehouse\obj\Release\net6.0\ThaiDuongWarehouse.Api.pdb
 D:\Visual Studio PJs\ThaiDuongWarehouse\ThaiDuongWarehouse\obj\Release\net6.0\ThaiDuongWarehouse.Api.genruntimeconfig.cache
 D:\Visual Studio PJs\ThaiDuongWarehouse\ThaiDuongWarehouse\obj\Release\net6.0\ref\ThaiDuongWarehouse.Api.dll
+D:\Visual Studio PJs\ThaiDuongWarehouse\ThaiDuongWarehouse\bin\Release\net6.0\Newtonsoft.Json.dll

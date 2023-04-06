@@ -15,9 +15,11 @@ public class CreateLocationCommandHandler : IRequestHandler<CreateLocationComman
         {
             throw new EntityNotFoundException($"{warehouse}");
         }
-        var location = new Location(request.LocationId);
+
+        var location = new Location(request.LocationId, warehouse.Id);
         warehouse.Locations.Add(location);
         _storageRepository.Add(location);
+
         return await _storageRepository.UnitOfWork.SaveEntitiesAsync();        
     }
 }

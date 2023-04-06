@@ -8,6 +8,6 @@ public class WarehouseEntityTypeConfiguration : IEntityTypeConfiguration<Warehou
         builder.Property(w => w.WarehouseName).IsRequired();
         builder.Ignore(d => d.DomainEvents);
 
-        builder.HasMany(l => l.Locations).WithOne();
+        builder.HasMany(l => l.Locations).WithOne().HasForeignKey(l => l.WarehouseId);
     }
 }
