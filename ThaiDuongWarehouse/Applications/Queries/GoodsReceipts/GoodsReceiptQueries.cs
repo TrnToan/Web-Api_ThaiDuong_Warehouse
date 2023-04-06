@@ -10,6 +10,20 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
         _mapper = mapper;
     }
 
+    public async Task<IEnumerable<GoodsReceiptViewModel>> GetAll()
+    {
+        var goodsReceipts = await _context.GoodsReceipts
+            .AsNoTracking()
+            .Include(gr => gr.Employee)
+            .Include(gr => gr.Lots)
+                .ThenInclude(grl => grl.Item)
+            .Include(gr => gr.Lots)
+                .ThenInclude(grl => grl.Employee)
+            .ToListAsync();
+
+        return _mapper.Map<IEnumerable<GoodsReceiptViewModel>>(goodsReceipts);
+    }
+
     public async Task<IEnumerable<GoodsReceiptViewModel>> GetConfirmedGoodsReceipt()
     {
         var goodsReceipts = await _context.GoodsReceipts

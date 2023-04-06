@@ -27,6 +27,13 @@ public class ItemRepository : BaseRepository, IItemRepository
             .FirstOrDefaultAsync();
     }
 
+    public async Task<IEnumerable<Item>> GetItemsByItemId(string itemId)
+    {
+        return await _context.Items
+            .Where(x => x.ItemId == itemId)
+            .ToListAsync();
+    }
+
     public Item Update(Item item)
     {
         return _context.Items.Update(item).Entity;

@@ -70,7 +70,7 @@ public class GoodsIssue : Entity, IAggregateRoot
         {           
             foreach(GoodsIssueLot lot in entry.Lots)
             {
-                this.AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.GoodsIssueLotId, lot.Quantity, entry.Item, timestamp));
+                this.AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.GoodsIssueLotId, -lot.Quantity, entry.Item, timestamp));
             }
         }
         IsConfirmed = true;

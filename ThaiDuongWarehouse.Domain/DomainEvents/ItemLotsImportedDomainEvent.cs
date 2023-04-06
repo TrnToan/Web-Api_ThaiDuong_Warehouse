@@ -1,8 +1,8 @@
 ﻿namespace ThaiDuongWarehouse.Domain.DomainEvents;
 public class ItemLotsImportedDomainEvent : INotification
 {
-	public IEnumerable<ItemLot> ItemLots { get; private set; }
-	public ItemLotsImportedDomainEvent(IEnumerable<ItemLot> itemLots)
+	public List<ItemLot> ItemLots { get; private set; }
+	public ItemLotsImportedDomainEvent(List<ItemLot> itemLots)
     {
         ItemLots = itemLots;
     }

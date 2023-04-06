@@ -54,11 +54,15 @@ public class GoodsReceipt : Entity, IAggregateRoot
         }
         Lots.Remove(lot);
     }
-    public void Confirm(DateTime timestamp, IEnumerable<ItemLot> itemLots)
+    public void Confirm(DateTime timestamp, List<ItemLot> itemLots)
     {
         IsConfirmed = true;
         Timestamp = timestamp;
 
         this.AddDomainEvent(new ItemLotsImportedDomainEvent(itemLots));
+        foreach (var lot in itemLots)
+        {
+            this.AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.LotId, lot.Quantity, lot.Item, timestamp));
+        }
     }
 }

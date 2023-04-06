@@ -15,6 +15,11 @@ public class StorageRepository : BaseRepository, IStorageRepository
         return await _context.Warehouses.ToListAsync();
     }
 
+    public async Task<Location?> GetLocationById(string locationId)
+    {
+        return await _context.Locations.FirstOrDefaultAsync(l => l.LocationId == locationId);
+    }
+
     public async Task<Warehouse?> GetWarehouseById(string warehouseId)
     {
         return await _context.Warehouses

@@ -65,4 +65,20 @@ public class GoodsIssueQueries : IGoodsIssueQueries
         return _mapper.Map<IEnumerable<GoodsIssue>, IEnumerable<GoodsIssueViewModel>>(goodsIssues);
 
     }
+
+    public async Task<IEnumerable<GoodsIssueViewModel>> GetAll()
+    {
+        var goodsIssues = await _context.GoodsIssues
+            .AsNoTracking()
+            .Include(gi => gi.Employee)
+            .Include(gi => gi.Entries)
+                .ThenInclude(gie => gie.Item)
+            .Include(gi => gi.Entries)
+                .ThenInclude(gie => gie.Lots)
+                .ThenInclude(gil => gil.Employee)
+            .OrderByDescending(gi => gi.Timestamp)
+            .ToListAsync();
+
+        return _mapper.Map<IEnumerable<GoodsIssue>, IEnumerable<GoodsIssueViewModel>>(goodsIssues);
+    }
 }

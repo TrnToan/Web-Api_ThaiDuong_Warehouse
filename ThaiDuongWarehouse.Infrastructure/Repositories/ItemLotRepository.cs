@@ -9,6 +9,11 @@ public class ItemLotRepository : BaseRepository, IItemLotRepository
         _context.ItemLots.Add(itemLot);
     }
 
+    public void Addlots(IEnumerable<ItemLot> itemLots)
+    {
+        _context.ItemLots.AddRange(itemLots);
+    }
+
     public async Task<IEnumerable<ItemLot>> GetAll()
     {
         return await _context.ItemLots
