@@ -1,6 +1,4 @@
-﻿using ThaiDuongWarehouse.Api.Applications.Queries.ItemLots;
-
-namespace ThaiDuongWarehouse.Api.Controllers;
+﻿namespace ThaiDuongWarehouse.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -18,19 +16,19 @@ public class ItemLotsController : ControllerBase
 		return await _queries.GetIsolatedItemLots();
 	}
 	[HttpGet]
-	[Route("{itemLotId}")]
+	[Route("ByLotId/{itemLotId}")]
 	public async Task<ItemLotViewModel> GetItemLotByLotIdAsync(string itemLotId)
 	{
 		return await _queries.GetItemLotByLotId(itemLotId);
 	}
 	[HttpGet]
-	[Route("{itemId}")]
+	[Route("ByItemId/{itemId}")]
 	public async Task<IEnumerable<ItemLotViewModel>> GetItemLotByItemIdAsync(string itemId)
 	{
 		return await _queries.GetItemLotsByItemId(itemId);
 	}
 	[HttpGet]
-	[Route("{purchaseOrderNumber}")]
+	[Route("ByPO/{purchaseOrderNumber}")]
 	public async Task<IEnumerable<ItemLotViewModel>> GetItemLotByPoAsync(string purchaseOrderNumber)
 	{
 		return await _queries.GetItemLotsByPO(purchaseOrderNumber);

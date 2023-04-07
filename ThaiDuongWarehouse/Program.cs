@@ -1,5 +1,7 @@
 using System.Reflection;
 using ThaiDuongWarehouse.Api.Applications.Mapping;
+using ThaiDuongWarehouse.Api.Applications.Queries.Histories.Export;
+using ThaiDuongWarehouse.Api.Applications.Queries.Histories.Import;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +48,8 @@ builder.Services.AddScoped<IGoodsReceiptQueries, GoodsReceiptQueries>();
 builder.Services.AddScoped<IInventoryLogEntryQueries, InventoryLogEntryQueries>();
 builder.Services.AddScoped<IWarningQueries, WarningQueries>();
 builder.Services.AddScoped<IGoodsIssueQueries, GoodsIssueQueries>();
+builder.Services.AddScoped<IImportHistoryQueries, ImportHistoryQueries>();
+builder.Services.AddScoped<IExportHistoryQueries, ExportHistoryQueries>();
 
 builder.Services.AddAutoMapper(typeof(ModelToViewModelProfile).Assembly);
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));

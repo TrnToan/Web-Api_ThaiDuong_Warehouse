@@ -34,7 +34,7 @@ public class CreateGoodsReceiptCommandHandler : IRequestHandler<CreateGoodsRecei
             }
 
             var goodsReceiptLot = new GoodsReceiptLot(receiptLotViewModel.GoodsReceiptLotId,
-                receiptLotViewModel.Quantity, receiptLotViewModel.Unit, employee, item);
+                receiptLotViewModel.Quantity, receiptLotViewModel.Unit, employee, item, receiptLotViewModel.Note);
             goodsReceipt.AddLot(goodsReceiptLot);
         }
         _goodsReceiptRepository.Add(goodsReceipt);

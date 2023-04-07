@@ -12,7 +12,7 @@ public class GoodsReceiptEntityTypeConfiguration : IEntityTypeConfiguration<Good
 
         builder.OwnsMany(gr => gr.Lots, grl =>
         {
-            grl.WithOwner();
+            grl.WithOwner().HasForeignKey(l => l.GoodsReceiptId);
 
             grl.HasKey(lot => lot.GoodsReceiptLotId);
             grl.Property(lot => lot.LocationId);

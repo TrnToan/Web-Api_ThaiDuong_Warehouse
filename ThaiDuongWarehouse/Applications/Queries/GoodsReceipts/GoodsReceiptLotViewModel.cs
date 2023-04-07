@@ -11,10 +11,11 @@ public class GoodsReceiptLotViewModel
     public DateTime? ExpirationDate { get; private set; }
     public ItemViewModel Item { get; private set; }
     public EmployeeViewModel Employee { get; private set; }
+    public string? Note { get; private set; }
 
     public GoodsReceiptLotViewModel(string goodsReceiptLotId, string? locationId, double quantity, 
-        double? sublotSize, string? purchaseOrderNumber, DateTime? productionDate, 
-        DateTime? expirationDate, ItemViewModel item, EmployeeViewModel employee)
+        double? sublotSize, string? purchaseOrderNumber, DateTime? productionDate, DateTime? expirationDate, 
+        ItemViewModel item, EmployeeViewModel employee, string? note)
     {
         GoodsReceiptLotId = goodsReceiptLotId;
         LocationId = locationId;
@@ -25,5 +26,6 @@ public class GoodsReceiptLotViewModel
         ExpirationDate = expirationDate;
         Item = item;
         Employee = employee;
+        Note = note;
     }
 }

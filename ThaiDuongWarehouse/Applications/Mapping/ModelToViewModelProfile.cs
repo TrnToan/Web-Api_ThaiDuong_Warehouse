@@ -1,6 +1,5 @@
-﻿using ThaiDuongWarehouse.Api.Applications.Queries.GoodsIssues;
-using ThaiDuongWarehouse.Api.Applications.Queries.InventoryLogEntries;
-using ThaiDuongWarehouse.Domain.AggregateModels.GoodsIssueAggregate;
+﻿using ThaiDuongWarehouse.Api.Applications.Queries.Histories.Export;
+using ThaiDuongWarehouse.Api.Applications.Queries.Histories.Import;
 using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
 
 namespace ThaiDuongWarehouse.Api.Applications.Mapping;
@@ -24,5 +23,10 @@ public class ModelToViewModelProfile : Profile
 		CreateMap<GoodsIssueEntry, GoodsIssueEntryViewModel>();
 		CreateMap<GoodsIssueLot, GoodsIssueLotViewModel>();
 		CreateMap<InventoryLogEntry, InventoryLogEntryViewModel>();
+		CreateMap<GoodsReceipt, GoodsReceiptsHistoryViewModel>();
+		CreateMap<GoodsReceiptLot, GoodsReceiptLotsHistoryViewModel>();
+		CreateMap<GoodsIssue, GoodsIssuesHistoryViewModel>();
+		CreateMap<GoodsIssueEntry, GoodsIssueEntryHistoryViewModel>();
+		CreateMap<GoodsIssueLot, GoodsIssueLotsHistoryViewModel>();
 	}
 }

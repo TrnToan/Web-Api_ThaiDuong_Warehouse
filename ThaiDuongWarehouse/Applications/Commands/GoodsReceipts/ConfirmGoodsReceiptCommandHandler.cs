@@ -28,16 +28,26 @@ public class ConfirmGoodsReceiptCommandHandler : IRequestHandler<ConfirmGoodsRec
         foreach (GoodsReceiptLot lot in goodsReceipt.Lots)
         {
             var items = await _itemRepository.GetItemsByItemId(lot.Item.ItemId);
+
+            bool hasDuplicateUnit = false;
             foreach (Item item in items)
             {
                 if (lot.Unit == item.Unit)
                 {
-                    break;
+                    hasDuplicateUnit = true;
+                    break;                   
                 }
+            }
+
+            if (hasDuplicateUnit == false)
+            {
+                Item item = new();
                 item.CreateItemWithNewUnit(lot.Item.ItemId, lot.Item.ItemClassId, lot.Item.ItemName, lot.Unit);
             }
 
-            Location location = await _storageRepository.GetLocationById(lot.LocationId);
+#pragma warning disable CS8604 // Possible null reference argument.
+            Location? location = await _storageRepository.GetLocationById(lot.LocationId);
+#pragma warning restore CS8604 // Possible null reference argument.
             if (location is null)
             {
                 throw new EntityNotFoundException($"{lot.LocationId} doesn't exist. Create new location.");
@@ -45,6 +55,8 @@ public class ConfirmGoodsReceiptCommandHandler : IRequestHandler<ConfirmGoodsRec
 
             ItemLot itemLot = new(lot.GoodsReceiptLotId, location.Id, lot.ItemId, lot.Quantity, lot.Unit, lot.SublotSize,
                 lot.PurchaseOrderNumber, lot.ProductionDate, lot.ExpirationDate);
+
+            // Do đã truyền vào ItemId là ForeignKey của bảng Item, cân nhắc việc bỏ đi đối số lot.Unit
 
             itemLots.Add(itemLot);
         }

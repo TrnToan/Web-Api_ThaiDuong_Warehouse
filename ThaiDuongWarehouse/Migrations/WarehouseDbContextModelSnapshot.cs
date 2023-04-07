@@ -533,6 +533,9 @@ namespace ThaiDuongWarehouse.Api.Migrations
                             b1.Property<string>("LocationId")
                                 .HasColumnType("nvarchar(max)");
 
+                            b1.Property<string>("Note")
+                                .HasColumnType("nvarchar(max)");
+
                             b1.Property<DateTime?>("ProductionDate")
                                 .HasColumnType("datetime2");
 
