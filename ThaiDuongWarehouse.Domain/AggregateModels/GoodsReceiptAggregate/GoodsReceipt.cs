@@ -62,7 +62,7 @@ public class GoodsReceipt : Entity, IAggregateRoot
         this.AddDomainEvent(new ItemLotsImportedDomainEvent(itemLots));
         foreach (var lot in itemLots)
         {
-            this.AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.LotId, lot.Quantity, lot.Item, timestamp));
+            this.AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.LotId, lot.Quantity, lot.ItemId, timestamp));
         }
     }
 }

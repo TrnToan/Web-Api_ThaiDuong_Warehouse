@@ -16,12 +16,12 @@ public class CreateGoodsReceiptCommand : IRequest<bool>
     public List<CreateGoodsReceiptLotViewModel> GoodsReceiptLots { get; private set; }
 
     public CreateGoodsReceiptCommand(string goodsReceiptId, string supplier,
-        string employeeId, List<CreateGoodsReceiptLotViewModel> lots)
+        string employeeId, List<CreateGoodsReceiptLotViewModel> goodsReceiptLots)
     {
         GoodsReceiptId = goodsReceiptId;
         //Timestamp = timestamp;
         Supplier = supplier;
         EmployeeId = employeeId;
-        GoodsReceiptLots = lots;
+        GoodsReceiptLots = goodsReceiptLots;
     }
 }

@@ -73,11 +73,9 @@ namespace ThaiDuongWarehouse.Api.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.HasIndex("ItemId")
-                        .IsUnique();
+                    b.HasIndex("ItemId");
 
-                    b.HasIndex("LotId")
-                        .IsUnique();
+                    b.HasIndex("LotId");
 
                     b.ToTable("LotAdjustments");
                 });

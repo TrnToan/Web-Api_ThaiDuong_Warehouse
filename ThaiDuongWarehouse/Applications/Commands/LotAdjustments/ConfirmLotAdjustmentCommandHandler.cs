@@ -19,7 +19,8 @@ public class ConfirmLotAdjustmentCommandHandler : IRequestHandler<ConfirmLotAdju
         if (lotAdjustment is null)
             throw new ArgumentNullException(nameof(lotAdjustment));
 
-        lotAdjustment.Confirm(lotAdjustment.LotId, request.ItemId, lotAdjustment.Unit, lotAdjustment.Timestamp,
+        var item = await _itemRepository.GetItemByEntityId(lotAdjustment.ItemId);
+        lotAdjustment.Confirm(lotAdjustment.LotId, item.ItemId, lotAdjustment.Unit, lotAdjustment.Timestamp,
             lotAdjustment.BeforeQuantity, lotAdjustment.AfterQuantity, lotAdjustment.NewPurchaseOrderNumber);
         
         _lotAdjustmentRepository.Update(lotAdjustment);

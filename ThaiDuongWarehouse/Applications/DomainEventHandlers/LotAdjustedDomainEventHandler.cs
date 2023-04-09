@@ -1,4 +1,5 @@
 ﻿using ThaiDuongWarehouse.Domain.AggregateModels.InventoryLogAggregate;
+using ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate;
 using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
 using ThaiDuongWarehouse.Domain.DomainEvents;
 
@@ -22,11 +23,15 @@ public class LotAdjustedDomainEventHandler : INotificationHandler<LotAdjustedDom
         if (itemLot is null)
             throw new EntityNotFoundException(notification.LotId);
 
+        var itemLots = await _itemLotRepository.GetLotsByItemId(notification.ItemId, notification.Unit);
+        var unIsolatedItemLots = itemLots.Where(lot => lot.IsIsolated == false);
+        double beforeQuantity = unIsolatedItemLots.Sum(x => x.Quantity);
+
         var item = await _itemRepository.GetItemById(notification.ItemId, notification.Unit);
-        var changedQuantity = notification.AfterQuantity - notification.BeforeQuantity;
+        double changedQuantity = notification.AfterQuantity - notification.BeforeQuantity;
 
 #pragma warning disable CS8604 // Possible null reference argument.
-        var inventoryLogEntry = new InventoryLogEntry(notification.Timestamp, notification.LotId, notification.BeforeQuantity,
+        var inventoryLogEntry = new InventoryLogEntry(notification.Timestamp, notification.LotId, beforeQuantity,
             changedQuantity, itemLot.Unit, item);
 #pragma warning restore CS8604 // Possible null reference argument.
         itemLot.Update(notification.AfterQuantity, notification.NewPurchaseOrderNumber);

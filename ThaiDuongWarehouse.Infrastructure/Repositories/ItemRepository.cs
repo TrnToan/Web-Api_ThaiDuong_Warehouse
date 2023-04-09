@@ -19,6 +19,13 @@ public class ItemRepository : BaseRepository, IItemRepository
         return await _context.Items.ToListAsync();
     }
 
+    public async Task<Item?> GetItemByEntityId(int Id)
+    {
+        return await _context.Items
+            .Where(i => i.Id == Id)
+            .FirstAsync();
+    }
+
     public async Task<Item?> GetItemById(string itemId, string unit)
     {
         return await _context.Items

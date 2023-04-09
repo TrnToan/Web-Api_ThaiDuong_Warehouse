@@ -4,7 +4,7 @@ public class LotAdjustmentEntityTypeConfiguration : IEntityTypeConfiguration<Lot
     public void Configure(EntityTypeBuilder<LotAdjustment> builder)
     {
         builder.HasKey(l => l.Id);
-        builder.HasIndex(l => l.LotId).IsUnique();
+        builder.HasIndex(l => l.LotId);
         builder.Property(l => l.NewPurchaseOrderNumber).HasMaxLength(50).IsRequired();
         builder.Property(l => l.OldPurchaseOrderNumber).HasMaxLength(50).IsRequired();
         builder.Property(l => l.BeforeQuantity).IsRequired();
@@ -17,5 +17,6 @@ public class LotAdjustmentEntityTypeConfiguration : IEntityTypeConfiguration<Lot
 
         builder.HasOne(e => e.Employee).WithMany().HasForeignKey(la => la.EmployeeId).IsRequired();
         builder.HasOne(i => i.Item).WithOne().HasForeignKey<LotAdjustment>(la => la.ItemId).IsRequired();
+        builder.HasIndex(i => i.ItemId).IsUnique(false);
     }
 }

@@ -14,16 +14,19 @@ public class CreateGoodsReceiptLotViewModel
     [DataMember]
     public string ItemId { get; private set; }
     [DataMember]
+    public string PurchaseOrderNumber { get; private set; }
+    [DataMember]
     public string EmployeeId { get; private set; }
     [DataMember]
     public string? Note { get; private set; }
     public CreateGoodsReceiptLotViewModel(string goodsReceiptLotId, double quantity, string unit,
-        string itemId, string employeeId, string? note)
+        string itemId, string purchaseOrderNumber, string employeeId, string? note)
     {
         GoodsReceiptLotId = goodsReceiptLotId;
         Quantity = quantity;
         Unit = unit;
         ItemId = itemId;
+        PurchaseOrderNumber = purchaseOrderNumber;
         EmployeeId = employeeId;
         Note = note;
     }

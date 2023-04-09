@@ -35,14 +35,16 @@ public class LotAdjustment : Entity, IAggregateRoot
     }
 
     public LotAdjustment(string lotId, string oldPurchaseOrderNumber, double beforeQuantity, string unit, string? note,
-        DateTime timestamp)
+        DateTime timestamp, int itemId, int employeeId)
     {
         LotId = lotId;
         OldPurchaseOrderNumber = oldPurchaseOrderNumber;
         Note = note;
         BeforeQuantity = beforeQuantity;
         Unit = unit;
-        Timestamp = timestamp;
+        Timestamp = timestamp;  
+        ItemId = itemId;
+        EmployeeId = employeeId;
     }
 
     public void Update(double quantity, string purchaseOrderNumber)

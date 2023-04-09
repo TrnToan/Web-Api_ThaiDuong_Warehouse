@@ -36,9 +36,10 @@ public class LotAdjustmentsController : ControllerBase
         }
     }
     [HttpPatch]
-    [Route("Confirm")]
-    public async Task<IActionResult> ConfirmLotAdjustment(ConfirmLotAdjustmentCommand command)
+    [Route("{lotId}/Confirm")]
+    public async Task<IActionResult> ConfirmLotAdjustment(string lotId)
     {
+        ConfirmLotAdjustmentCommand command = new (lotId);
         bool result = await _mediator.Send(command);
         try
         {
@@ -55,8 +56,9 @@ public class LotAdjustmentsController : ControllerBase
     }
     [HttpDelete]
     [Route("{lotId}")]
-    public async Task<IActionResult> DeleteLotAdjustment([FromRoute] RemoveLotAdjustmentCommand command)
+    public async Task<IActionResult> DeleteLotAdjustment([FromRoute] string lotId)
     {
+        var command = new RemoveLotAdjustmentCommand(lotId);
         bool result = await _mediator.Send(command);
         try
         {

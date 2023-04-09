@@ -12,4 +12,9 @@ public class RemoveLotAdjustmentCommand : IRequest<bool>
     {
         LotId = lotId;
     }
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    public RemoveLotAdjustmentCommand()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    {    }
 }

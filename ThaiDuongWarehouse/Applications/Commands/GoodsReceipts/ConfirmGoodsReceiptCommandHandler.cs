@@ -27,21 +27,11 @@ public class ConfirmGoodsReceiptCommandHandler : IRequestHandler<ConfirmGoodsRec
         List<ItemLot> itemLots = new();
         foreach (GoodsReceiptLot lot in goodsReceipt.Lots)
         {
-            var items = await _itemRepository.GetItemsByItemId(lot.Item.ItemId);
+            Item? item = await _itemRepository.GetItemByEntityId(lot.ItemId);
 
-            bool hasDuplicateUnit = false;
-            foreach (Item item in items)
+            if (item is null)
             {
-                if (lot.Unit == item.Unit)
-                {
-                    hasDuplicateUnit = true;
-                    break;                   
-                }
-            }
-
-            if (hasDuplicateUnit == false)
-            {
-                Item item = new();
+                item = new();
                 item.CreateItemWithNewUnit(lot.Item.ItemId, lot.Item.ItemClassId, lot.Item.ItemName, lot.Unit);
             }
 

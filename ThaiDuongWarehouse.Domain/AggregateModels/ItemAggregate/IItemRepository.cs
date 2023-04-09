@@ -6,4 +6,5 @@ public interface IItemRepository : IRepository<Item>
     Task<Item?> GetItemById(string itemId, string unit);
     Task<IEnumerable<Item>> GetItemsByItemId(string itemId); 
     Task<IEnumerable<Item>> GetAllAsync();
+    Task<Item?> GetItemByEntityId(int Id);
 }

@@ -31,12 +31,13 @@ public class GoodsReceiptLot
         ItemId = itemId;
     }
 
-    public GoodsReceiptLot(string goodsReceiptLotId, double quantity, string unit, Employee employee, 
+    public GoodsReceiptLot(string goodsReceiptLotId, double quantity, string unit, string purchaseOrderNumber, Employee employee, 
         Item item, string? note)
     {
         GoodsReceiptLotId = goodsReceiptLotId;
         Quantity = quantity;
         Unit = unit;
+        PurchaseOrderNumber = purchaseOrderNumber;
         Employee = employee;
         Item = item;
         Note = note;

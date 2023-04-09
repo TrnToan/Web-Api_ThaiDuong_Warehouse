@@ -1,14 +1,16 @@
 ﻿namespace ThaiDuongWarehouse.Api.Applications.Commands.Items;
 
-public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand, Item>
+public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand, ItemViewModel>
 {
     private readonly IItemRepository _itemRepository;
-    public UpdateItemCommandHandler(IItemRepository itemRepository)
+    private readonly IMapper _mapper;
+    public UpdateItemCommandHandler(IItemRepository itemRepository, IMapper mapper)
     {
         _itemRepository = itemRepository;
+        _mapper = mapper;
     }
 
-    public async Task<Item> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
+    public async Task<ItemViewModel> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
     {
         var item = await _itemRepository.GetItemById(request.ItemId, request.Unit);
 
@@ -21,6 +23,6 @@ public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand, Item>
         _itemRepository.Update(item);
         await _itemRepository.UnitOfWork.SaveEntitiesAsync();
 
-        return item;
+        return _mapper.Map<ItemViewModel>(item);
     }
 }

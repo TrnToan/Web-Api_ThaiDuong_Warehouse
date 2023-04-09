@@ -24,14 +24,14 @@ public class GoodsReceiptsController : ControllerBase
     }
 
     [HttpGet]
-    [Route("ConfirmedGoodsReceipts")]
+    [Route("Confirmed")]
     public async Task<IEnumerable<GoodsReceiptViewModel>> GetConfirmedGoodsReceiptsAsync()
     {
         return await _queries.GetConfirmedGoodsReceipt(); 
     }
 
     [HttpGet]
-    [Route("UnconfirmedGoodsReceipts")]
+    [Route("Unconfirmed")]
     public async Task<IEnumerable<GoodsReceiptViewModel>> GetUnconfirmedGoodsReceiptsAsync()
     {
         return await _queries.GetUnConfirmedGoodsReceipt();
@@ -51,13 +51,9 @@ public class GoodsReceiptsController : ControllerBase
     }
 
     [HttpPost]
-    [Route("{goodsReceiptId}/goodsIssueLots")]
-    public async Task<IActionResult> PostAsync(string goodsReceiptId, [FromQuery]string? supplier, [FromQuery]string employeeId, 
-        [FromBody] List<CreateGoodsReceiptLotViewModel> goodsReceiptLots)
+    [Route("goodsReceipt/goodsReceiptLots")]
+    public async Task<IActionResult> PostAsync([FromBody] CreateGoodsReceiptCommand cmd)
     {
-#pragma warning disable CS8604 // Possible null reference argument.
-        CreateGoodsReceiptCommand cmd = new (goodsReceiptId, supplier, employeeId, goodsReceiptLots);
-#pragma warning restore CS8604 // Possible null reference argument.
         try
         {
             var result = await _mediator.Send(cmd);
@@ -97,8 +93,9 @@ public class GoodsReceiptsController : ControllerBase
 
     [HttpDelete]
     [Route("{goodsReceiptId}")]
-    public async Task<IActionResult> RemoveAsync([FromRoute] RemoveGoodsReceiptCommand command)
+    public async Task<IActionResult> RemoveAsync([FromRoute] string goodsReceiptId)
     {
+        RemoveGoodsReceiptCommand command = new(goodsReceiptId);
         try
         {
             var result = await _mediator.Send(command);

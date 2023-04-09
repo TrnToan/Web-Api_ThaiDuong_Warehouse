@@ -3,7 +3,7 @@
 namespace ThaiDuongWarehouse.Api.Applications.Commands.Items;
 
 [DataContract]
-public class UpdateItemCommand : IRequest<Item>
+public class UpdateItemCommand : IRequest<ItemViewModel>
 {
     [DataMember]
     public string ItemId { get; private set; }
