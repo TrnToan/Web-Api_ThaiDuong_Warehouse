@@ -556,8 +556,7 @@ namespace ThaiDuongWarehouse.Api.Migrations
 
                             b1.HasIndex("GoodsReceiptId");
 
-                            b1.HasIndex("ItemId")
-                                .IsUnique();
+                            b1.HasIndex("ItemId");
 
                             b1.ToTable("GoodsReceiptLot");
 

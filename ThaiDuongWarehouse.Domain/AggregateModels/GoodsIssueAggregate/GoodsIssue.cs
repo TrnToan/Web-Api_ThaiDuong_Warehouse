@@ -4,7 +4,7 @@ public class GoodsIssue : Entity, IAggregateRoot
     public string GoodsIssueId { get; private set; }
     public string Receiver { get; private set; }
     public string? PurchaseOrderNumber { get; private set; }
-    public bool IsConfirmed { get; private set; }
+    public bool IsConfirmed { get; private set; } = false;
     public DateTime Timestamp { get; private set; }
     // ForeignKey
     public int EmployeeId { get; private set; }
@@ -52,27 +52,29 @@ public class GoodsIssue : Entity, IAggregateRoot
         entry.AddLot(lot);
     }
     public void Confirm(DateTime timestamp, List<ItemLot> lots)
-    {       
+    {
+        foreach (GoodsIssueEntry entry in Entries)
+        {
+            foreach (GoodsIssueLot lot in entry.Lots)
+            {
+                this.AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.GoodsIssueLotId, -lot.Quantity, entry.Item.Id, timestamp));
+            }
+        }
+
         var completelyExportedLots = new List<ItemLot>();
+
         foreach (var lot in lots)
         {
             var goodsIssueLot = Entries.SelectMany(e => e.Lots).First(l => l.GoodsIssueLotId == lot.LotId);
-            this.AddDomainEvent(new ItemLotInformationChangedDomainEvent(lot.LotId, lot.Quantity));
+            this.AddDomainEvent(new ItemLotInformationChangedDomainEvent(lot.LotId, goodsIssueLot.Quantity));
 
-            if(goodsIssueLot.Quantity == lot.Quantity)
+            if (goodsIssueLot.Quantity == lot.Quantity)
             {
                 completelyExportedLots.Add(lot);
             }
         }
         this.AddDomainEvent(new ItemLotsExportedDomainEvent(completelyExportedLots));
-
-        foreach(GoodsIssueEntry entry in Entries)
-        {           
-            foreach(GoodsIssueLot lot in entry.Lots)
-            {
-                this.AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.GoodsIssueLotId, -lot.Quantity, entry.Item, timestamp));
-            }
-        }
+        
         IsConfirmed = true;
     }
 }

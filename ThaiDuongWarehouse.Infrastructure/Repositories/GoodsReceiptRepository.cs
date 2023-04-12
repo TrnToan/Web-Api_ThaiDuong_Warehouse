@@ -7,7 +7,8 @@ public class GoodsReceiptRepository : BaseRepository, IGoodsReceiptRepository
 
     public GoodsReceipt Add(GoodsReceipt goodsReceipt)
     {
-        return _context.GoodsReceipts.Add(goodsReceipt).Entity;
+        return _context.GoodsReceipts
+            .Add(goodsReceipt).Entity;
     }
 
     public async Task<IEnumerable<GoodsReceipt>> GetConfirmedGoodsReceipt()

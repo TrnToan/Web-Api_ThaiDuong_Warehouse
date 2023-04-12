@@ -1,0 +1,8 @@
+controller --> Command --> MediatR (chọn ra Handler tương ứng với command) --> 
+CommandHandler đòi hỏi các Repository cụ thể từ các IRepository -->
+DI container (Từ IRepository khởi tạo các dịch vụ Repository tương ứng rồi bơm vào chương trình thông qua constructor) 
+--> Gọi tới Repository cụ thể của từng entity --> Repository gọi tới entity tương ứng từ DbContext (khi gọi tới DbContext lần đầu sẽ tự động gọi 
+hết toàn bộ Entity của DbContext ra rồi cất vào Stack) --> Các lần gọi Repository sau đó sẽ lấy các entity tương ứng với Repository đó từ 
+network stack -->
+Khi gọi tới SaveEntitiesAsync --> MediatD: Dispatch Domain Events --> Lấy hết toàn bộ Domain events hiện có 
+trong context, rồi publish Event (nếu có)

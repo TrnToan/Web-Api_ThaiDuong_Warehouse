@@ -25,7 +25,7 @@ public class GoodsIssueQueries : IGoodsIssueQueries
                 .ThenInclude(gil => gil.Employee)
             .FirstOrDefaultAsync(gi => gi.GoodsIssueId == id);
 
-        return _mapper.Map<GoodsIssueViewModel>(goodsIssue);
+        return _mapper.Map<GoodsIssue, GoodsIssueViewModel>(goodsIssue);
     }
 
     public async Task<IEnumerable<GoodsIssueViewModel>> GetConfirmedGoodsIssuesByTime(TimeRangeQuery query)

@@ -18,9 +18,7 @@ public class InventoryLogEntryChangedDomainEventHandler : INotificationHandler<I
 
     public async Task Handle(InventoryLogEntryChangedDomainEvent notification, CancellationToken cancellationToken)
     {
-#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
-        Item item = await _itemRepository.GetItemByEntityId(notification.ItemId);
-#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+        Item? item = await _itemRepository.GetItemByEntityId(notification.ItemId);
         InventoryLogEntry? latestEntry = await _inventoryLogEntryRepository.GetLatestLogEntry(notification.ItemId);
         double tempQuantity = 0;
 

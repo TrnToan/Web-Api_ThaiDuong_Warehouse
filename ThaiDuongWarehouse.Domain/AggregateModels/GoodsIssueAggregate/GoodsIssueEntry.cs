@@ -26,7 +26,7 @@ public class GoodsIssueEntry
     {
         if(lot.Quantity <= 0)
         {
-            throw new WarehouseDomainException("GoodsIssue is not valid.");
+            throw new WarehouseDomainException("Quantity is not valid.");
         }
         Lots.Add(lot);
     }

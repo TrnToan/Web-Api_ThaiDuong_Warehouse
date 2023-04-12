@@ -705,3 +705,72 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230407050832_GenerateGoodsReceiptFKMigration')
+BEGIN
+    ALTER TABLE [GoodsReceiptLot] ADD [Note] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230407050832_GenerateGoodsReceiptFKMigration')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20230407050832_GenerateGoodsReceiptFKMigration', N'7.0.3');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230409022916_RemoveLotAdjustmentsUniqueIndex')
+BEGIN
+    DROP INDEX [IX_LotAdjustments_LotId] ON [LotAdjustments];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230409022916_RemoveLotAdjustmentsUniqueIndex')
+BEGIN
+    CREATE INDEX [IX_LotAdjustments_LotId] ON [LotAdjustments] ([LotId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230409022916_RemoveLotAdjustmentsUniqueIndex')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20230409022916_RemoveLotAdjustmentsUniqueIndex', N'7.0.3');
+END;
+GO
+
+COMMIT;
+GO
+
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230409054652_RemoveLotAdjustmentUniqueIndex')
+BEGIN
+    DROP INDEX [IX_LotAdjustments_ItemId] ON [LotAdjustments];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230409054652_RemoveLotAdjustmentUniqueIndex')
+BEGIN
+    CREATE INDEX [IX_LotAdjustments_ItemId] ON [LotAdjustments] ([ItemId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230409054652_RemoveLotAdjustmentUniqueIndex')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20230409054652_RemoveLotAdjustmentUniqueIndex', N'7.0.3');
+END;
+GO
+
+COMMIT;
+GO
+

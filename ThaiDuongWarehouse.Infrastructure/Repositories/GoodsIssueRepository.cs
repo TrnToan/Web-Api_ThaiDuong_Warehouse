@@ -12,7 +12,10 @@ public class GoodsIssueRepository : BaseRepository, IGoodsIssueRepository
 
     public async Task<GoodsIssue?> GetGoodsIssueById(string id)
     {
-        return await _context.GoodsIssues.FirstOrDefaultAsync(gi => gi.GoodsIssueId == id);
+        return await _context.GoodsIssues
+            .Include(g => g.Entries)
+            .ThenInclude(g => g.Item)
+            .FirstOrDefaultAsync(gi => gi.GoodsIssueId == id);
     }
 
     public Task<IEnumerable<GoodsIssue>> GetListAsync(DateTime startTime, DateTime endTime)

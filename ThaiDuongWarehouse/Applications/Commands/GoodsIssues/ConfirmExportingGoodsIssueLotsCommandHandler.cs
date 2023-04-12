@@ -38,7 +38,7 @@ public class ConfirmExportingGoodsIssueLotsCommandHandler : IRequestHandler<Conf
                 ItemLot? itemLot = await _itemLotRepository.GetLotByLotId(lot.GoodsIssueLotId);
                 if (itemLot is null)
                 {
-                    throw new EntityNotFoundException($"{itemLot} does not exist");
+                    throw new EntityNotFoundException($"Itemlot with {lot.GoodsIssueLotId} does not exist");
                 }
                 itemLots.Add(itemLot);
             }

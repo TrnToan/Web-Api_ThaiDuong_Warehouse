@@ -10,6 +10,11 @@ public class GoodsIssueViewModel
     public DateTime Timestamp { get; private set; }
     public EmployeeViewModel Employee { get; private set; }
     public List<GoodsIssueEntryViewModel> Entries { get; private set; }
+
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    public GoodsIssueViewModel()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+    {    }
     public GoodsIssueViewModel(string goodsIssueId, string receiver, string? purchaseOrderNumber, 
         bool isConfirmed, DateTime timestamp, EmployeeViewModel employee, 
         List<GoodsIssueEntryViewModel> entries)

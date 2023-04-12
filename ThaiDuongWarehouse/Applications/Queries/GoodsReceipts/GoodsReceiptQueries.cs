@@ -1,4 +1,7 @@
-﻿namespace ThaiDuongWarehouse.Api.Applications.Queries.GoodsReceipt;
+﻿using ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate;
+using GoodsReceipt = ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate.GoodsReceipt;
+
+namespace ThaiDuongWarehouse.Api.Applications.Queries.GoodsReceipt;
 
 public class GoodsReceiptQueries : IGoodsReceiptQueries
 {
@@ -66,10 +69,10 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
             gr.Timestamp.CompareTo(query.StartTime) > 0 &&
             gr.Timestamp.CompareTo(query.EndTime) < 0)
             .Where(gr => gr.IsConfirmed == true)
+            .OrderByDescending(gr => gr.Timestamp)
             .ToListAsync();
-        goodsReceipts = (List<Domain.AggregateModels.GoodsReceiptAggregate.GoodsReceipt>)goodsReceipts.OrderByDescending(gr => gr.Timestamp);
 
-        return _mapper.Map<IEnumerable<GoodsReceiptViewModel>>(goodsReceipts);
+        return _mapper.Map<IEnumerable<Domain.AggregateModels.GoodsReceiptAggregate.GoodsReceipt> ,IEnumerable<GoodsReceiptViewModel>>(goodsReceipts);
     }
 
     public async Task<IEnumerable<GoodsReceiptViewModel>> GetUnConfirmedGoodsReceipt()

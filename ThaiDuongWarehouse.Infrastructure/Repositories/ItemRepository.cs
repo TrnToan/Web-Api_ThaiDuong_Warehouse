@@ -23,7 +23,7 @@ public class ItemRepository : BaseRepository, IItemRepository
     {
         return await _context.Items
             .Where(i => i.Id == Id)
-            .FirstAsync();
+            .FirstOrDefaultAsync();
     }
 
     public async Task<Item?> GetItemById(string itemId, string unit)

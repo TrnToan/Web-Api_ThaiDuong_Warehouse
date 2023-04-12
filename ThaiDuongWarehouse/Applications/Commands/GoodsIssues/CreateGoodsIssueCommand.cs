@@ -12,20 +12,17 @@ public class CreateGoodsIssueCommand : IRequest<bool>
     [DataMember]
     public string? PurchaseOrderNumber { get; private set; }
     [DataMember]
-    public bool IsConfirmed { get; private set; }
-    [DataMember]
     public DateTime Timestamp { get; private set; }
     [DataMember]
     public string EmployeeId { get; private set; }
     [DataMember]
     public List<CreateGoodsIssueEntryViewModel> Entries { get; private set; }
-    public CreateGoodsIssueCommand(string goodsIssueId, string receiver, string? purchaseOrderNumber, bool isConfirmed, 
+    public CreateGoodsIssueCommand(string goodsIssueId, string receiver, string? purchaseOrderNumber,  
         DateTime timestamp, string employeeId, List<CreateGoodsIssueEntryViewModel> entries)
     {
         GoodsIssueId = goodsIssueId;
         Receiver = receiver;
         PurchaseOrderNumber = purchaseOrderNumber;
-        IsConfirmed = isConfirmed;
         Timestamp = timestamp;
         EmployeeId = employeeId;
         Entries = entries;

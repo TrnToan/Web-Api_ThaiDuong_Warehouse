@@ -9,9 +9,7 @@ public class GoodsIssueLot
     public int EmployeeId { get; private set; }
     public Employee Employee { get; private set; }
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     private GoodsIssueLot() { }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
     public GoodsIssueLot(string goodsIssueLotId, double quantity, double? sublotSize, string? note,
         int employeeId) : this()
