@@ -24,17 +24,17 @@ public class GoodsReceiptsController : ControllerBase
     }
 
     [HttpGet]
-    [Route("Confirmed")]
-    public async Task<IEnumerable<GoodsReceiptViewModel>> GetConfirmedGoodsReceiptsAsync()
+    [Route("goodsReceipts/{isConfirmed}")]
+    public async Task<IEnumerable<GoodsReceiptViewModel>> GetIsConfirmedGoodsReceiptsAsync(bool isConfirmed)
     {
-        return await _queries.GetConfirmedGoodsReceipt(); 
-    }
-
-    [HttpGet]
-    [Route("Unconfirmed")]
-    public async Task<IEnumerable<GoodsReceiptViewModel>> GetUnconfirmedGoodsReceiptsAsync()
-    {
-        return await _queries.GetUnConfirmedGoodsReceipt();
+        if (isConfirmed)
+        {
+            return await _queries.GetConfirmedGoodsReceipt();
+        }
+        else
+        {
+            return await _queries.GetUnConfirmedGoodsReceipt();
+        }
     }
 
     [HttpGet]

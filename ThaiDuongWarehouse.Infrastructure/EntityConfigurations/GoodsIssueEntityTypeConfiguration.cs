@@ -33,7 +33,8 @@ public class GoodsIssueEntityTypeConfiguration : IEntityTypeConfiguration<GoodsI
             ge.Property(entry => entry.RequestedQuantity).IsRequired();
             ge.Property(entry => entry.Unit).IsRequired();
 
-            ge.HasOne(entry => entry.Item).WithOne().IsRequired(); 
+            ge.HasOne(entry => entry.Item).WithOne().IsRequired().HasForeignKey<GoodsIssueEntry>(entry => entry.ItemId);
+            ge.HasIndex(entry => entry.ItemId).IsUnique(false);
             ge.OwnsMany(entry => entry.Lots, lot =>
             {
                 lot.WithOwner();

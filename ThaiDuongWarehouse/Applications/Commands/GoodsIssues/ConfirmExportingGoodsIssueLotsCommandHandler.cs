@@ -1,6 +1,4 @@
-﻿using Microsoft.VisualBasic;
-
-namespace ThaiDuongWarehouse.Api.Applications.Commands.GoodsIssues;
+﻿namespace ThaiDuongWarehouse.Api.Applications.Commands.GoodsIssues;
 
 public class ConfirmExportingGoodsIssueLotsCommandHandler : IRequestHandler<ConfirmExportingGoodsIssueLotsCommand, bool>
 {

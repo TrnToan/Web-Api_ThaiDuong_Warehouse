@@ -15,7 +15,10 @@ public class CreateGoodsReceiptCommandHandler : IRequestHandler<CreateGoodsRecei
 
     public async Task<bool> Handle(CreateGoodsReceiptCommand request, CancellationToken cancellationToken)
     {
-        var goodsReceiptEmployee = await _employeeRepository.GetEmployeeById(request.EmployeeId); 
+        var goodsReceiptEmployee = await _employeeRepository.GetEmployeeById(request.EmployeeId);
+
+        var goodsReceipt = new GoodsReceipt(request.GoodsReceiptId, request.Supplier, request.Timestamp, false,
+            goodsReceiptEmployee);
 
         List<GoodsReceiptLot> goodsReceiptLots = new();
         
@@ -37,15 +40,10 @@ public class CreateGoodsReceiptCommandHandler : IRequestHandler<CreateGoodsRecei
                 receiptLotViewModel.Unit, receiptLotViewModel.PurchaseOrderNumber, employee, item, receiptLotViewModel.Note);
 
             goodsReceiptLots.Add(goodsReceiptLot);
-            //goodsReceipt.AddLot(goodsReceiptLot);
         }
-        var goodsReceipt = new GoodsReceipt(request.GoodsReceiptId, request.Supplier, request.Timestamp, false, 
-            goodsReceiptEmployee, goodsReceiptLots);
 
+        goodsReceipt.AddLots(goodsReceiptLots);
         _goodsReceiptRepository.Add(goodsReceipt);
-
-        if (goodsReceipt.Lots.Count < 2)
-            throw new Exception("Missing goodsReceiptLots on trying to add 2 lots");
 
         return await _goodsReceiptRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
     }

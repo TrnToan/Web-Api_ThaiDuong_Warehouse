@@ -18,6 +18,6 @@ public class RemoveGoodsReceiptCommandHandler : IRequestHandler<RemoveGoodsRecei
 
         _goodsReceiptRepository.Remove(goodsReceipt);
 
-        return await _goodsReceiptRepository.UnitOfWork.SaveEntitiesAsync();
+        return await _goodsReceiptRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
     }
 }

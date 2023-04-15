@@ -65,12 +65,15 @@ public class GoodsIssue : Entity, IAggregateRoot
 
         foreach (var lot in lots)
         {
-            var goodsIssueLot = Entries.SelectMany(e => e.Lots).First(l => l.GoodsIssueLotId == lot.LotId);
-            this.AddDomainEvent(new ItemLotInformationChangedDomainEvent(lot.LotId, goodsIssueLot.Quantity));
+            var goodsIssueLot = Entries.SelectMany(e => e.Lots).First(l => l.GoodsIssueLotId == lot.LotId);           
 
             if (goodsIssueLot.Quantity == lot.Quantity)
             {
                 completelyExportedLots.Add(lot);
+            }
+            else
+            {
+                this.AddDomainEvent(new ItemLotInformationChangedDomainEvent(lot.LotId, goodsIssueLot.Quantity));   
             }
         }
         this.AddDomainEvent(new ItemLotsExportedDomainEvent(completelyExportedLots));

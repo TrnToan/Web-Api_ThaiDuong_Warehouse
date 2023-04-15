@@ -5,7 +5,9 @@ public class GoodsIssueEntry
     public double? RequestedSublotSize { get; private set; }
     public double RequestedQuantity { get; private set; }
     public string Unit { get; private set; }
-    public int GoodsIssueId { get; set; }    // Foreign Key
+    // Foreign Key
+    public int GoodsIssueId { get; private set; }    
+    public int ItemId { get; private set; }
     public Item Item { get; private set; }
     public List<GoodsIssueLot> Lots { get; private set; }
 

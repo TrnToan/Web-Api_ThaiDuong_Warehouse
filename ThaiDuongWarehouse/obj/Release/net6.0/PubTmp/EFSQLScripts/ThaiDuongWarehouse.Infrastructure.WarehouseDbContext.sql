@@ -774,3 +774,28 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230411161154_RemoveItemIdIndexInGoodsReceiptLotTable')
+BEGIN
+    DROP INDEX [IX_GoodsReceiptLot_ItemId] ON [GoodsReceiptLot];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230411161154_RemoveItemIdIndexInGoodsReceiptLotTable')
+BEGIN
+    CREATE INDEX [IX_GoodsReceiptLot_ItemId] ON [GoodsReceiptLot] ([ItemId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230411161154_RemoveItemIdIndexInGoodsReceiptLotTable')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20230411161154_RemoveItemIdIndexInGoodsReceiptLotTable', N'7.0.3');
+END;
+GO
+
+COMMIT;
+GO
+
