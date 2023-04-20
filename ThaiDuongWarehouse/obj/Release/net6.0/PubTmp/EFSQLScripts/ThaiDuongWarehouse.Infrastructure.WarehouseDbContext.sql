@@ -799,3 +799,28 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230413150011_RemoveIX_GoodsIssueEntry_ItemId')
+BEGIN
+    DROP INDEX [IX_GoodsIssueEntry_ItemId] ON [GoodsIssueEntry];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230413150011_RemoveIX_GoodsIssueEntry_ItemId')
+BEGIN
+    CREATE INDEX [IX_GoodsIssueEntry_ItemId] ON [GoodsIssueEntry] ([ItemId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230413150011_RemoveIX_GoodsIssueEntry_ItemId')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20230413150011_RemoveIX_GoodsIssueEntry_ItemId', N'7.0.3');
+END;
+GO
+
+COMMIT;
+GO
+

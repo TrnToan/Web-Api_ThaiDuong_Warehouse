@@ -1,4 +1,5 @@
 using System.Reflection;
+using ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 using ThaiDuongWarehouse.Api.Applications.Mapping;
 using ThaiDuongWarehouse.Api.Applications.Queries.Histories.Export;
 using ThaiDuongWarehouse.Api.Applications.Queries.Histories.Import;
@@ -50,6 +51,8 @@ builder.Services.AddScoped<IWarningQueries, WarningQueries>();
 builder.Services.AddScoped<IGoodsIssueQueries, GoodsIssueQueries>();
 builder.Services.AddScoped<IImportHistoryQueries, ImportHistoryQueries>();
 builder.Services.AddScoped<IExportHistoryQueries, ExportHistoryQueries>();
+
+builder.Services.AddScoped<InventoryLogEntryService>();
 
 builder.Services.AddAutoMapper(typeof(ModelToViewModelProfile).Assembly);
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));

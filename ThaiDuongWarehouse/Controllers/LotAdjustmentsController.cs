@@ -36,7 +36,7 @@ public class LotAdjustmentsController : ControllerBase
         }
     }
     [HttpPatch]
-    [Route("{lotId}/Confirm")]
+    [Route("Confirm/{lotId}")]
     public async Task<IActionResult> ConfirmLotAdjustment(string lotId)
     {
         ConfirmLotAdjustmentCommand command = new (lotId);

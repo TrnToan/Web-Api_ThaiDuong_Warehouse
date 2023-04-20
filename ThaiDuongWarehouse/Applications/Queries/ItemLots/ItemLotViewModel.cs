@@ -11,9 +11,8 @@ public class ItemLotViewModel
     public DateTime? ExpirationDate { get; private set; }
     public LocationViewModel? Location { get; private set; }
     public ItemViewModel Item { get; private set; }
-    public string Unit { get; private set; }
     public ItemLotViewModel(string lotId, bool isIsolated, double quantity, double? sublotSize, string? purchaseOrderNumber, 
-        DateTime? productionDate, DateTime? expirationDate, LocationViewModel? location, ItemViewModel item, string unit)
+        DateTime? productionDate, DateTime? expirationDate, LocationViewModel? location, ItemViewModel item)
     {
         LotId = lotId;
         IsIsolated = isIsolated;
@@ -24,6 +23,5 @@ public class ItemLotViewModel
         ExpirationDate = expirationDate;
         Location = location;
         Item = item;
-        Unit = unit;
     }
 }

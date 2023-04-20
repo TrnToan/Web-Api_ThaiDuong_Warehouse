@@ -7,8 +7,15 @@ public class GoodsReceiptRepository : BaseRepository, IGoodsReceiptRepository
 
     public GoodsReceipt Add(GoodsReceipt goodsReceipt)
     {
-        return _context.GoodsReceipts
+        try
+        {
+            return _context.GoodsReceipts
             .Add(goodsReceipt).Entity;
+        }
+        catch(Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 
     public async Task<IEnumerable<GoodsReceipt>> GetConfirmedGoodsReceipt()

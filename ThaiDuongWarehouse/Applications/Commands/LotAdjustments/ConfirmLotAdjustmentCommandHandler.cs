@@ -3,13 +3,11 @@
 public class ConfirmLotAdjustmentCommandHandler : IRequestHandler<ConfirmLotAdjustmentCommand, bool>
 {
     private readonly ILotAdjustmentRepository _lotAdjustmentRepository;
-    private readonly IEmployeeRepository _employeeRepository;
     private readonly IItemRepository _itemRepository;
     public ConfirmLotAdjustmentCommandHandler(ILotAdjustmentRepository lotAdjustmentRepository, 
-        IEmployeeRepository employeeRepository, IItemRepository itemRepository)
+        IItemRepository itemRepository)
     {
         _lotAdjustmentRepository = lotAdjustmentRepository;
-        _employeeRepository = employeeRepository;
         _itemRepository = itemRepository;
     }
 

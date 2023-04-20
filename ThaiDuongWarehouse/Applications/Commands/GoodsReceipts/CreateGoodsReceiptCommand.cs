@@ -19,7 +19,6 @@ public class CreateGoodsReceiptCommand : IRequest<bool>
         string employeeId, List<CreateGoodsReceiptLotViewModel> goodsReceiptLots)
     {
         GoodsReceiptId = goodsReceiptId;
-        //Timestamp = timestamp;
         Supplier = supplier;
         EmployeeId = employeeId;
         GoodsReceiptLots = goodsReceiptLots;

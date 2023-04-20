@@ -8,32 +8,41 @@ public class InventoryLogEntryChangedDomainEventHandler : INotificationHandler<I
     private readonly IInventoryLogEntryRepository _inventoryLogEntryRepository;
     private readonly IItemLotRepository _itemLotRepository;
     private readonly IItemRepository _itemRepository;
+    private InventoryLogEntryService _service;
     public InventoryLogEntryChangedDomainEventHandler(IInventoryLogEntryRepository inventoryLogEntryRepository, 
-        IItemLotRepository itemLotRepository, IItemRepository itemRepository)
+        IItemLotRepository itemLotRepository, IItemRepository itemRepository, InventoryLogEntryService service)
     {
         _inventoryLogEntryRepository = inventoryLogEntryRepository;
         _itemLotRepository = itemLotRepository;
         _itemRepository = itemRepository;
+        _service = service;
     }
 
     public async Task Handle(InventoryLogEntryChangedDomainEvent notification, CancellationToken cancellationToken)
-    {
+    {        
         Item? item = await _itemRepository.GetItemByEntityId(notification.ItemId);
-        InventoryLogEntry? latestEntry = await _inventoryLogEntryRepository.GetLatestLogEntry(notification.ItemId);
-        double tempQuantity = 0;
+        InventoryLogEntry? latestEntry1 = await _inventoryLogEntryRepository.GetLatestLogEntry(notification.ItemId);
+        InventoryLogEntry? latestEntry2 = _service.FindEntry(notification.ItemId);
 
-        if (latestEntry is null)
+        double tempQuantity = 0;
+        if (latestEntry1 is null && latestEntry2 is null)
         {
             IEnumerable<ItemLot> itemLots = await _itemLotRepository.GetLotsByItemId(item.ItemId, item.Unit);
             List<ItemLot> unIsolatedItemLots = itemLots.Where(lot => lot.IsIsolated == false).ToList();
-            tempQuantity = unIsolatedItemLots.Sum(x => x.Quantity);
+            tempQuantity = unIsolatedItemLots.Sum(x => x.Quantity);     
         }
-        else
-            tempQuantity = latestEntry.BeforeQuantity + latestEntry.ChangedQuantity;
-
+        else if (latestEntry1 is not null && latestEntry2 is null)
+        {
+            tempQuantity = latestEntry1.BeforeQuantity + latestEntry1.ChangedQuantity;
+        }
+        else 
+        {
+            tempQuantity = latestEntry2.BeforeQuantity + latestEntry2.ChangedQuantity;
+        }                
         InventoryLogEntry newEntry = new (notification.ItemId, notification.ItemLotId, notification.Timestamp,
-            tempQuantity, notification.Quantity, item.Unit);
+            tempQuantity, notification.Quantity, item?.Unit);
 
+        _service.AddEntry(newEntry);
         _inventoryLogEntryRepository.Add(newEntry);
     }
 }

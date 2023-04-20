@@ -21,17 +21,6 @@ public class GoodsReceipt : Entity, IAggregateRoot
         Supplier = supplier;
     }
 
-    public GoodsReceipt(string goodsReceiptId, string? supplier, DateTime timestamp, bool isConfirmed, 
-        Employee employee, List<GoodsReceiptLot> lots) : this()
-    {
-        GoodsReceiptId = goodsReceiptId;
-        Supplier = supplier;
-        Timestamp = timestamp;
-        IsConfirmed = isConfirmed;
-        Lots = lots;
-        Employee = employee;
-    }
-
     public void UpdateLot(string lotId, double quantity, double sublotSize, string? purchaseOrderNumber,
         string locationId, DateTime productionDate, DateTime expirationDate)
     {
@@ -49,7 +38,7 @@ public class GoodsReceipt : Entity, IAggregateRoot
 
         Lots.Add(goodsReceiptLot);
     }
-    public void AddLots(IEnumerable<GoodsReceiptLot> goodsReceiptLots)
+    public void AddLots(List<GoodsReceiptLot> goodsReceiptLots)
     {
         foreach(var lot in goodsReceiptLots)
         {

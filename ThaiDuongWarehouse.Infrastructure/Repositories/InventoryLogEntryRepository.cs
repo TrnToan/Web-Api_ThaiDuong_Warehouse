@@ -15,7 +15,9 @@ public class InventoryLogEntryRepository : BaseRepository, IInventoryLogEntryRep
 
     public async Task<IEnumerable<InventoryLogEntry>> GetAll()
     {
-        return await _context.InventoryLogEntries.ToListAsync();
+        return await _context.InventoryLogEntries
+            .OrderByDescending(i => i.Timestamp)
+            .ToListAsync();
     }
 
     public async Task<IEnumerable<InventoryLogEntry>> GetByItem(string itemId)

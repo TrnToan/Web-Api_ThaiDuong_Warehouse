@@ -1,6 +1,4 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate;
-
-namespace ThaiDuongWarehouse.Api.Applications.Queries.Histories.Export;
+﻿namespace ThaiDuongWarehouse.Api.Applications.Queries.Histories.Export;
 
 public class ExportHistoryQueries : IExportHistoryQueries
 {
@@ -25,6 +23,8 @@ public class ExportHistoryQueries : IExportHistoryQueries
                 .Where(g => g.Entries.Any(e => e.Item.ItemId == itemId))
                 .Include(g => g.Entries)
                 .ThenInclude(e => e.Lots)
+                .Include(g => g.Entries)
+                .ThenInclude(e => e.Item)
                 .ToListAsync();
         }
         else if (itemClassId != null && itemId == null)
@@ -37,6 +37,8 @@ public class ExportHistoryQueries : IExportHistoryQueries
                 .Where(g => g.Entries.Any(e => e.Item.ItemClassId == itemClassId))
                 .Include(g => g.Entries)
                 .ThenInclude(e => e.Lots)
+                .Include(g => g.Entries)
+                .ThenInclude(e => e.Item)
                 .ToListAsync();
         }
         else
@@ -52,6 +54,8 @@ public class ExportHistoryQueries : IExportHistoryQueries
             .Where(g => g.PurchaseOrderNumber == purchaseOrderNumber)
             .Include(g => g.Entries)
             .ThenInclude(e => e.Lots)
+            .Include(g => g.Entries)
+            .ThenInclude(e => e.Item)
             .ToListAsync();
 
         return _mapper.Map<IEnumerable<GoodsIssuesHistoryViewModel>>(goodsIssues);
@@ -67,6 +71,8 @@ public class ExportHistoryQueries : IExportHistoryQueries
             g.Timestamp.CompareTo(query.EndTime) <= 0)
             .Include(g => g.Entries)
             .ThenInclude(e => e.Lots)
+            .Include(g => g.Entries)
+            .ThenInclude(e => e.Item)
             .ToListAsync();
 
         return _mapper.Map<IEnumerable<GoodsIssuesHistoryViewModel>>(goodsIssues);
