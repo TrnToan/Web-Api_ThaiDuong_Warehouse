@@ -57,6 +57,13 @@ public class GoodsReceiptsController : ControllerBase
         return await _queries.GetSuppliers();
     }
 
+    [HttpGet]
+    [Route("PurchaseOrderNumbers")]
+    public async Task<IList<string?>> GetPOsAsync()
+    {
+        return await _queries.GetPOs();
+    }
+
     [HttpPost]
     [Route("goodsReceipt/goodsReceiptLots")]
     public async Task<IActionResult> PostAsync([FromBody] CreateGoodsReceiptCommand cmd)

@@ -74,6 +74,19 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
         return _mapper.Map<IEnumerable<Domain.AggregateModels.GoodsReceiptAggregate.GoodsReceipt> ,IEnumerable<GoodsReceiptViewModel>>(goodsReceipts);
     }
 
+    public async Task<IList<string?>> GetPOs()
+    {
+        var purchaseOrderNumbers = await _context.GoodsReceipts
+            .AsNoTracking()
+            .SelectMany(gr => gr.Lots)
+            .Where(lot => lot.PurchaseOrderNumber != null)
+            .Select(lot => lot.PurchaseOrderNumber)
+            .Distinct()
+            .ToListAsync();
+
+        return purchaseOrderNumbers;
+    }
+
     public async Task<IList<string?>> GetSuppliers()
     {
         var suppliers = await _context.GoodsReceipts

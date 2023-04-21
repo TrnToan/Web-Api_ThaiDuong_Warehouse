@@ -21,6 +21,11 @@ public class InventoryLogEntryChangedDomainEventHandler : INotificationHandler<I
     public async Task Handle(InventoryLogEntryChangedDomainEvent notification, CancellationToken cancellationToken)
     {        
         Item? item = await _itemRepository.GetItemByEntityId(notification.ItemId);
+        if (item is null)
+        {
+            throw new EntityNotFoundException($"Item doesn't exist");
+        }
+
         InventoryLogEntry? latestEntry1 = await _inventoryLogEntryRepository.GetLatestLogEntry(notification.ItemId);
         InventoryLogEntry? latestEntry2 = _service.FindEntry(notification.ItemId);
 
