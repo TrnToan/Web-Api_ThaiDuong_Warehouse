@@ -8,7 +8,7 @@ public class InventoryLogEntryChangedDomainEventHandler : INotificationHandler<I
     private readonly IInventoryLogEntryRepository _inventoryLogEntryRepository;
     private readonly IItemLotRepository _itemLotRepository;
     private readonly IItemRepository _itemRepository;
-    private InventoryLogEntryService _service;
+    private readonly InventoryLogEntryService _service;
     public InventoryLogEntryChangedDomainEventHandler(IInventoryLogEntryRepository inventoryLogEntryRepository, 
         IItemLotRepository itemLotRepository, IItemRepository itemRepository, InventoryLogEntryService service)
     {
@@ -40,7 +40,7 @@ public class InventoryLogEntryChangedDomainEventHandler : INotificationHandler<I
             tempQuantity = latestEntry2.BeforeQuantity + latestEntry2.ChangedQuantity;
         }                
         InventoryLogEntry newEntry = new (notification.ItemId, notification.ItemLotId, notification.Timestamp,
-            tempQuantity, notification.Quantity, item?.Unit);
+            tempQuantity, notification.Quantity, item.Unit);
 
         _service.AddEntry(newEntry);
         _inventoryLogEntryRepository.Add(newEntry);

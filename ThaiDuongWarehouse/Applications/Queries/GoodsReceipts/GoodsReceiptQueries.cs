@@ -74,6 +74,17 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
         return _mapper.Map<IEnumerable<Domain.AggregateModels.GoodsReceiptAggregate.GoodsReceipt> ,IEnumerable<GoodsReceiptViewModel>>(goodsReceipts);
     }
 
+    public async Task<IList<string?>> GetSuppliers()
+    {
+        var suppliers = await _context.GoodsReceipts
+            .AsNoTracking()
+            .Select(g => g.Supplier)
+            .Distinct()
+            .ToListAsync();
+
+        return suppliers;
+    }
+
     public async Task<IEnumerable<GoodsReceiptViewModel>> GetUnConfirmedGoodsReceipt()
     {
         var goodsReceipts = await _context.GoodsReceipts
@@ -89,4 +100,6 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
         var goodsReceiptViewModels = _mapper.Map<IEnumerable<GoodsReceiptViewModel>>(goodsReceipts);
         return goodsReceiptViewModels;
     }
+
+    
 }

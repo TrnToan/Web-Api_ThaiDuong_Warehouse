@@ -7,4 +7,5 @@ public interface IGoodsReceiptQueries
     Task<IEnumerable<GoodsReceiptViewModel>> GetUnConfirmedGoodsReceipt();
     Task<IEnumerable<GoodsReceiptViewModel>> GetGoodsReceiptsByTime(TimeRangeQuery query);
     Task<GoodsReceiptViewModel?> GetGoodsReceiptById(string goodsReceiptId);
+    Task<IList<string?>> GetSuppliers();
 }
