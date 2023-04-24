@@ -57,7 +57,7 @@ public class GoodsIssue : Entity, IAggregateRoot
         {
             foreach (GoodsIssueLot lot in entry.Lots)
             {
-                this.AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.GoodsIssueLotId, -lot.Quantity, entry.Item.Id, timestamp));
+                this.AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.GoodsIssueLotId, -lot.Quantity, entry.Item.Id));
             }
         }
 

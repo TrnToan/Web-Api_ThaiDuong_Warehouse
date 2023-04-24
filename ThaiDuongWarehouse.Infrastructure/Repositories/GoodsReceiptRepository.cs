@@ -7,15 +7,11 @@ public class GoodsReceiptRepository : BaseRepository, IGoodsReceiptRepository
 
     public GoodsReceipt Add(GoodsReceipt goodsReceipt)
     {
-        try
-        {
+        if (goodsReceipt.IsTransient())
             return _context.GoodsReceipts
-            .Add(goodsReceipt).Entity;
-        }
-        catch(Exception ex)
-        {
-            throw new Exception(ex.Message);
-        }
+                .Add(goodsReceipt).Entity;
+        else
+            throw new Exception("Failed to add goodsreceipt.");
     }
 
     public async Task<IEnumerable<GoodsReceipt>> GetConfirmedGoodsReceipt()

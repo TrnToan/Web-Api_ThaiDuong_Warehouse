@@ -22,8 +22,7 @@ public class GoodsReceiptEntityTypeConfiguration : IEntityTypeConfiguration<Good
             grl.Property(lot => lot.ProductionDate);
             grl.Property(lot => lot.ExpirationDate);
 
-            grl.HasOne(lot => lot.Item).WithOne().HasForeignKey<GoodsReceiptLot>(lot => lot.ItemId);
-            grl.HasIndex(lot => lot.ItemId).IsUnique(false);
+            grl.HasOne(lot => lot.Item).WithMany().HasForeignKey(lot => lot.ItemId);
             grl.HasOne(e => e.Employee).WithMany().OnDelete(DeleteBehavior.Restrict).IsRequired();
         });
         builder.Ignore(d => d.DomainEvents);

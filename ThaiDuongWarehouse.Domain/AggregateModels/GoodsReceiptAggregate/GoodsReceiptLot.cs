@@ -10,7 +10,8 @@ public class GoodsReceiptLot
     public DateTime? ProductionDate { get; private set; }
     public DateTime? ExpirationDate { get; private set; }
     public string? Note { get; private set; }
-    public int ItemId { get; private set; }                      // Foreign Key
+    // Foreign Key
+    public int ItemId { get; private set; }                      
     public int GoodsReceiptId { get; private set; }
 
     public Item Item { get; private set; }
@@ -31,9 +32,8 @@ public class GoodsReceiptLot
         ItemId = itemId;
         GoodsReceiptId = goodsReceiptId;
     }
-
     public GoodsReceiptLot(string goodsReceiptLotId, double quantity, string unit, string purchaseOrderNumber, Employee employee, 
-        Item item, string? note)
+        Item item, string? note, int goodsReceiptId)
     {
         GoodsReceiptLotId = goodsReceiptLotId;
         Quantity = quantity;
@@ -42,6 +42,7 @@ public class GoodsReceiptLot
         Employee = employee;
         Item = item;
         Note = note;
+        GoodsReceiptId = goodsReceiptId;
     }
 
     public void Update(double quantity, double? sublotSize, string? purchaseOrderNumber, string locationId, 

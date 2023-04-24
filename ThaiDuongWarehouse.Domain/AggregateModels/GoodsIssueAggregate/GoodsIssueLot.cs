@@ -6,6 +6,7 @@ public class GoodsIssueLot
     public double? SublotSize { get; private set; }
     public string? Note { get; private set; }
     // ForeignKey
+    public int GoodsIssueEntryId { get; private set; }
     public int EmployeeId { get; private set; }
     public Employee Employee { get; private set; }
 

@@ -46,12 +46,10 @@ public class ConfirmGoodsReceiptCommandHandler : IRequestHandler<ConfirmGoodsRec
             ItemLot itemLot = new(lot.GoodsReceiptLotId, location.Id, lot.ItemId, lot.Quantity, lot.Unit, lot.SublotSize,
                 lot.PurchaseOrderNumber, lot.ProductionDate, lot.ExpirationDate);
 
-            // Do đã truyền vào ItemId là ForeignKey của bảng Item, cân nhắc việc bỏ đi đối số lot.Unit
-
             itemLots.Add(itemLot);
         }
 
-        goodsReceipt.Confirm(DateTime.Now, itemLots);
+        goodsReceipt.Confirm(itemLots);
         _goodsReceiptRepository.Update(goodsReceipt);
 
         return await _goodsReceiptRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);

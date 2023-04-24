@@ -14,13 +14,12 @@ public class GoodsReceipt : Entity, IAggregateRoot
         Employee employee) : this() 
     {
         GoodsReceiptId = goodsReceiptId;
+        Supplier = supplier;
         Timestamp = timestamp;
         IsConfirmed = isConfirmed;
         Lots = new List<GoodsReceiptLot>();
-        Employee = employee;
-        Supplier = supplier;
+        Employee = employee;       
     }
-
     public void UpdateLot(string lotId, double quantity, double sublotSize, string? purchaseOrderNumber,
         string locationId, DateTime productionDate, DateTime expirationDate)
     {
@@ -38,13 +37,6 @@ public class GoodsReceipt : Entity, IAggregateRoot
 
         Lots.Add(goodsReceiptLot);
     }
-    public void AddLots(List<GoodsReceiptLot> goodsReceiptLots)
-    {
-        foreach(var lot in goodsReceiptLots)
-        {
-            AddLot(lot);    
-        }
-    }
     public void RemoveLot(string goodsReceiptLotId)
     {
         var lot = Lots.FirstOrDefault(e => e.GoodsReceiptLotId == goodsReceiptLotId);
@@ -54,15 +46,14 @@ public class GoodsReceipt : Entity, IAggregateRoot
         }
         Lots.Remove(lot);
     }
-    public void Confirm(DateTime timestamp, List<ItemLot> itemLots)
+    public void Confirm(List<ItemLot> itemLots)
     {
-        IsConfirmed = true;
-        Timestamp = timestamp;
-
         this.AddDomainEvent(new ItemLotsImportedDomainEvent(itemLots));
         foreach (var lot in itemLots)
         {
-            this.AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.LotId, lot.Quantity, lot.ItemId, timestamp));
+            this.AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.LotId, lot.Quantity, lot.ItemId));
         }
+
+        IsConfirmed = true;
     }
 }

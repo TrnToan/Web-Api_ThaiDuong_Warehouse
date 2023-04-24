@@ -2,23 +2,15 @@
 
 namespace ThaiDuongWarehouse.Api.Applications.Commands.GoodsReceipts;
 
-[DataContract]
 public class CreateGoodsReceiptLotViewModel
 {
-    [DataMember]
-    public string GoodsReceiptLotId { get; private set; }
-    [DataMember]
-    public double Quantity { get; private set; }
-    [DataMember]
-    public string Unit { get; private set; }
-    [DataMember]
-    public string ItemId { get; private set; }
-    [DataMember]
-    public string PurchaseOrderNumber { get; private set; }
-    [DataMember]
-    public string EmployeeId { get; private set; }
-    [DataMember]
-    public string? Note { get; private set; }
+    public string GoodsReceiptLotId { get; set; }
+    public double Quantity { get; set; }
+    public string Unit { get; set; }
+    public string ItemId { get; set; }
+    public string PurchaseOrderNumber { get; set; }
+    public string EmployeeId { get; set; }
+    public string? Note { get; set; }
     public CreateGoodsReceiptLotViewModel(string goodsReceiptLotId, double quantity, string unit,
         string itemId, string purchaseOrderNumber, string employeeId, string? note)
     {

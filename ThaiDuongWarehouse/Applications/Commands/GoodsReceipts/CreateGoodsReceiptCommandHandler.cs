@@ -16,11 +16,13 @@ public class CreateGoodsReceiptCommandHandler : IRequestHandler<CreateGoodsRecei
     public async Task<bool> Handle(CreateGoodsReceiptCommand request, CancellationToken cancellationToken)
     {
         var goodsReceiptEmployee = await _employeeRepository.GetEmployeeById(request.EmployeeId);
-
+        if (goodsReceiptEmployee is null)
+        {
+            throw new EntityNotFoundException($"Employee in the GoodsReceipt {request.GoodsReceiptId} doesn't exist in the context.");
+        }
+   
         var goodsReceipt = new GoodsReceipt(request.GoodsReceiptId, request.Supplier, request.Timestamp, false,
             goodsReceiptEmployee);
-
-        List<GoodsReceiptLot> goodsReceiptLots = new();
         
         foreach (var receiptLotViewModel in request.GoodsReceiptLots)
         {
@@ -37,12 +39,12 @@ public class CreateGoodsReceiptCommandHandler : IRequestHandler<CreateGoodsRecei
             }
 
             var goodsReceiptLot = new GoodsReceiptLot(receiptLotViewModel.GoodsReceiptLotId, receiptLotViewModel.Quantity, 
-                receiptLotViewModel.Unit, receiptLotViewModel.PurchaseOrderNumber, employee, item, receiptLotViewModel.Note);
+                receiptLotViewModel.Unit, receiptLotViewModel.PurchaseOrderNumber, employee, item, 
+                receiptLotViewModel.Note, goodsReceipt.Id);
 
-            goodsReceiptLots.Add(goodsReceiptLot);
+            goodsReceipt.AddLot(goodsReceiptLot);
         }
 
-        goodsReceipt.AddLots(goodsReceiptLots);
         _goodsReceiptRepository.Add(goodsReceipt);
 
         return await _goodsReceiptRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);

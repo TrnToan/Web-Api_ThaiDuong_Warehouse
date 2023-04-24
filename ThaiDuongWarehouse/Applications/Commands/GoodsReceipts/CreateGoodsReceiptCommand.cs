@@ -5,15 +5,15 @@ namespace ThaiDuongWarehouse.Api.Applications.Commands.GoodsReceipts;
 public class CreateGoodsReceiptCommand : IRequest<bool>
 {
     [DataMember]
-    public string GoodsReceiptId { get; private set; }
+    public string GoodsReceiptId { get; set; }
     [DataMember]
-    public DateTime Timestamp { get; private set; } = DateTime.Now;
+    public DateTime Timestamp { get; set; } = DateTime.Now;
     [DataMember]
-    public string? Supplier { get; private set; }
+    public string? Supplier { get; set; }
     [DataMember]
-    public string EmployeeId { get; private set; }
+    public string EmployeeId { get; set; }
     [DataMember]
-    public List<CreateGoodsReceiptLotViewModel> GoodsReceiptLots { get; private set; }
+    public List<CreateGoodsReceiptLotViewModel> GoodsReceiptLots { get; set; }
 
     public CreateGoodsReceiptCommand(string goodsReceiptId, string supplier,
         string employeeId, List<CreateGoodsReceiptLotViewModel> goodsReceiptLots)

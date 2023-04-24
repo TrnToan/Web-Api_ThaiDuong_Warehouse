@@ -38,7 +38,7 @@ public class GoodsIssueEntityTypeConfiguration : IEntityTypeConfiguration<GoodsI
             ge.OwnsMany(entry => entry.Lots, lot =>
             {
                 lot.WithOwner();
-                lot.HasKey(gil => gil.GoodsIssueLotId);
+                lot.HasKey(gil => new { gil.GoodsIssueEntryId, gil.GoodsIssueLotId });
                 lot.Property(gil => gil.Quantity).IsRequired();
                 lot.Property(gil => gil.SublotSize);
                 lot.Property(gil => gil.Note);

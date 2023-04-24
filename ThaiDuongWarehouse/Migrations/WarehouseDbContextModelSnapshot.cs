@@ -569,8 +569,8 @@ namespace ThaiDuongWarehouse.Api.Migrations
                                 .HasForeignKey("GoodsReceiptId");
 
                             b1.HasOne("ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate.Item", "Item")
-                                .WithOne()
-                                .HasForeignKey("ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate.GoodsReceipt.Lots#ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate.GoodsReceiptLot", "ItemId")
+                                .WithMany()
+                                .HasForeignKey("ItemId")
                                 .OnDelete(DeleteBehavior.Cascade)
                                 .IsRequired();
 

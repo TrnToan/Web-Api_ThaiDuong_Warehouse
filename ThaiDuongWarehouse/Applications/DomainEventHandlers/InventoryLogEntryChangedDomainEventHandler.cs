@@ -29,23 +29,23 @@ public class InventoryLogEntryChangedDomainEventHandler : INotificationHandler<I
         InventoryLogEntry? latestEntry1 = await _inventoryLogEntryRepository.GetLatestLogEntry(notification.ItemId);
         InventoryLogEntry? latestEntry2 = _service.FindEntry(notification.ItemId);
 
-        double tempQuantity = 0;
+        double beforeQuantity = 0;
         if (latestEntry1 is null && latestEntry2 is null)
         {
             IEnumerable<ItemLot> itemLots = await _itemLotRepository.GetLotsByItemId(item.ItemId, item.Unit);
             List<ItemLot> unIsolatedItemLots = itemLots.Where(lot => lot.IsIsolated == false).ToList();
-            tempQuantity = unIsolatedItemLots.Sum(x => x.Quantity);     
+            beforeQuantity = unIsolatedItemLots.Sum(x => x.Quantity);     
         }
         else if (latestEntry1 is not null && latestEntry2 is null)
         {
-            tempQuantity = latestEntry1.BeforeQuantity + latestEntry1.ChangedQuantity;
+            beforeQuantity = latestEntry1.BeforeQuantity + latestEntry1.ChangedQuantity;
         }
         else 
         {
-            tempQuantity = latestEntry2.BeforeQuantity + latestEntry2.ChangedQuantity;
+            beforeQuantity = latestEntry2.BeforeQuantity + latestEntry2.ChangedQuantity;
         }                
         InventoryLogEntry newEntry = new (notification.ItemId, notification.ItemLotId, notification.Timestamp,
-            tempQuantity, notification.Quantity, item.Unit);
+            beforeQuantity, notification.Quantity, item.Unit);
 
         _service.AddEntry(newEntry);
         _inventoryLogEntryRepository.Add(newEntry);

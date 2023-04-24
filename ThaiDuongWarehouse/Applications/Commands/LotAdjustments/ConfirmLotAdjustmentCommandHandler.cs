@@ -18,9 +18,11 @@ public class ConfirmLotAdjustmentCommandHandler : IRequestHandler<ConfirmLotAdju
             throw new ArgumentNullException(nameof(lotAdjustment));
 
         var item = await _itemRepository.GetItemByEntityId(lotAdjustment.ItemId);
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
         lotAdjustment.Confirm(lotAdjustment.LotId, item.ItemId, lotAdjustment.Unit, lotAdjustment.Timestamp,
             lotAdjustment.BeforeQuantity, lotAdjustment.AfterQuantity, lotAdjustment.NewPurchaseOrderNumber);
-        
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+
         _lotAdjustmentRepository.Update(lotAdjustment);
         return await _lotAdjustmentRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
     }
