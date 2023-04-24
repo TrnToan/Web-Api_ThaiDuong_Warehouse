@@ -824,3 +824,16 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230424140040_One2Many_Item-GoodsReceiptLot')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20230424140040_One2Many_Item-GoodsReceiptLot', N'7.0.3');
+END;
+GO
+
+COMMIT;
+GO
+

@@ -4,10 +4,13 @@ public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsI
 {
     private readonly IGoodsIssueRepository _goodsIssueRepository;
     private readonly IEmployeeRepository _employeeRepository;
-    public AddLotsToGoodsIssueCommandHandler(IGoodsIssueRepository goodsIssueRepository, IEmployeeRepository employeeRepository)
+    private readonly IItemLotRepository _itemLotRepository;
+    public AddLotsToGoodsIssueCommandHandler(IGoodsIssueRepository goodsIssueRepository, 
+        IEmployeeRepository employeeRepository, IItemLotRepository itemLotRepository)
     {
         _goodsIssueRepository = goodsIssueRepository;
         _employeeRepository = employeeRepository;
+        _itemLotRepository = itemLotRepository;
     }
 
     public async Task<bool> Handle(AddLotsToGoodsIssueCommand request, CancellationToken cancellationToken)
@@ -25,6 +28,16 @@ public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsI
             if (employee is null)
             {
                 throw new EntityNotFoundException(nameof(employee));
+            }
+
+            var lot = await _itemLotRepository.GetLotByLotId(lotViewmodel.GoodsIssueLotId);
+            if (lot is null)
+            {
+                throw new EntityNotFoundException($"Itemlot with id {lotViewmodel.GoodsIssueLotId} doesn't exist.");
+            }
+            if (lot.IsIsolated == true)
+            {
+                throw new Exception($"Itemlot with id {lotViewmodel.GoodsIssueLotId} is isolated.");
             }
 
             GoodsIssueLot goodsIssueLot = new (lotViewmodel.GoodsIssueLotId, lotViewmodel.Quantity, lotViewmodel.SublotSize,

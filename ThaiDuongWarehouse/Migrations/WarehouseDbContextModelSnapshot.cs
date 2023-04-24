@@ -454,13 +454,13 @@ namespace ThaiDuongWarehouse.Api.Migrations
 
                             b1.OwnsMany("ThaiDuongWarehouse.Domain.AggregateModels.GoodsIssueAggregate.GoodsIssueLot", "Lots", b2 =>
                                 {
+                                    b2.Property<int>("GoodsIssueEntryId")
+                                        .HasColumnType("int");
+
                                     b2.Property<string>("GoodsIssueLotId")
                                         .HasColumnType("nvarchar(450)");
 
                                     b2.Property<int>("EmployeeId")
-                                        .HasColumnType("int");
-
-                                    b2.Property<int>("GoodsIssueEntryId")
                                         .HasColumnType("int");
 
                                     b2.Property<string>("Note")
@@ -472,11 +472,9 @@ namespace ThaiDuongWarehouse.Api.Migrations
                                     b2.Property<double?>("SublotSize")
                                         .HasColumnType("float");
 
-                                    b2.HasKey("GoodsIssueLotId");
+                                    b2.HasKey("GoodsIssueEntryId", "GoodsIssueLotId");
 
                                     b2.HasIndex("EmployeeId");
-
-                                    b2.HasIndex("GoodsIssueEntryId");
 
                                     b2.ToTable("GoodsIssueLot");
 
