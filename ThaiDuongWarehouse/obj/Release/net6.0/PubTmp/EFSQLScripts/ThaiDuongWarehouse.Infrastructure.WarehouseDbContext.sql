@@ -837,3 +837,34 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230424164202_NewPKGoodsIssueLot')
+BEGIN
+    ALTER TABLE [GoodsIssueLot] DROP CONSTRAINT [PK_GoodsIssueLot];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230424164202_NewPKGoodsIssueLot')
+BEGIN
+    DROP INDEX [IX_GoodsIssueLot_GoodsIssueEntryId] ON [GoodsIssueLot];
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230424164202_NewPKGoodsIssueLot')
+BEGIN
+    ALTER TABLE [GoodsIssueLot] ADD CONSTRAINT [PK_GoodsIssueLot] PRIMARY KEY ([GoodsIssueEntryId], [GoodsIssueLotId]);
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230424164202_NewPKGoodsIssueLot')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20230424164202_NewPKGoodsIssueLot', N'7.0.3');
+END;
+GO
+
+COMMIT;
+GO
+

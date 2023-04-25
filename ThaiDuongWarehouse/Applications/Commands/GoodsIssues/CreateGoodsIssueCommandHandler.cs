@@ -18,7 +18,7 @@ public class CreateGoodsIssueCommandHandler : IRequestHandler<CreateGoodsIssueCo
         var employee = await _employeeRepository.GetEmployeeById(request.EmployeeId);
         if (employee is null)
         {
-            throw new EntityNotFoundException($"{employee} doesn't exist.");
+            throw new EntityNotFoundException($"Employee with Id {request.EmployeeId} doesn't exist.");
         }
         var goodsIssue = new GoodsIssue(request.GoodsIssueId, request.PurchaseOrderNumber, request.Timestamp, 
             request.Receiver, employee.Id);
@@ -28,7 +28,7 @@ public class CreateGoodsIssueCommandHandler : IRequestHandler<CreateGoodsIssueCo
             var item = await _itemRepository.GetItemById(entry.ItemId, entry.Unit);
             if (item is null)
             {
-                throw new EntityNotFoundException($"{item} doesn't exist.");
+                throw new EntityNotFoundException($"Item with Id {entry.ItemId} doesn't exist.");
             }
 
             goodsIssue.AddEntry(item, entry.Unit, entry.RequestedSublotSize, entry.RequestedQuantity);

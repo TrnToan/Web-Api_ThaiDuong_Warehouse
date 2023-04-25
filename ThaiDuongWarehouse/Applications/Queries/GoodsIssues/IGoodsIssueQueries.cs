@@ -8,4 +8,5 @@ public interface IGoodsIssueQueries
     Task<GoodsIssueViewModel?> GetGoodsIssueById(string id);
     Task<IEnumerable<GoodsIssueViewModel>> GetConfirmedGoodsIssuesByTime(TimeRangeQuery query);
     Task<IEnumerable<GoodsIssueViewModel>> GetUnconfirmedGoodsIssues();
+    Task<IList<string>> GetReceivers();
 }

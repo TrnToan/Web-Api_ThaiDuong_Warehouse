@@ -16,19 +16,10 @@ public class ConfirmExportingGoodsIssueLotsCommandHandler : IRequestHandler<Conf
         GoodsIssue? goodsIssue = await _goodsIssueRepository.GetGoodsIssueById(request.GoodsIssueId);
         if (goodsIssue is null)
         {
-            throw new EntityNotFoundException(nameof(goodsIssue));
+            throw new EntityNotFoundException($"Goodsissue with Id {request.GoodsIssueId} doesn't exist.");
         }
 
         List<ItemLot> itemLots = new();
-        //foreach (var lotId in request.GoodsIssueLotIds)
-        //{
-        //    var lot = await _itemLotRepository.GetLotByLotId(lotId);
-        //    if (lot is null)
-        //    {
-        //        throw new EntityNotFoundException($"{lotId} does not exist in ItemLot DbContext");
-        //    }
-        //    itemLots.Add(lot);
-        //}
         foreach (GoodsIssueEntry entry in goodsIssue.Entries)
         {
             foreach (GoodsIssueLot lot in entry.Lots)

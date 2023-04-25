@@ -19,7 +19,7 @@ public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsI
 
         if (goodsIssue is null)
         {
-            throw new EntityNotFoundException(nameof(goodsIssue));
+            throw new EntityNotFoundException($"Goodsissue with Id {request.GoodsIssueId} doesn't exist.");
         }
         
         foreach(var lotViewmodel in request.GoodsIssueLots)
@@ -27,7 +27,7 @@ public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsI
             var employee = await _employeeRepository.GetEmployeeById(lotViewmodel.EmployeeId);
             if (employee is null)
             {
-                throw new EntityNotFoundException(nameof(employee));
+                throw new EntityNotFoundException($"Employee with Id {lotViewmodel.EmployeeId} doesn't exist.");
             }
 
             var lot = await _itemLotRepository.GetLotByLotId(lotViewmodel.GoodsIssueLotId);

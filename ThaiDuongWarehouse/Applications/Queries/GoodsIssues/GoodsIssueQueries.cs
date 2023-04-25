@@ -81,4 +81,23 @@ public class GoodsIssueQueries : IGoodsIssueQueries
 
         return _mapper.Map<IEnumerable<GoodsIssue>, IEnumerable<GoodsIssueViewModel>>(goodsIssues);
     }
+
+    public async Task<IList<string>> GetReceivers()
+    {
+        var goodsIssueReceivers = await _context.GoodsIssues
+            .AsNoTracking()
+            .Select(g => g.Receiver)
+            .Distinct()
+            .ToListAsync();
+
+        var departmentReceivers = await _context.Departments
+            .AsNoTracking()
+            .Select(d => d.Name)
+            .ToListAsync();
+        
+        var receivers = new List<string>();
+        receivers.AddRange(goodsIssueReceivers);
+        receivers.AddRange(departmentReceivers);
+        return receivers;
+    }
 }

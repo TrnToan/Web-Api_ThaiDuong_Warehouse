@@ -35,6 +35,13 @@ public class GoodsIssuesController : ControllerBase
         return await _queries.GetUnconfirmedGoodsIssues();
     }
 
+    [HttpGet]
+    [Route("Receivers")]
+    public async Task<IList<string>> GetReceiversAsync()
+    {
+        return await _queries.GetReceivers();
+    }
+
     [HttpPost]
     public async Task<IActionResult> PostAsync([FromBody] CreateGoodsIssueCommand command)
     {
