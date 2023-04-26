@@ -53,7 +53,7 @@ public class ItemsController : ControllerBase
         var result = await _mediator.Send(command);
         try
         {
-            if (result is null)
+            if (result is false)
             {
                 return BadRequest();
             }

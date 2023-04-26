@@ -12,7 +12,7 @@ public class CreateItemWithNewUnitDomainEventHandler : INotificationHandler<Crea
 
     public Task Handle(CreateItemWithNewUnitDomainEvent notification, CancellationToken cancellationToken)
     {
-        Item item = new (notification.ItemId, notification.ItemClassId, notification.Unit, notification.ItemName);
+        Item item = new (notification.ItemId, notification.ItemClassId, notification.Unit);
 
         _itemRepository.Add(item);
         return Task.CompletedTask;

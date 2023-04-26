@@ -87,7 +87,6 @@ public class GoodsIssueQueries : IGoodsIssueQueries
         var goodsIssueReceivers = await _context.GoodsIssues
             .AsNoTracking()
             .Select(g => g.Receiver)
-            .Distinct()
             .ToListAsync();
 
         var departmentReceivers = await _context.Departments
@@ -95,9 +94,13 @@ public class GoodsIssueQueries : IGoodsIssueQueries
             .Select(d => d.Name)
             .ToListAsync();
         
-        var receivers = new List<string>();
-        receivers.AddRange(goodsIssueReceivers);
-        receivers.AddRange(departmentReceivers);
+        var allReceivers = new List<string>();
+        allReceivers.AddRange(goodsIssueReceivers);
+        allReceivers.AddRange(departmentReceivers);
+
+        List<string> receivers = allReceivers
+            .Distinct()
+            .ToList();
         return receivers;
     }
 }

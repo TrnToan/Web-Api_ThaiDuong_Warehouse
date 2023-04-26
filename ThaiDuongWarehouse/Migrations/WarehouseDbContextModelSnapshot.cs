@@ -393,8 +393,8 @@ namespace ThaiDuongWarehouse.Api.Migrations
                         .IsRequired();
 
                     b.HasOne("ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate.Item", "Item")
-                        .WithOne()
-                        .HasForeignKey("ThaiDuongWarehouse.Domain.AggregateModels.AdjustmentAggregate.LotAdjustment", "ItemId")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -447,8 +447,8 @@ namespace ThaiDuongWarehouse.Api.Migrations
                                 .HasForeignKey("GoodsIssueId");
 
                             b1.HasOne("ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate.Item", "Item")
-                                .WithOne()
-                                .HasForeignKey("ThaiDuongWarehouse.Domain.AggregateModels.GoodsIssueAggregate.GoodsIssue.Entries#ThaiDuongWarehouse.Domain.AggregateModels.GoodsIssueAggregate.GoodsIssueEntry", "ItemId")
+                                .WithMany()
+                                .HasForeignKey("ItemId")
                                 .OnDelete(DeleteBehavior.Cascade)
                                 .IsRequired();
 

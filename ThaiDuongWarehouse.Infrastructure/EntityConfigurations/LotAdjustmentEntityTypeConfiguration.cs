@@ -16,7 +16,6 @@ public class LotAdjustmentEntityTypeConfiguration : IEntityTypeConfiguration<Lot
         builder.Ignore(d => d.DomainEvents);
 
         builder.HasOne(e => e.Employee).WithMany().HasForeignKey(la => la.EmployeeId).IsRequired();
-        builder.HasOne(i => i.Item).WithOne().HasForeignKey<LotAdjustment>(la => la.ItemId).IsRequired();
-        builder.HasIndex(i => i.ItemId).IsUnique(false);
+        builder.HasOne(i => i.Item).WithMany().HasForeignKey(la => la.ItemId).IsRequired();
     }
 }

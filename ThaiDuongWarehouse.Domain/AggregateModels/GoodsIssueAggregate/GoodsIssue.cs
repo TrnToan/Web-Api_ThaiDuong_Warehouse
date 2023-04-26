@@ -51,7 +51,7 @@ public class GoodsIssue : Entity, IAggregateRoot
         }
         entry.AddLot(lot);
     }
-    public void Confirm(DateTime timestamp, List<ItemLot> lots)
+    public void Confirm(List<ItemLot> lots)
     {
         foreach (GoodsIssueEntry entry in Entries)
         {

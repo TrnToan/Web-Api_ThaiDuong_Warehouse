@@ -868,3 +868,16 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230426084517_LotAdjustment_Item_GoodsIssueEntry')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20230426084517_LotAdjustment_Item_GoodsIssueEntry', N'7.0.3');
+END;
+GO
+
+COMMIT;
+GO
+

@@ -32,7 +32,7 @@ public class ConfirmExportingGoodsIssueLotsCommandHandler : IRequestHandler<Conf
                 itemLots.Add(itemLot);
             }
         }
-        goodsIssue.Confirm(goodsIssue.Timestamp, itemLots);
+        goodsIssue.Confirm(itemLots);
         _goodsIssueRepository.Update(goodsIssue);
 
         return await _goodsIssueRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);

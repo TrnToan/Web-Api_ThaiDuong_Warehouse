@@ -20,12 +20,11 @@ public class Item : Entity, IAggregateRoot
         Price = price;
     }
 
-    public Item(string itemId, string itemClassId, string unit, string itemName)
+    public Item(string itemId, string itemClassId, string unit)
     {
         ItemId = itemId;
         ItemClassId = itemClassId;
         Unit = unit;
-        ItemName = itemName;
         MinimumStockLevel = 0;
         Price = 0;
     }
@@ -41,8 +40,8 @@ public class Item : Entity, IAggregateRoot
         Price = price;
     }
 
-    public void CreateItemWithNewUnit(string itemId, string itemClassId, string itemName, string unit)
+    public void CreateItemWithNewUnit(string itemId, string itemClassId, string unit)
     {
-        this.AddDomainEvent(new CreateItemWithNewUnitDomainEvent(itemId, itemClassId, itemName, unit));
+        this.AddDomainEvent(new CreateItemWithNewUnitDomainEvent(itemId, itemClassId, unit));
     }
 }

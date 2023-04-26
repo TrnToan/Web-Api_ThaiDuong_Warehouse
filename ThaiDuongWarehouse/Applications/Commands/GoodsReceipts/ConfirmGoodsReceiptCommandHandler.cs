@@ -21,20 +21,12 @@ public class ConfirmGoodsReceiptCommandHandler : IRequestHandler<ConfirmGoodsRec
 
         if (goodsReceipt is null)
         {
-            throw new EntityNotFoundException(nameof(goodsReceipt));
+            throw new EntityNotFoundException($"GoodsReceipt with Id {request.GoodsReceiptId} doesn't exist.");
         }
 
         List<ItemLot> itemLots = new();
         foreach (GoodsReceiptLot lot in goodsReceipt.Lots)
         {
-            Item? item = await _itemRepository.GetItemByEntityId(lot.ItemId);
-
-            if (item is null)
-            {
-                item = new();
-                item.CreateItemWithNewUnit(lot.Item.ItemId, lot.Item.ItemClassId, lot.Item.ItemName, lot.Unit);
-            }
-
 #pragma warning disable CS8604 // Possible null reference argument.
             Location? location = await _storageRepository.GetLocationById(lot.LocationId);
 #pragma warning restore CS8604 // Possible null reference argument.

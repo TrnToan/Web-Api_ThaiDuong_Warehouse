@@ -42,7 +42,9 @@ public class InventoryLogEntryChangedDomainEventHandler : INotificationHandler<I
         }
         else 
         {
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             beforeQuantity = latestEntry2.BeforeQuantity + latestEntry2.ChangedQuantity;
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
         }                
         InventoryLogEntry newEntry = new (notification.ItemId, notification.ItemLotId, notification.Timestamp,
             beforeQuantity, notification.Quantity, item.Unit);
