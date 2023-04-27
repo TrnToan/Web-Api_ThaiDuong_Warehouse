@@ -33,8 +33,7 @@ public class InventoryLogEntryChangedDomainEventHandler : INotificationHandler<I
         if (latestEntry1 is null && latestEntry2 is null)
         {
             IEnumerable<ItemLot> itemLots = await _itemLotRepository.GetLotsByItemId(item.ItemId, item.Unit);
-            List<ItemLot> unIsolatedItemLots = itemLots.Where(lot => lot.IsIsolated == false).ToList();
-            beforeQuantity = unIsolatedItemLots.Sum(x => x.Quantity);     
+            beforeQuantity = itemLots.Sum(x => x.Quantity);     
         }
         else if (latestEntry1 is not null && latestEntry2 is null)
         {

@@ -27,7 +27,7 @@ public class ItemLot : Entity, IAggregateRoot
         ProductionDate = productionDate;
         ExpirationDate = expirationDate;
     }
-    public void Update(double quantity)
+    public void SetQuantity(double quantity)
     {
         Quantity = quantity;
     }
@@ -35,5 +35,9 @@ public class ItemLot : Entity, IAggregateRoot
     {
         Quantity = quantity;
         PurchaseOrderNumber = purchaseOrderNumber;
+    }
+    public void UpdateState(bool isIsolated)
+    {
+        IsIsolated = isIsolated;
     }
 }

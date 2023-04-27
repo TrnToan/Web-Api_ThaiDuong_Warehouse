@@ -1,15 +1,19 @@
-﻿namespace ThaiDuongWarehouse.Api.Controllers;
+﻿using ThaiDuongWarehouse.Api.Applications.Commands.ItemLots;
+
+namespace ThaiDuongWarehouse.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
 public class ItemLotsController : ControllerBase
 {
     private readonly IItemLotQueries _queries;
-	public ItemLotsController(IItemLotQueries queries)
-	{
-		_queries = queries;
-	}
-	[HttpGet]
+	private readonly IMediator _mediator;
+	public ItemLotsController(IItemLotQueries queries, IMediator mediator)
+    {
+        _queries = queries;
+        _mediator = mediator;
+    }
+    [HttpGet]
 	[Route("Isolated")]
 	public async Task<IEnumerable<ItemLotViewModel>> GetIsolatedItemLotsAsync()
 	{
@@ -32,5 +36,24 @@ public class ItemLotsController : ControllerBase
 	public async Task<IEnumerable<ItemLotViewModel>> GetItemLotByPoAsync(string purchaseOrderNumber)
 	{
 		return await _queries.GetItemLotsByPO(purchaseOrderNumber);
+	}
+	[HttpPatch]
+	[Route("{itemLotId}")]
+	public async Task<IActionResult> UpdateItemLotStateAsync([FromRoute] string itemLotId, bool isIsolated)
+	{
+		var command = new UpdateItemLotCommand(itemLotId, isIsolated);
+		try
+		{
+			var result = await _mediator.Send(command);
+			if (result != true)
+			{
+				return BadRequest();
+			}
+			return Ok();
+		}
+		catch (Exception ex)
+		{
+			return BadRequest(ex.Message);
+		}
 	}
 }

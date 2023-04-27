@@ -14,10 +14,11 @@ public class ItemLotInformationChangedDomainEventHandler : INotificationHandler<
         var itemLot = await _itemLotRepository.GetLotByLotId(notification.ItemLotId);
         if (itemLot is null)
         {
-            throw new ArgumentException();
+            throw new EntityNotFoundException($"Itemlot with Id {notification.ItemLotId} doesn't exist.");
         }
+
         var newQuantity = itemLot.Quantity - notification.Quantity;
-        itemLot.Update(newQuantity);
+        itemLot.SetQuantity(newQuantity);
         _itemLotRepository.UpdateLot(itemLot);
     }
 }

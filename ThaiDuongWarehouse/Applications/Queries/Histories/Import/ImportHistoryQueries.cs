@@ -63,6 +63,7 @@ public class ImportHistoryQueries : IImportHistoryQueries
             g.Timestamp.CompareTo(query.StartTime) >= 0 &&
             g.Timestamp.CompareTo(query.EndTime) <= 0)
             .Include(g => g.Lots)
+            .ThenInclude(lot => lot.Item)
             .ToListAsync();
 
         return _mapper.Map<IEnumerable<GoodsReceiptsHistoryViewModel>>(goodsReceipts);

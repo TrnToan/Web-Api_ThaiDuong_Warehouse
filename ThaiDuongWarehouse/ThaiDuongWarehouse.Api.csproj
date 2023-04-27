@@ -22,10 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Applications\Commands\ItemLots\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ThaiDuongWarehouse.Domain\ThaiDuongWarehouse.Domain.csproj" />
     <ProjectReference Include="..\ThaiDuongWarehouse.Infrastructure\ThaiDuongWarehouse.Infrastructure.csproj" />
   </ItemGroup>
