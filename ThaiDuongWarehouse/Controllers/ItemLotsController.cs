@@ -13,30 +13,43 @@ public class ItemLotsController : ControllerBase
         _queries = queries;
         _mediator = mediator;
     }
+
     [HttpGet]
 	[Route("Isolated")]
 	public async Task<IEnumerable<ItemLotViewModel>> GetIsolatedItemLotsAsync()
 	{
 		return await _queries.GetIsolatedItemLots();
 	}
+
 	[HttpGet]
 	[Route("ByLotId/{itemLotId}")]
 	public async Task<ItemLotViewModel> GetItemLotByLotIdAsync(string itemLotId)
 	{
 		return await _queries.GetItemLotByLotId(itemLotId);
 	}
+
 	[HttpGet]
 	[Route("ByItemId/{itemId}")]
 	public async Task<IEnumerable<ItemLotViewModel>> GetItemLotByItemIdAsync(string itemId)
 	{
 		return await _queries.GetItemLotsByItemId(itemId);
 	}
+
 	[HttpGet]
 	[Route("ByPO/{purchaseOrderNumber}")]
 	public async Task<IEnumerable<ItemLotViewModel>> GetItemLotByPoAsync(string purchaseOrderNumber)
 	{
 		return await _queries.GetItemLotsByPO(purchaseOrderNumber);
 	}
+
+	[HttpGet]
+	[Route("ByLocation/{locationId}")]
+	public async Task<IList<ItemLotViewModel>> GetItemLotsByLocationAsync(string locationId)
+	{
+		return await _queries.GetItemLotsByLocationId(locationId);
+
+    }
+
 	[HttpPatch]
 	[Route("{itemLotId}")]
 	public async Task<IActionResult> UpdateItemLotStateAsync([FromRoute] string itemLotId, bool isIsolated)
@@ -56,6 +69,7 @@ public class ItemLotsController : ControllerBase
 			return BadRequest(ex.Message);
 		}
 	}
+
 	[HttpDelete]
 	public async Task<IActionResult> RemoveLotsAsync([FromBody] RemoveItemLotsCommand command)
 	{

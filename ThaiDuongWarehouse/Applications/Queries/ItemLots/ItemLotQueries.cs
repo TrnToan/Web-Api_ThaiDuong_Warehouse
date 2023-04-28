@@ -57,4 +57,17 @@ public class ItemLotQueries : IItemLotQueries
         var viewModels = _mapper.Map<IEnumerable<ItemLot>, IEnumerable<ItemLotViewModel>>(itemLots);
         return viewModels;
     }
+
+    public async Task<IList<ItemLotViewModel>> GetItemLotsByLocationId(string locationId)
+    {
+        List<ItemLot> itemlots = await _context.ItemLots
+            .AsNoTracking()
+            .Include(il => il.Location)
+            .Include(il => il.Item)
+            .Where(il => il.Location.LocationId == locationId)
+            .ToListAsync();
+
+        var viewModels = _mapper.Map<IList<ItemLot>, IList<ItemLotViewModel>>(itemlots);
+        return viewModels;
+    }
 }
