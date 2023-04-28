@@ -1,4 +1,6 @@
-﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.LotAggregate;
+﻿using System.Runtime.CompilerServices;
+
+namespace ThaiDuongWarehouse.Domain.AggregateModels.LotAggregate;
 public class ItemLot : Entity, IAggregateRoot
 {
     public string LotId { get; private set; }
@@ -39,5 +41,9 @@ public class ItemLot : Entity, IAggregateRoot
     public void UpdateState(bool isIsolated)
     {
         IsIsolated = isIsolated;
+    }
+    public static void Reject(ItemLot lot)
+    {
+        lot.AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.LotId, -lot.Quantity, lot.ItemId));
     }
 }

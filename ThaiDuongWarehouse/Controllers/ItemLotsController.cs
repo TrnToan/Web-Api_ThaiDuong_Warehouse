@@ -56,4 +56,21 @@ public class ItemLotsController : ControllerBase
 			return BadRequest(ex.Message);
 		}
 	}
+	[HttpDelete]
+	public async Task<IActionResult> RemoveLotsAsync([FromBody] RemoveItemLotsCommand command)
+	{
+        try
+        {
+            var result = await _mediator.Send(command);
+            if (result != true)
+            {
+                return BadRequest();
+            }
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }
