@@ -52,12 +52,12 @@ public class LotAdjustment : Entity, IAggregateRoot
         AfterQuantity = quantity;
         NewPurchaseOrderNumber = purchaseOrderNumber;
     }
-    public void Confirm(string lotId, string itemId, string unit, DateTime timestamp, double beforeQuantity , double afterQuanity, 
+    public void Confirm(string lotId, string itemId, string unit, double beforeQuantity , double afterQuanity, 
         string newPurchaseOrderNumber)
     {
         IsConfirmed = true;
-        Timestamp = timestamp;
+        Timestamp = DateTime.Now;
         this.AddDomainEvent(new LotAdjustedDomainEvent(lotId, itemId, beforeQuantity, afterQuanity, unit, 
-            newPurchaseOrderNumber, timestamp));
+            newPurchaseOrderNumber, Timestamp));
     }
 }

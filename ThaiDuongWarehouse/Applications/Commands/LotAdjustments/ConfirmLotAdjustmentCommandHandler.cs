@@ -15,11 +15,11 @@ public class ConfirmLotAdjustmentCommandHandler : IRequestHandler<ConfirmLotAdju
     {
         var lotAdjustment = await _lotAdjustmentRepository.GetAdjustmentByLotId(request.LotId);
         if (lotAdjustment is null)
-            throw new ArgumentNullException(nameof(lotAdjustment));
+            throw new EntityNotFoundException($"LotAdjustment with itemlot {request.LotId} doesn't exist.");
 
         var item = await _itemRepository.GetItemByEntityId(lotAdjustment.ItemId);
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-        lotAdjustment.Confirm(lotAdjustment.LotId, item.ItemId, lotAdjustment.Unit, lotAdjustment.Timestamp,
+        lotAdjustment.Confirm(lotAdjustment.LotId, item.ItemId, lotAdjustment.Unit,
             lotAdjustment.BeforeQuantity, lotAdjustment.AfterQuantity, lotAdjustment.NewPurchaseOrderNumber);
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 

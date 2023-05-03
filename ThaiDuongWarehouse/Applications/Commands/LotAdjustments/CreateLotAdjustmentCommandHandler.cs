@@ -18,26 +18,34 @@ public class CreateLotAdjustmentCommandHandler : IRequestHandler<CreateLotAdjust
 
     public async Task<bool> Handle(CreateLotAdjustmentCommand request, CancellationToken cancellationToken)
     {
+        var lotAdjustment = await _lotAdjustmentRepository.GetAdjustmentByLotId(request.LotId);
+        if (lotAdjustment is not null)
+        {
+            throw new Exception($"LotAdjustment with itemlot {request.LotId} has already existed.");
+        }
+
         Item? item = await _itemRepository.GetItemById(request.ItemId, request.Unit);
         if (item is null)
         {
             throw new EntityNotFoundException("Item does not exist.");
         }
+
         var itemLot = await _itemLotRepository.GetLotByLotId(request.LotId);
         if (itemLot is null)
         {
             throw new EntityNotFoundException($"Itemlot {request.LotId} does not exist");
         }
+
         var employee = await _employeeRepository.GetEmployeeByName(request.EmployeeName);
         if (employee is null)
         {
             throw new EntityNotFoundException($"Employee {request.EmployeeName} does not exist");
         }
         
-        var lotAdjustment = new LotAdjustment(request.LotId, request.OldPurchaseOrderNumber,  request.BeforeQuantity, 
+        var newLotAdjustment = new LotAdjustment(request.LotId, request.OldPurchaseOrderNumber,  request.BeforeQuantity, 
             request.Unit, request.Note, DateTime.Now, item.Id, employee.Id);
-        lotAdjustment.Update(request.AfterQuantity, request.NewPurchaseOrderNumber);
-        _lotAdjustmentRepository.Add(lotAdjustment);
+        newLotAdjustment.Update(request.AfterQuantity, request.NewPurchaseOrderNumber);
+        _lotAdjustmentRepository.Add(newLotAdjustment);
 
         return await _lotAdjustmentRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
     }

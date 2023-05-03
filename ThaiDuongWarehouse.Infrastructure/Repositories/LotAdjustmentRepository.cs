@@ -16,6 +16,7 @@ public class LotAdjustmentRepository : BaseRepository, ILotAdjustmentRepository
     public async Task<LotAdjustment?> GetAdjustmentByLotId(string lotId)
     {
         return await _context.LotAdjustments
+            .Where(la => la.IsConfirmed == false)
             .FirstOrDefaultAsync(la => la.LotId == lotId);
     }
 

@@ -24,8 +24,7 @@ public class LotAdjustedDomainEventHandler : INotificationHandler<LotAdjustedDom
             throw new EntityNotFoundException(notification.LotId);
 
         var itemLots = await _itemLotRepository.GetLotsByItemId(notification.ItemId, notification.Unit);
-        var unIsolatedItemLots = itemLots.Where(lot => lot.IsIsolated == false);
-        double beforeQuantity = unIsolatedItemLots.Sum(x => x.Quantity);
+        double beforeQuantity = itemLots.Sum(x => x.Quantity);
 
         var item = await _itemRepository.GetItemById(notification.ItemId, notification.Unit);
         double changedQuantity = notification.AfterQuantity - notification.BeforeQuantity;
