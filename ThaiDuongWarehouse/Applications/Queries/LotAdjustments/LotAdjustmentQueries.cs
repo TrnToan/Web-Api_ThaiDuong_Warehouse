@@ -13,7 +13,7 @@ public class LotAdjustmentQueries : ILotAdjustmentQueries
     {
         var adjustments = await _context.LotAdjustments
             .Include(la => la.Employee)
-            .Include(la => la.Item.Unit)
+            .Include(la => la.Item)
             .ToListAsync();
         var viewmodels = _mapper.Map<IEnumerable<LotAdjustment>, IEnumerable<LotAdjustmentViewModel>>(adjustments);
         
@@ -23,7 +23,8 @@ public class LotAdjustmentQueries : ILotAdjustmentQueries
     public async Task<IEnumerable<LotAdjustmentViewModel>> GetUnconfirmedAdjustments()
     {
         var adjustments = await _context.LotAdjustments
-            .Include(la => la.Employee)            
+            .Include(la => la.Employee)           
+            .Include(la => la.Item)
             .Where(la => la.IsConfirmed == false)
             .ToListAsync();
         var viewmodels = _mapper.Map<IEnumerable<LotAdjustment>, IEnumerable<LotAdjustmentViewModel>>(adjustments);
