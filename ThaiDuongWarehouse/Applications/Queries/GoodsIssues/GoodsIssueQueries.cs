@@ -103,4 +103,14 @@ public class GoodsIssueQueries : IGoodsIssueQueries
             .ToList();
         return receivers;
     }
+
+    public async Task<IList<string>> GetAllGoodsIssueIds()
+    {
+        var goodsIssueIds = await _context.GoodsIssues
+            .AsNoTracking()
+            .Select(g => g.GoodsIssueId)
+            .ToListAsync();
+
+        return goodsIssueIds;
+    }
 }

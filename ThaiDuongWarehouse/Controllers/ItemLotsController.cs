@@ -14,6 +14,12 @@ public class ItemLotsController : ControllerBase
         _mediator = mediator;
     }
 
+	[HttpGet]
+	public async Task<IEnumerable<ItemLotViewModel>> GetAllAsync()
+	{
+		return await _queries.GetAll();
+	}
+
     [HttpGet]
 	[Route("Isolated")]
 	public async Task<IEnumerable<ItemLotViewModel>> GetIsolatedItemLotsAsync()

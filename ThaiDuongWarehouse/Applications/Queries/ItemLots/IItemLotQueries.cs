@@ -2,6 +2,7 @@
 
 public interface IItemLotQueries
 {
+    Task<IEnumerable<ItemLotViewModel>> GetAll();
     Task<IEnumerable<ItemLotViewModel>> GetItemLotsByItemId(string itemId);
     Task<ItemLotViewModel> GetItemLotByLotId(string lotId);
     Task<IEnumerable<ItemLotViewModel>> GetItemLotsByPO(string purchaseOrderNumber);

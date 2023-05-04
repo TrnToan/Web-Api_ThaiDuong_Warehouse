@@ -16,6 +16,13 @@ public class GoodsIssuesController : ControllerBase
     }
 
     [HttpGet]
+    [Route("Ids")]
+    public async Task<IList<string>> GetGoodsIssueIdsAsync()
+    {
+        return await _queries.GetAllGoodsIssueIds();
+    }
+
+    [HttpGet]
     [Route("{goodsIssueId}")]
     public async Task<GoodsIssueViewModel?> GetGoodsIssueByIdAsync([FromRoute] string goodsIssueId)
     {

@@ -14,17 +14,9 @@ public class ItemLotRepository : BaseRepository, IItemLotRepository
         _context.ItemLots.AddRange(itemLots);
     }
 
-    public async Task<IEnumerable<ItemLot>> GetAll()
-    {
-        return await _context.ItemLots
-            .AsNoTracking()
-            .ToListAsync();
-    }
-
     public async Task<IEnumerable<ItemLot>> GetIsolatedItemLots()
     {
         return await _context.ItemLots
-            .AsNoTracking()
             .Where(il => il.IsIsolated == true)
             .ToListAsync();
     }

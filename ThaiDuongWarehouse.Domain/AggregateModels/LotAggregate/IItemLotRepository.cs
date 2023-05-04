@@ -10,5 +10,4 @@ public interface IItemLotRepository : IRepository<ItemLot>
     Task<IEnumerable<ItemLot>> GetLotsByItemId(string itemId, string unit);
     Task<IEnumerable<ItemLot>> GetLotByPO(string purchaseOrderNumber);
     Task<IEnumerable<ItemLot>> GetIsolatedItemLots();
-    Task<IEnumerable<ItemLot>> GetAll();
 }
