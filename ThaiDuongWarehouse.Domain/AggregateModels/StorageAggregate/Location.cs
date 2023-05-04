@@ -2,7 +2,6 @@
 public class Location : Entity
 {
     public string LocationId { get; private set; }
-
     public int WarehouseId { get; private set; }
     public List<ItemLot> ItemLots { get; private set; }
 

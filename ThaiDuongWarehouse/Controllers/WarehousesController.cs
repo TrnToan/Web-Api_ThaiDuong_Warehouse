@@ -19,12 +19,21 @@ public class WarehousesController : ControllerBase
 	{
 		return await _queries.GetAllWarehouses();
 	}
+
+	[HttpGet]
+	[Route("locations")]
+	public async Task<IEnumerable<LocationViewModel>> GetAllLocationsAsync()
+	{
+		return await _queries.GetAllLocations();
+	}
+
 	[HttpGet]
 	[Route("{warehouseId}")]
 	public async Task<WarehouseViewModel?> GetWarehouseByIdAsync(string warehouseId)
 	{
 		return await _queries.GetWarehouseById(warehouseId);
 	}
+
 	[HttpPost]
 	public async Task<IActionResult> AddLocation(CreateLocationCommand command)
 	{
