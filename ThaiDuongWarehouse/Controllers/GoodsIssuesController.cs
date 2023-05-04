@@ -70,6 +70,27 @@ public class GoodsIssuesController : ControllerBase
     }
 
     [HttpPatch]
+    [Route("GoodsIssueEntry")]
+    public async Task<IActionResult> UpdateEntryAsync([FromBody] UpdateGoodsIssueEntryCommand command)
+    {
+        try
+        {
+            var result = await _mediator.Send(command);
+
+            if (!result)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPatch]
     [Route("{goodsIssueId}/goodsIssueLots")]
     public async Task<IActionResult> AddLotsAsync([FromRoute] string goodsIssueId, [FromBody] List<CreateGoodsIssueLotViewModel> goodsIssueLots)
     {

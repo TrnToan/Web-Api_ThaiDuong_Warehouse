@@ -20,8 +20,13 @@ public class GoodsIssueEntry
         Unit = unit;
         Lots = new List<GoodsIssueLot>();     
     }
-    public void SetQuantity(double requestedQuantity)
+    public void UpdateEntry(double? requestedSublotSize, double requestedQuantity)
     {
+        if (requestedSublotSize != null) 
+        {
+            RequestedSublotSize = requestedSublotSize;
+        }
+
         RequestedQuantity = requestedQuantity;
     }
     public void AddLot(GoodsIssueLot lot)

@@ -1,4 +1,6 @@
-﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.GoodsIssueAggregate;
+﻿using MediatR;
+
+namespace ThaiDuongWarehouse.Domain.AggregateModels.GoodsIssueAggregate;
 public class GoodsIssue : Entity, IAggregateRoot
 {
     public string GoodsIssueId { get; private set; }
@@ -33,14 +35,14 @@ public class GoodsIssue : Entity, IAggregateRoot
         }
         Entries.Add(entry);
     }
-    public void SetQuantity(string itemId, double quantity)
+    public void UpdateEntry(string itemId, string unit, double? sublotsize, double quantity)
     {
-        var entry = Entries.FirstOrDefault(e => e.Item.ItemId == itemId);
-        if (entry == null) 
+        var entry = Entries.SingleOrDefault(entry => entry.Item.ItemId == itemId && entry.Item.Unit == unit);
+        if (entry == null)
         {
-            throw new ArgumentException("Entry doesn't exist");
+            throw new WarehouseDomainException($"Entry having item {itemId} with unit {unit} doesn't exist in the current GoodsIssue.");
         }
-        entry.SetQuantity(quantity);
+        entry.UpdateEntry(sublotsize, quantity);
     }
     public void Addlot(string itemId, GoodsIssueLot lot) 
     {

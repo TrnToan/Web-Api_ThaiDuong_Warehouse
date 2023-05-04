@@ -9,6 +9,18 @@ public class LotAdjustmentQueries : ILotAdjustmentQueries
         _context = context;
         _mapper = mapper;
     }
+
+    public async Task<IEnumerable<LotAdjustmentViewModel>> GetAdjustmentsByTime(TimeRangeQuery query)
+    {
+        var adjustments = await _context.LotAdjustments
+            .AsNoTracking()
+            .Include(la => la.Employee)
+            .Include(la => la.Item)
+            .ToListAsync();
+
+        return _mapper.Map<IEnumerable<LotAdjustment>, IEnumerable<LotAdjustmentViewModel>>(adjustments);
+    }
+
     public async Task<IEnumerable<LotAdjustmentViewModel>> GetAll()
     {
         var adjustments = await _context.LotAdjustments

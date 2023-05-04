@@ -1,4 +1,5 @@
 ﻿using ThaiDuongWarehouse.Api.Applications.Commands.LotAdjustments;
+using ThaiDuongWarehouse.Api.Applications.Queries;
 
 namespace ThaiDuongWarehouse.Api.Controllers;
 
@@ -13,11 +14,20 @@ public class LotAdjustmentsController : ControllerBase
         _queries = queries;
         _mediator = mediator;
     }
+
     [HttpGet]
+    public async Task<IEnumerable<LotAdjustmentViewModel>> GetLotAdjustmentsByTimeAsync([FromQuery] TimeRangeQuery query)
+    {
+        return await _queries.GetAdjustmentsByTime(query);
+    }
+
+    [HttpGet]
+    [Route("Unconfirmed")]
     public async Task<IEnumerable<LotAdjustmentViewModel>> GetAdjustmentsAsync()
     {
         return await _queries.GetUnconfirmedAdjustments();
     }
+
     [HttpPost]
     public async Task<IActionResult> PostAsync([FromBody] CreateLotAdjustmentCommand command)
     {
