@@ -6,10 +6,10 @@ namespace ThaiDuongWarehouse.Api.Applications.Commands.ItemLots;
 public class RemoveItemLotsCommand : IRequest<bool>
 {
     [DataMember]
-    public List<string> ItemLotIds { get; set; }
+    public string ItemLotId { get; set; }
 
-    public RemoveItemLotsCommand(List<string> itemLotIds)
+    public RemoveItemLotsCommand(string itemLotId)
     {
-        ItemLotIds = itemLotIds;
+        ItemLotId = itemLotId;
     }
 }

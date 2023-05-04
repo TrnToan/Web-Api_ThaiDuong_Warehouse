@@ -71,8 +71,9 @@ public class ItemLotsController : ControllerBase
 	}
 
 	[HttpDelete]
-	public async Task<IActionResult> RemoveLotsAsync([FromBody] RemoveItemLotsCommand command)
+	public async Task<IActionResult> RemoveLotsAsync([FromQuery] string itemLotId)
 	{
+		var command = new RemoveItemLotsCommand(itemLotId);
         try
         {
             var result = await _mediator.Send(command);

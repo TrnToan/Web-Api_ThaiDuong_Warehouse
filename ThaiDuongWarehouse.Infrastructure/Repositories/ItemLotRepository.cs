@@ -47,6 +47,11 @@ public class ItemLotRepository : BaseRepository, IItemLotRepository
         return await _context.ItemLots.Where(il => il.PurchaseOrderNumber == purchaseOrderNumber).ToListAsync();
     }
 
+    public void RemoveLot(ItemLot itemLot)
+    {
+        _context.ItemLots.Remove(itemLot);
+    }
+
     public void RemoveLots(IEnumerable<ItemLot> itemLots)
     {
         _context.ItemLots.RemoveRange(itemLots);

@@ -12,24 +12,19 @@ public class RemoveItemLotsCommandHandler : IRequestHandler<RemoveItemLotsComman
     }
 
     public async Task<bool> Handle(RemoveItemLotsCommand request, CancellationToken cancellationToken)
-    {
-        List<ItemLot> removedLots = new();
-        foreach(string lotId in request.ItemLotIds)
+    {      
+        var lot = await _itemLotRepository.GetLotByLotId(request.ItemLotId);
+        if (lot is null) 
         {
-            var lot = await _itemLotRepository.GetLotByLotId(lotId);
-            if (lot is null) 
-            {
-                throw new EntityNotFoundException($"ItemLot with Id {lotId} doesn't exist.");
-            }
-            
-            if (lot.IsIsolated == false)
-            {
-                throw new EntityNotFoundException("It is not allowed to delete one of the itemlots in the list.");
-            }
-            removedLots.Add(lot);
-            ItemLot.Reject(lot);
+            throw new EntityNotFoundException($"ItemLot with Id {request.ItemLotId} doesn't exist.");
         }
-        _itemLotRepository.RemoveLots(removedLots);
+            
+        if (lot.IsIsolated == false)
+        {
+            throw new EntityNotFoundException("It is not allowed to delete unisolated lot.");
+        }           
+        ItemLot.Reject(lot);
+        _itemLotRepository.RemoveLot(lot);
         return await _itemLotRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
     }
 }

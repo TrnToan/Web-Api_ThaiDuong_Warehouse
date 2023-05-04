@@ -5,6 +5,7 @@ public interface IItemLotRepository : IRepository<ItemLot>
     void Addlots(IEnumerable<ItemLot> itemLots);
     void UpdateLot(ItemLot itemLot);
     void RemoveLots(IEnumerable<ItemLot> itemLots);
+    void RemoveLot(ItemLot itemLot);
     Task<ItemLot?> GetLotByLotId(string lotId);
     Task<IEnumerable<ItemLot>> GetLotsByItemId(string itemId, string unit);
     Task<IEnumerable<ItemLot>> GetLotByPO(string purchaseOrderNumber);
