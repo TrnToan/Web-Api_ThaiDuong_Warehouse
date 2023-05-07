@@ -40,8 +40,8 @@ public class GoodsIssueQueries : IGoodsIssueQueries
                 .ThenInclude(gil => gil.Employee)
             .Where(gi => gi.IsConfirmed == true)
             .Where(gi =>
-                gi.Timestamp.CompareTo(query.StartTime) > 0 &&
-                gi.Timestamp.CompareTo(query.EndTime) < 0)
+                gi.Timestamp.CompareTo(query.StartTime) >= 0 &&
+                gi.Timestamp.CompareTo(query.EndTime) <= 0)
             .OrderByDescending(gi => gi.Timestamp)
             .ToListAsync();
 

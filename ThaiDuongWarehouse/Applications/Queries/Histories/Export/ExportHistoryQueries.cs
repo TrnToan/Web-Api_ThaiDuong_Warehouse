@@ -25,6 +25,7 @@ public class ExportHistoryQueries : IExportHistoryQueries
                 .ThenInclude(e => e.Lots)
                 .Include(g => g.Entries)
                 .ThenInclude(e => e.Item)
+                .Include(g => g.Entries.Where(e => e.Item.ItemId == itemId))
                 .ToListAsync();
         }
         else if (itemClassId != null && itemId == null)
@@ -39,6 +40,7 @@ public class ExportHistoryQueries : IExportHistoryQueries
                 .ThenInclude(e => e.Lots)
                 .Include(g => g.Entries)
                 .ThenInclude(e => e.Item)
+                .Include(g => g.Entries.Where(e => e.Item.ItemClassId == itemClassId))
                 .ToListAsync();
         }
         else

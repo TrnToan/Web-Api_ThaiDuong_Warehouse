@@ -29,6 +29,7 @@ public class ItemLot : Entity, IAggregateRoot
         ProductionDate = productionDate;
         ExpirationDate = expirationDate;
     }
+
     public void SetQuantity(double quantity)
     {
         Quantity = quantity;

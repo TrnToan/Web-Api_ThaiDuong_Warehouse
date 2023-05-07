@@ -29,19 +29,10 @@ public class Item : Entity, IAggregateRoot
         Price = 0;
     }
 
-    public Item()
-    {
-    }
-
     public void Update(string unit, double minimumStockLevel, decimal price)
     {
         Unit = unit;
         MinimumStockLevel = minimumStockLevel;
         Price = price;
-    }
-
-    public void CreateItemWithNewUnit(string itemId, string itemClassId, string unit)
-    {
-        this.AddDomainEvent(new CreateItemWithNewUnitDomainEvent(itemId, itemClassId, unit));
     }
 }

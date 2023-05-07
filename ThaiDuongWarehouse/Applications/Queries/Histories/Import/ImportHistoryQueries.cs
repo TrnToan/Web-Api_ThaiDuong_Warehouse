@@ -22,7 +22,7 @@ public class ImportHistoryQueries : IImportHistoryQueries
             goodsReceipts = await _context.GoodsReceipts
                 .AsNoTracking()
                 .Where(g => g.Lots.Any(lot => lot.Item.ItemId == itemId))
-                .Include(g => g.Lots)
+                .Include(g => g.Lots.Where(lot => lot.Item.ItemId == itemId))
                 .ThenInclude(lot => lot.Item)
                 .ToListAsync();
         }
@@ -31,7 +31,7 @@ public class ImportHistoryQueries : IImportHistoryQueries
             goodsReceipts = await _context.GoodsReceipts
                 .AsNoTracking()
                 .Where(g => g.Lots.Any(lot => lot.Item.ItemClassId == itemClassId))
-                .Include(g => g.Lots)
+                .Include(g => g.Lots.Where(lot => lot.Item.ItemClassId == itemClassId))
                 .ThenInclude(lot => lot.Item)
                 .ToListAsync();
         }
@@ -47,7 +47,7 @@ public class ImportHistoryQueries : IImportHistoryQueries
             .AsNoTracking()
             .Include(g => g.Lots)
             .Where(g => g.Lots.Any(lot => lot.PurchaseOrderNumber == purchaseOrderNumber))
-            .Include(g => g.Lots)
+            .Include(g => g.Lots.Where(lot => lot.PurchaseOrderNumber == purchaseOrderNumber))
             .ThenInclude(lot => lot.Item)
             .ToListAsync();
 

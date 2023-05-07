@@ -29,8 +29,8 @@ public class InventoryLogEntryQueries : IInventoryLogEntryQueries
             .Include(log => log.Item)
             .Where(log => log.Item.ItemId == itemId)
             .Where(log =>
-            log.Timestamp.CompareTo(query.StartTime) > 0 &&
-            log.Timestamp.CompareTo(query.EndTime) < 0)
+            log.Timestamp.CompareTo(query.StartTime) >= 0 &&
+            log.Timestamp.CompareTo(query.EndTime) <= 0)
             .ToListAsync();
 
         return _mapper.Map<IEnumerable<InventoryLogEntry>, IEnumerable<InventoryLogEntryViewModel>>(logEntries);
@@ -42,8 +42,8 @@ public class InventoryLogEntryQueries : IInventoryLogEntryQueries
             .AsNoTracking()
             .Include(log => log.Item)
             .Where(log => 
-            log.Timestamp.CompareTo(query.StartTime) > 0 &&
-            log.Timestamp.CompareTo(query.EndTime) < 0)
+            log.Timestamp.CompareTo(query.StartTime) >= 0 &&
+            log.Timestamp.CompareTo(query.EndTime) <= 0)
             .ToListAsync();
 
         return _mapper.Map<IEnumerable<InventoryLogEntry>, IEnumerable<InventoryLogEntryViewModel>>(logEntries);

@@ -30,4 +30,14 @@ public class InventoryLogEntry : Entity, IAggregateRoot
         Unit = unit;
         Item = item;
     }
+
+    public void UpdateQuantity(double quantity)
+    {
+        ChangedQuantity = quantity;
+    }
+
+    public void UpdateEntry(double beforeQuantity, double changedQuantity)
+    {
+        BeforeQuantity = beforeQuantity + changedQuantity;
+    }
 }

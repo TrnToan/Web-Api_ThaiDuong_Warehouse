@@ -32,7 +32,7 @@ public class ConfirmGoodsReceiptCommandHandler : IRequestHandler<ConfirmGoodsRec
 #pragma warning restore CS8604 // Possible null reference argument.
             if (location is null)
             {
-                throw new EntityNotFoundException($"{lot.LocationId} doesn't exist. Create new location.");
+                throw new EntityNotFoundException($"Location doesn't exist. Create new location.");
             }
 
             ItemLot itemLot = new(lot.GoodsReceiptLotId, location.Id, lot.ItemId, lot.Quantity, lot.Unit, lot.SublotSize,

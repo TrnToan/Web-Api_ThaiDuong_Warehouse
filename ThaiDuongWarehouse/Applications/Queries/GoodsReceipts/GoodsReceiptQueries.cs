@@ -65,8 +65,8 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
             .Include(gr => gr.Lots)
                 .ThenInclude(grl => grl.Employee)
             .Where(gr =>
-            gr.Timestamp.CompareTo(query.StartTime) > 0 &&
-            gr.Timestamp.CompareTo(query.EndTime) < 0)
+            gr.Timestamp.CompareTo(query.StartTime) >= 0 &&
+            gr.Timestamp.CompareTo(query.EndTime) <= 0)
             .Where(gr => gr.IsConfirmed == true)
             .OrderByDescending(gr => gr.Timestamp)
             .ToListAsync();
