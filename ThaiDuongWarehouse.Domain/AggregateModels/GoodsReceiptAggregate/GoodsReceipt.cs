@@ -21,15 +21,15 @@ public class GoodsReceipt : Entity, IAggregateRoot
         Employee = employee;       
     }
 
-    public void UpdateLot(string lotId, double quantity, double sublotSize, string? purchaseOrderNumber,
-        string locationId, DateTime productionDate, DateTime expirationDate)
+    public void UpdateLot(string lotId, double quantity, double sublotSize, string? sublotUnit, string? purchaseOrderNumber,
+        string locationId, DateTime productionDate, DateTime expirationDate, string? note)
     {
         var lot = Lots.FirstOrDefault(e => e.GoodsReceiptLotId == lotId);
         if (lot == null)
         {
             throw new WarehouseDomainException("Lot doesn't exist in the current GoodsReceipt");
         }
-        lot.Update(quantity, sublotSize, purchaseOrderNumber, locationId, productionDate, expirationDate);
+        lot.Update(quantity, sublotSize, sublotUnit, purchaseOrderNumber, locationId, productionDate, expirationDate, note);
     }
 
     public void AddLot(GoodsReceiptLot goodsReceiptLot)

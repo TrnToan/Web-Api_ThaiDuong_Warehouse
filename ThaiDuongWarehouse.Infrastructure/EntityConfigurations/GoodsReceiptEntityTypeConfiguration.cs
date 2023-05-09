@@ -18,6 +18,7 @@ public class GoodsReceiptEntityTypeConfiguration : IEntityTypeConfiguration<Good
             grl.Property(lot => lot.LocationId);
             grl.Property(lot => lot.Quantity).IsRequired();
             grl.Property(lot => lot.SublotSize);
+            grl.Property(lot => lot.SublotUnit);
             grl.Property(lot => lot.PurchaseOrderNumber);
             grl.Property(lot => lot.ProductionDate);
             grl.Property(lot => lot.ExpirationDate);

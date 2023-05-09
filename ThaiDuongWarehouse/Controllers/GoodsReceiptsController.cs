@@ -65,7 +65,6 @@ public class GoodsReceiptsController : ControllerBase
     }
 
     [HttpPost]
-    [Route("goodsReceipt/goodsReceiptLots")]
     public async Task<IActionResult> PostAsync([FromBody] CreateGoodsReceiptCommand cmd)
     {
         try
@@ -73,6 +72,27 @@ public class GoodsReceiptsController : ControllerBase
             var result = await _mediator.Send(cmd);
 
             if(!result)
+            {
+                return BadRequest();
+            }
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPatch]
+    [Route("{goodsReceiptId}")]
+    public async Task<IActionResult> UpdateGoodsReceiptAsync(string goodsReceiptId, List<UpdateGoodsReceiptLotViewModel> goodsReceiptLots)
+    {
+        UpdateGoodsReceiptCommand command = new UpdateGoodsReceiptCommand(goodsReceiptId, goodsReceiptLots);
+        try
+        {
+            var result = await _mediator.Send(command);
+
+            if (!result)
             {
                 return BadRequest();
             }

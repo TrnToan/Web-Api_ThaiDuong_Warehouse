@@ -4,6 +4,7 @@ public class GoodsIssueLot
     public string GoodsIssueLotId { get; private set; }
     public double Quantity { get; private set; }
     public double? SublotSize { get; private set; }
+    public string? SublotUnit { get; private set; }
     public string? Note { get; private set; }
     // ForeignKey
     public int GoodsIssueEntryId { get; private set; }
@@ -12,12 +13,13 @@ public class GoodsIssueLot
 
     private GoodsIssueLot() { }
 
-    public GoodsIssueLot(string goodsIssueLotId, double quantity, double? sublotSize, string? note,
+    public GoodsIssueLot(string goodsIssueLotId, double quantity, double? sublotSize, string? sublotUnit, string? note,
         int employeeId) : this()
     {
         GoodsIssueLotId = goodsIssueLotId;
         Quantity = quantity;
         SublotSize = sublotSize;
+        SublotUnit = sublotUnit;
         Note = note;
         EmployeeId = employeeId;
     }

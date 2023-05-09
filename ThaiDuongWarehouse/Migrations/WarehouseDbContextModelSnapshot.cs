@@ -319,6 +319,9 @@ namespace ThaiDuongWarehouse.Api.Migrations
                     b.Property<double?>("SublotSize")
                         .HasColumnType("float");
 
+                    b.Property<string>("SublotUnit")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Unit")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -472,6 +475,9 @@ namespace ThaiDuongWarehouse.Api.Migrations
                                     b2.Property<double?>("SublotSize")
                                         .HasColumnType("float");
 
+                                    b2.Property<string>("SublotUnit")
+                                        .HasColumnType("nvarchar(max)");
+
                                     b2.HasKey("GoodsIssueEntryId", "GoodsIssueLotId");
 
                                     b2.HasIndex("EmployeeId");
@@ -542,6 +548,9 @@ namespace ThaiDuongWarehouse.Api.Migrations
 
                             b1.Property<double?>("SublotSize")
                                 .HasColumnType("float");
+
+                            b1.Property<string>("SublotUnit")
+                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("Unit")
                                 .IsRequired()

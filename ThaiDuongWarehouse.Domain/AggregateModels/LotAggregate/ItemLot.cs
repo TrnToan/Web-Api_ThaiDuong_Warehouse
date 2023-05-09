@@ -10,6 +10,7 @@ public class ItemLot : Entity, IAggregateRoot
     public double Quantity { get; private set; }
     public string Unit { get; private set; }
     public double? SublotSize { get; private set; }
+    public string? SublotUnit { get; private set; }
     public string? PurchaseOrderNumber { get; private set; }
     public DateTime? ProductionDate { get; private set; }
     public DateTime? ExpirationDate { get; private set; }
@@ -17,7 +18,7 @@ public class ItemLot : Entity, IAggregateRoot
     public Item Item { get; private set; }
 
     public ItemLot(string lotId, int locationId, int itemId, double quantity, string unit,
-        double? sublotSize, string? purchaseOrderNumber, DateTime? productionDate, DateTime? expirationDate)
+        double? sublotSize, string? sublotUnit, string? purchaseOrderNumber, DateTime? productionDate, DateTime? expirationDate)
     {
         LotId = lotId;
         LocationId = locationId;
@@ -25,6 +26,7 @@ public class ItemLot : Entity, IAggregateRoot
         Quantity = quantity;
         Unit = unit;
         SublotSize = sublotSize;
+        SublotUnit = sublotUnit;
         PurchaseOrderNumber = purchaseOrderNumber;
         ProductionDate = productionDate;
         ExpirationDate = expirationDate;

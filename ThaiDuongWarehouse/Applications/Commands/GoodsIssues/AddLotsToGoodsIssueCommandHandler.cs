@@ -41,7 +41,7 @@ public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsI
             }
 
             GoodsIssueLot goodsIssueLot = new (lotViewmodel.GoodsIssueLotId, lotViewmodel.Quantity, lotViewmodel.SublotSize,
-                lotViewmodel.Note, employee.Id);
+                lotViewmodel.SublotUnit, lotViewmodel.Note, employee.Id);
 
             goodsIssue.Addlot(lotViewmodel.ItemId, goodsIssueLot);
         }

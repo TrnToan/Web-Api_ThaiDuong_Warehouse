@@ -35,7 +35,7 @@ public class UpdateConfirmedGoodsReceiptCommandHandler : IRequestHandler<UpdateC
             var itemLot = await _itemLotRepository.GetLotByLotId(modifiedLot.GoodsReceiptLotId);
             if (itemLot is null)
             {
-                throw new NotImplementedException("Not implemented.");
+                throw new NotImplementedException();
             }
             var goodsReceiptLot = goodsReceipt.Lots.First(lot => lot.GoodsReceiptLotId == modifiedLot.GoodsReceiptLotId);
             double newQuantity = itemLot.Quantity + (modifiedLot.Quantity - goodsReceiptLot.Quantity);

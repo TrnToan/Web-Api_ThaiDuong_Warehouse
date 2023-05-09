@@ -881,3 +881,34 @@ GO
 COMMIT;
 GO
 
+BEGIN TRANSACTION;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230509060106_Add-SublotUnitProperty')
+BEGIN
+    ALTER TABLE [ItemLots] ADD [SublotUnit] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230509060106_Add-SublotUnitProperty')
+BEGIN
+    ALTER TABLE [GoodsReceiptLot] ADD [SublotUnit] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230509060106_Add-SublotUnitProperty')
+BEGIN
+    ALTER TABLE [GoodsIssueLot] ADD [SublotUnit] nvarchar(max) NULL;
+END;
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20230509060106_Add-SublotUnitProperty')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20230509060106_Add-SublotUnitProperty', N'7.0.3');
+END;
+GO
+
+COMMIT;
+GO
+

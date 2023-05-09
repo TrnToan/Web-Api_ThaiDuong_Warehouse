@@ -40,6 +40,7 @@ public class GoodsIssueEntityTypeConfiguration : IEntityTypeConfiguration<GoodsI
                 lot.HasKey(gil => new { gil.GoodsIssueEntryId, gil.GoodsIssueLotId });
                 lot.Property(gil => gil.Quantity).IsRequired();
                 lot.Property(gil => gil.SublotSize);
+                lot.Property(gil => gil.SublotUnit);
                 lot.Property(gil => gil.Note);
 
                 lot.HasOne(gil => gil.Employee).WithMany().HasForeignKey(gil => gil.EmployeeId).OnDelete(DeleteBehavior.Restrict).IsRequired();

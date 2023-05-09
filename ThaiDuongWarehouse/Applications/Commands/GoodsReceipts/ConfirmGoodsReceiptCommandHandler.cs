@@ -5,13 +5,10 @@ namespace ThaiDuongWarehouse.Api.Applications.Commands.GoodsReceipts;
 public class ConfirmGoodsReceiptCommandHandler : IRequestHandler<ConfirmGoodsReceiptCommand, bool>
 {
     private readonly IGoodsReceiptRepository _goodsReceiptRepository;
-    private readonly IItemRepository _itemRepository;
     private readonly IStorageRepository _storageRepository;
-    public ConfirmGoodsReceiptCommandHandler(IGoodsReceiptRepository goodsReceiptRepository, IItemRepository itemRepository, 
-        IStorageRepository storageRepository)
+    public ConfirmGoodsReceiptCommandHandler(IGoodsReceiptRepository goodsReceiptRepository, IStorageRepository storageRepository)
     {
         _goodsReceiptRepository = goodsReceiptRepository;
-        _itemRepository = itemRepository;
         _storageRepository = storageRepository;
     }
 
@@ -36,7 +33,7 @@ public class ConfirmGoodsReceiptCommandHandler : IRequestHandler<ConfirmGoodsRec
             }
 
             ItemLot itemLot = new(lot.GoodsReceiptLotId, location.Id, lot.ItemId, lot.Quantity, lot.Unit, lot.SublotSize,
-                lot.PurchaseOrderNumber, lot.ProductionDate, lot.ExpirationDate);
+                lot.SublotUnit, lot.PurchaseOrderNumber, lot.ProductionDate, lot.ExpirationDate);
 
             itemLots.Add(itemLot);
         }

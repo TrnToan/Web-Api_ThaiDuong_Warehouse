@@ -38,9 +38,9 @@ public class CreateGoodsReceiptCommandHandler : IRequestHandler<CreateGoodsRecei
                 throw new EntityNotFoundException($"Employee with Id {receiptLotViewModel.EmployeeId} doesn't exist.");
             }
 
-            var goodsReceiptLot = new GoodsReceiptLot(receiptLotViewModel.GoodsReceiptLotId, receiptLotViewModel.Quantity, 
-                receiptLotViewModel.Unit, receiptLotViewModel.PurchaseOrderNumber, employee, item, 
-                receiptLotViewModel.Note, goodsReceipt.Id);
+            var goodsReceiptLot = new GoodsReceiptLot(receiptLotViewModel.GoodsReceiptLotId, receiptLotViewModel.Quantity,
+                receiptLotViewModel.Unit, receiptLotViewModel.SublotSize, receiptLotViewModel.SublotUnit, receiptLotViewModel.PurchaseOrderNumber,
+                employee, item, receiptLotViewModel.Note, goodsReceipt.Id);
 
             goodsReceipt.AddLot(goodsReceiptLot);
         }

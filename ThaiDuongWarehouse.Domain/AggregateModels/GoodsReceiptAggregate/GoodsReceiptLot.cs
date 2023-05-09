@@ -6,6 +6,7 @@ public class GoodsReceiptLot
     public double Quantity { get; private set; }
     public string Unit { get; private set; }
     public double? SublotSize { get; private set; }
+    public string? SublotUnit { get; private set; }
     public string? PurchaseOrderNumber { get; private set; }
     public DateTime? ProductionDate { get; private set; }
     public DateTime? ExpirationDate { get; private set; }
@@ -19,7 +20,7 @@ public class GoodsReceiptLot
 
     private GoodsReceiptLot() { }
     public GoodsReceiptLot(string goodsReceiptLotId, string? locationId, double quantity, string unit, double? sublotSize, 
-        string? purchaseOrderNumber, DateTime? productionDate, DateTime? expirationDate, int itemId, int goodsReceiptId)
+        string? purchaseOrderNumber, DateTime? productionDate, DateTime? expirationDate, int itemId, int goodsReceiptId, string? sublotUnit)
     {
         GoodsReceiptLotId = goodsReceiptLotId;
         LocationId = locationId;
@@ -31,13 +32,16 @@ public class GoodsReceiptLot
         ExpirationDate = expirationDate;
         ItemId = itemId;
         GoodsReceiptId = goodsReceiptId;
+        SublotUnit = sublotUnit;
     }
-    public GoodsReceiptLot(string goodsReceiptLotId, double quantity, string unit, string purchaseOrderNumber, Employee employee, 
-        Item item, string? note, int goodsReceiptId)
+    public GoodsReceiptLot(string goodsReceiptLotId, double quantity, string unit, double? sublotSize, string? sublotUnit, 
+        string purchaseOrderNumber, Employee employee, Item item, string? note, int goodsReceiptId)
     {
         GoodsReceiptLotId = goodsReceiptLotId;
         Quantity = quantity;
         Unit = unit;
+        SublotSize = sublotSize;
+        SublotUnit = sublotUnit;
         PurchaseOrderNumber = purchaseOrderNumber;
         Employee = employee;
         Item = item;
@@ -45,15 +49,17 @@ public class GoodsReceiptLot
         GoodsReceiptId = goodsReceiptId;
     }
 
-    public void Update(double quantity, double? sublotSize, string? purchaseOrderNumber, string locationId, 
-        DateTime? productionDate, DateTime? expirationDate)
+    public void Update(double quantity, double? sublotSize, string? sublotUnit, string? purchaseOrderNumber, string locationId, 
+        DateTime? productionDate, DateTime? expirationDate, string? note)
     {
         Quantity = quantity;
         SublotSize = sublotSize;
+        SublotUnit = sublotUnit;
         PurchaseOrderNumber = purchaseOrderNumber;
         LocationId = locationId;
         ProductionDate = productionDate;
         ExpirationDate = expirationDate;
+        Note = note;
     }
 
     public void SetQuantity(double quantity)

@@ -9,6 +9,7 @@ public class ItemLotEntityTypeConfiguration : IEntityTypeConfiguration<ItemLot>
         builder.Property(l => l.Quantity).IsRequired();
         builder.Property(l => l.Unit).IsRequired();
         builder.Property(l => l.SublotSize);
+        builder.Property(l => l.SublotUnit);
         builder.Property(l => l.PurchaseOrderNumber);
         builder.Property(l => l.ProductionDate);
         builder.Property(l => l.ExpirationDate);
