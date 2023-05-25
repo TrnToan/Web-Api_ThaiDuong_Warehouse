@@ -6,13 +6,15 @@ public class UpdateConfirmedGoodsReceiptCommandHandler : IRequestHandler<UpdateC
 {
     private readonly IGoodsReceiptRepository _goodsReceiptRepository;
     private readonly IItemLotRepository _itemLotRepository;
-    private readonly IInventoryLogEntryRepository _inventoryLogEntryRepository;
+    private readonly IStorageRepository _storageRepository;
+    private readonly IItemRepository _itemRepository;
     public UpdateConfirmedGoodsReceiptCommandHandler(IGoodsReceiptRepository goodsReceiptRepository, 
-        IItemLotRepository itemLotRepository, IInventoryLogEntryRepository inventoryLogEntryRepository)
+        IItemLotRepository itemLotRepository, IStorageRepository storageRepository, IItemRepository itemRepository)
     {
         _goodsReceiptRepository = goodsReceiptRepository;
         _itemLotRepository = itemLotRepository;
-        _inventoryLogEntryRepository = inventoryLogEntryRepository;
+        _storageRepository = storageRepository;
+        _itemRepository = itemRepository;
     }
 
     public async Task<bool> Handle(UpdateConfirmedGoodsReceiptCommand request, CancellationToken cancellationToken)
@@ -30,28 +32,37 @@ public class UpdateConfirmedGoodsReceiptCommandHandler : IRequestHandler<UpdateC
 
         foreach (var modifiedLot in request.GoodsReceiptLots)
         {
-            goodsReceipt.SetQuantityPerLot(modifiedLot.GoodsReceiptLotId, modifiedLot.Quantity);
-
             var itemLot = await _itemLotRepository.GetLotByLotId(modifiedLot.GoodsReceiptLotId);
+            var goodsReceiptLot = goodsReceipt.Lots.First(lot => lot.GoodsReceiptLotId == modifiedLot.GoodsReceiptLotId);
+            if (goodsReceiptLot is null)
+            {
+                throw new EntityNotFoundException($"GoodsReceiptLot with Id {modifiedLot.GoodsReceiptLotId} doesn't exist.");
+            }
+#pragma warning disable CS8604 // Possible null reference argument.
+            var location = await _storageRepository.GetLocationById(goodsReceiptLot.LocationId);
+#pragma warning restore CS8604 // Possible null reference argument.
+            var item = await _itemRepository.GetItemByEntityId(goodsReceiptLot.ItemId);
+
+            double newQuantity = 0;
             if (itemLot is null)
             {
+                newQuantity = modifiedLot.Quantity - goodsReceiptLot.Quantity;              
+            }
+            else
+                newQuantity = itemLot.Quantity + (modifiedLot.Quantity - goodsReceiptLot.Quantity);
+
+            if (newQuantity < 0)
                 throw new NotImplementedException();
-            }
-            var goodsReceiptLot = goodsReceipt.Lots.First(lot => lot.GoodsReceiptLotId == modifiedLot.GoodsReceiptLotId);
-            double newQuantity = itemLot.Quantity + (modifiedLot.Quantity - goodsReceiptLot.Quantity);
-            goodsReceipt.UpdateItemLot(modifiedLot.GoodsReceiptLotId, newQuantity);
 
-            var logEntry = await _inventoryLogEntryRepository.GetLogEntry(modifiedLot.GoodsReceiptLotId, goodsReceipt.Timestamp);
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-            logEntry.UpdateQuantity(modifiedLot.Quantity);
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
-            var entries = await _inventoryLogEntryRepository.GetLatestLogEntries(goodsReceiptLot.ItemId, goodsReceipt.Timestamp);
-
-            for (int i = 0; i < entries.Count - 1; i++)
-            {
-                entries[i + 1].UpdateEntry(entries[i].BeforeQuantity, entries[i].ChangedQuantity);
-            }
+            // raise domain event update Itemlot and InventoryLogEntry
+            goodsReceipt.UpdateItemLot(modifiedLot.GoodsReceiptLotId, location.Id, goodsReceiptLot.ItemId, 
+                newQuantity, goodsReceiptLot.Unit, goodsReceiptLot.SublotSize, goodsReceiptLot.SublotUnit, goodsReceiptLot.PurchaseOrderNumber,
+                goodsReceiptLot.ProductionDate, goodsReceiptLot.ExpirationDate); 
+            
+            goodsReceipt.AddLogEntry(modifiedLot.GoodsReceiptLotId, item.Id, modifiedLot.Quantity - goodsReceiptLot.Quantity);
+            goodsReceipt.SetQuantityPerLot(modifiedLot.GoodsReceiptLotId, modifiedLot.Quantity);  // update GoodsReceiptLot
         }
+        _goodsReceiptRepository.Update(goodsReceipt);
 
         return await _goodsReceiptRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
     }

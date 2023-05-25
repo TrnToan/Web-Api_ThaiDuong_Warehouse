@@ -125,6 +125,27 @@ public class GoodsReceiptsController : ControllerBase
         }
     }
 
+    [HttpPatch]
+    [Route("Reconfirm/{goodsReceiptId}")]
+    public async Task<IActionResult> UpdateConfirmedGoodsReceiptAsync(string goodsReceiptId, List<UpdateConfirmedGoodsReceiptLotViewModel> goodsReceiptLots)
+    {
+        UpdateConfirmedGoodsReceiptCommand command = new(goodsReceiptId, goodsReceiptLots);
+        try
+        {
+            var result = await _mediator.Send(command);
+
+            if (!result)
+            {
+                return BadRequest();
+            }
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
     [HttpDelete]
     [Route("{goodsReceiptId}")]
     public async Task<IActionResult> RemoveAsync([FromRoute] string goodsReceiptId)

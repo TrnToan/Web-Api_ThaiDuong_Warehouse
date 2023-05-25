@@ -32,7 +32,7 @@ public class InventoryLogEntryRepository : BaseRepository, IInventoryLogEntryRep
         throw new NotImplementedException();
     }
 
-    public async Task<IList<InventoryLogEntry>> GetLatestLogEntries(int itemId, DateTime timestamp)
+    public async Task<List<InventoryLogEntry>> GetLatestLogEntries(int itemId, DateTime timestamp)
     {
         return await _context.InventoryLogEntries
             .Where(log => log.ItemId == itemId)

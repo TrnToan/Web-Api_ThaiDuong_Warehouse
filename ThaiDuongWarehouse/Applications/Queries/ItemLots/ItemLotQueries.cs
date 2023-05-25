@@ -41,6 +41,7 @@ public class ItemLotQueries : IItemLotQueries
             .Include(il => il.Location)
             .Include(il => il.Item)
             .Where(il => il.Item.ItemId == itemId)
+            .Where(il => il.IsIsolated == false)
             .ToListAsync();
         var viewModels = _mapper.Map<IEnumerable<ItemLot>, IEnumerable<ItemLotViewModel>>(itemLots);
         return viewModels;

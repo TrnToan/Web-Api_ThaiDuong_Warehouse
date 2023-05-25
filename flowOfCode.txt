@@ -1,0 +1,20 @@
+controller --> Command --> MediatR (chọn ra Handler tương ứng với command) --> 
+CommandHandler đòi hỏi các Repository cụ thể từ các IRepository -->
+DI container (Từ IRepository khởi tạo các dịch vụ Repository tương ứng rồi bơm vào chương trình thông qua constructor) 
+--> Gọi tới Repository cụ thể của từng entity --> Repository gọi tới entity tương ứng từ DbContext (khi gọi tới DbContext lần đầu sẽ tự động gọi 
+hết toàn bộ Entity của DbContext ra rồi cất vào Stack) --> Các lần gọi Repository sau đó sẽ lấy các entity tương ứng với Repository đó từ 
+network stack -->
+Khi gọi tới SaveEntitiesAsync --> MediatR: Dispatch Domain Events --> Lấy hết toàn bộ Domain events hiện có 
+trong context, rồi publish Event (nếu có)
+
+Chỉnh sửa lô đã duyệt trong phiếu nhập rồi cập nhật lại trang lịch sử:
+- Kiểm tra Timestamp của GoodsReceipt: DateTime.Now.Month - Timestamp.Month <= 1 ? Nếu thoả thì tiếp tục sửa còn không thì huỷ bỏ yêu cầu.
+- Từ GoodsReceipt --> GoodsReceiptLots 
+- Chỉnh sửa từng lot trong GoodsReceiptLots 
+  + Chỉnh sửa Quantity của lot đồng thời cập nhật lại Quantity của lô đó trong tồn kho.
+  + Từ lotId của GoodsReceiptLot & Timestamp của GoodsReceipt truy xuất sang logEntry tương ứng trong InventoryLogEntry.
+  + Cập nhật logEntry: BeforeQuantity giữ nguyên, ChangedQuantity = lotQuantity
+  + Truy xuất các logEntries khác có cùng ItemId với logEntry vừa tìm được và có timestamp > timestamp của logEntry đó 
+rồi lưu vào 1 list entries.
+  + Từ list entries ở trên, duyệt danh sách để đồng bộ lại quantity trong InventoryLogEntry:
+  	++ Duyệt từ entries[0] tới entries[n-2]: entries[i+1].BeforeQuantity = entries[i].BeforeQuantity + entries[i].ChangedQuantity

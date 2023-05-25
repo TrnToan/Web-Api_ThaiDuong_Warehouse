@@ -21,7 +21,7 @@ public class GoodsReceipt : Entity, IAggregateRoot
         Employee = employee;       
     }
 
-    public void UpdateLot(string lotId, double quantity, double sublotSize, string? sublotUnit, string? purchaseOrderNumber,
+    public void UpdateLot(string lotId, double quantity, double? sublotSize, string? sublotUnit, string? purchaseOrderNumber,
         string locationId, DateTime productionDate, DateTime expirationDate, string? note)
     {
         var lot = Lots.FirstOrDefault(e => e.GoodsReceiptLotId == lotId);
@@ -60,9 +60,16 @@ public class GoodsReceipt : Entity, IAggregateRoot
         lot.SetQuantity(quantity);
     }
 
-    public void UpdateItemLot(string lotId, double quantity)
+    public void UpdateItemLot(string lotId, int locationId, int itemId, double quantity, string unit,
+        double? sublotSize, string? sublotUnit, string? purchaseOrderNumber, DateTime? productionDate, DateTime? expirationDate)
     {
-        this.AddDomainEvent(new UpdateItemLotDomainEvent(lotId, quantity));
+        this.AddDomainEvent(new UpdateItemLotDomainEvent(lotId, locationId, itemId, quantity, unit, sublotSize,
+            sublotUnit, purchaseOrderNumber, productionDate, expirationDate));
+    }
+
+    public void AddLogEntry(string lotId, int itemId, double quantity)
+    {
+        AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lotId, quantity, itemId));
     }
 
     public void Confirm(List<ItemLot> itemLots)
