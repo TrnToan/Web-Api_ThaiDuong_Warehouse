@@ -106,12 +106,32 @@ public class InventoryLogEntryQueries : IInventoryLogEntryQueries
         return extendedLogEntry;
     }
 
-    public async Task<IEnumerable<ExtendedInventoryLogEntryViewModel>> GetEntriesByItemClass(TimeRangeQuery query, string itemClassId)
+    public async Task<IEnumerable<ExtendedInventoryLogEntryViewModel>> GetExtendedLogEntries(TimeRangeQuery query, string? itemClassId, string? itemId)
     {
-        List<Item> items = await _context.Items
-            .AsNoTracking()
-            .Where(i => i.ItemClassId == itemClassId)
-            .ToListAsync();
+        var items = new List<Item>();
+        if (itemId == null && itemClassId != null)
+        {
+            items = await _context.Items
+                .AsNoTracking()
+                .Where(i => i.ItemClassId == itemClassId)
+                .ToListAsync();
+        }
+        else if (itemId != null && itemClassId == null)
+        {
+            items = await _context.Items
+                .AsNoTracking()
+                .Where(i => i.ItemId == itemId)
+                .ToListAsync();
+        }
+        else if (itemId != null && itemClassId != null)
+        {
+            items = await _context.Items
+                .AsNoTracking()
+                .Where(i => i.ItemClassId == itemClassId && i.ItemId == itemId)
+                .ToListAsync();
+        }
+        else
+            throw new Exception("Invalid Request");
 
         var extendedLogEntries = new List<ExtendedInventoryLogEntryViewModel>();
         foreach (var item in items)

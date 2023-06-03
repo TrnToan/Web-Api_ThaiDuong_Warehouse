@@ -26,17 +26,11 @@ public class InventoryLogEntriesController : ControllerBase
 		return await _queries.GetByTime(query);	
 	}
 
-	[HttpGet]
-	[Route("extendedLogEntry/{itemId}&{unit}")]
-	public async Task<ExtendedInventoryLogEntryViewModel> GetLogEntryByItemAsync([FromRoute] string itemId, [FromRoute] string unit, [FromQuery]TimeRangeQuery query)
-	{
-		return await _queries.GetEntryByItem(query, itemId, unit);
-	}
 
 	[HttpGet]
-	[Route("extendedLogEntries/{itemClassId}")]
-	public async Task<IEnumerable<ExtendedInventoryLogEntryViewModel>> GetLogEntriesByItemClassAsync([FromRoute] string itemClassId, [FromQuery]TimeRangeQuery query) 
+	[Route("extendedLogEntries")]
+	public async Task<IEnumerable<ExtendedInventoryLogEntryViewModel>> GetLogEntriesByItemClassAsync(string? itemClassId, string? itemId, [FromQuery]TimeRangeQuery query) 
 	{
-		return await _queries.GetEntriesByItemClass(query, itemClassId);
+		return await _queries.GetExtendedLogEntries(query, itemClassId, itemId);
 	}
 }
