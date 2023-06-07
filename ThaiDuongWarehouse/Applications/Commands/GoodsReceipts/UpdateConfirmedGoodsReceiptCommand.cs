@@ -8,7 +8,7 @@ public class UpdateConfirmedGoodsReceiptCommand : IRequest<bool>
     [DataMember]
     public string GoodsReceiptId { get; private set; }
     [DataMember]
-    public List<UpdateConfirmedGoodsReceiptLotViewModel> GoodsReceiptLots { get; private set; }
+    public List<UpdateConfirmedGoodsReceiptLotViewModel> GoodsReceiptLots { get; set; }
 
     public UpdateConfirmedGoodsReceiptCommand(string goodsReceiptId, List<UpdateConfirmedGoodsReceiptLotViewModel> goodsReceiptLots)
     {

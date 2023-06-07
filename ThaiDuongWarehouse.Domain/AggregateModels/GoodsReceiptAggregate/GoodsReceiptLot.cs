@@ -62,6 +62,16 @@ public class GoodsReceiptLot
         Note = note;
     }
 
+    public void UpdateConfirmedLot(double quantity, string? purchaseOrderNumber, string? locationId,
+        DateTime? productionDate, DateTime? expirationDate)
+    {
+        Quantity = quantity;
+        PurchaseOrderNumber = purchaseOrderNumber;
+        LocationId = locationId;
+        ProductionDate = productionDate;
+        ExpirationDate = expirationDate;
+    }
+
     public void SetQuantity(double quantity)
     {
         Quantity = quantity;

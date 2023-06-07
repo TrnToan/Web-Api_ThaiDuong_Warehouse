@@ -41,6 +41,15 @@ public class ItemLot : Entity, IAggregateRoot
         Quantity = quantity;
         PurchaseOrderNumber = purchaseOrderNumber;
     }
+    public void UpdateConfirmedLot(int locationId, double quantity, string? purchaseOrderNumber, DateTime? productionDate, 
+        DateTime? expirationDate)
+    {
+        LocationId = locationId;
+        Quantity = quantity;
+        PurchaseOrderNumber = purchaseOrderNumber;  
+        ProductionDate = productionDate;
+        ExpirationDate = expirationDate;
+    }
     public void UpdateState(bool isIsolated)
     {
         IsIsolated = isIsolated;
