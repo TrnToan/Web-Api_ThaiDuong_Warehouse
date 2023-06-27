@@ -35,7 +35,26 @@ public class ItemsController : ControllerBase
         var result = await _mediator.Send(command);
         try
         {
-            if(result != true)
+            if(!result)
+            {
+                return BadRequest();
+            }
+            else return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPost]
+    [Route("items")]
+    public async Task<IActionResult> PostItemsAsync([FromBody] CreateItemsCommand command)
+    {
+        bool result = await _mediator.Send(command);
+        try
+        {
+            if (!result)
             {
                 return BadRequest();
             }

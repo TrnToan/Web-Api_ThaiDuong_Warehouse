@@ -20,6 +20,14 @@ public class Item : Entity, IAggregateRoot
         Price = price;
     }
 
+    public Item(string itemId, string itemName, string unit, string itemClassId) 
+    { 
+        ItemId = itemId;
+        ItemClassId = itemClassId;
+        Unit = unit;
+        ItemName = itemName;
+    }
+
     public Item(string itemId, string itemClassId, string unit)
     {
         ItemId = itemId;

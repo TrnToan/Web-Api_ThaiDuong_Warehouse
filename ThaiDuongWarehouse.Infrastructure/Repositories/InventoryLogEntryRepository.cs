@@ -1,7 +1,4 @@
-﻿
-using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
-
-namespace ThaiDuongWarehouse.Infrastructure.Repositories;
+﻿namespace ThaiDuongWarehouse.Infrastructure.Repositories;
 public class InventoryLogEntryRepository : BaseRepository, IInventoryLogEntryRepository
 {
     public InventoryLogEntryRepository(WarehouseDbContext context) : base(context)
@@ -10,7 +7,7 @@ public class InventoryLogEntryRepository : BaseRepository, IInventoryLogEntryRep
 
     public void Add(InventoryLogEntry logEntry)
     {
-        _context.InventoryLogEntries.Add(logEntry);
+        _context.InventoryLogEntries.AddAsync(logEntry);
     }
 
     public async Task<IEnumerable<InventoryLogEntry>> GetAll()

@@ -11,20 +11,20 @@ public class GoodsReceiptRepository : BaseRepository, IGoodsReceiptRepository
             return _context.GoodsReceipts
                 .Add(goodsReceipt).Entity;
         else
-            throw new Exception("Failed to add goodsreceipt.");
+            return goodsReceipt;
     }
 
     public async Task<IEnumerable<GoodsReceipt>> GetConfirmedGoodsReceipt()
     {
         return await _context.GoodsReceipts
-            .Where(gr => gr.IsConfirmed == true)
+            .Where(gr => gr.IsConfirmed)
             .ToListAsync();
     }
 
     public async Task<IEnumerable<GoodsReceipt>> GetUnConfirmedGoodsReceipt()
     {
         return await _context.GoodsReceipts
-            .Where(gr => gr.IsConfirmed == false)
+            .Where(gr => !gr.IsConfirmed)
             .ToListAsync();
     }
 

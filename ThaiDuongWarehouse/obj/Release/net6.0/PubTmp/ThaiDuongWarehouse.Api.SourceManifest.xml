@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <sitemanifest>
   <IisApp path="D:\Visual Studio PJs\ThaiDuongWarehouse\ThaiDuongWarehouse\obj\Release\net6.0\PubTmp\Out\" />
-  <dbfullsql path="D:\Visual Studio PJs\ThaiDuongWarehouse\ThaiDuongWarehouse\obj\Release\net6.0\PubTmp\EFSQLScripts\ThaiDuongWarehouse.Infrastructure.WarehouseDbContext.sql" />
 </sitemanifest>

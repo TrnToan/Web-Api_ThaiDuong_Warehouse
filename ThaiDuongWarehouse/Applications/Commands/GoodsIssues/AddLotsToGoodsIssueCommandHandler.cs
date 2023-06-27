@@ -35,9 +35,9 @@ public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsI
             {
                 throw new EntityNotFoundException($"Itemlot with id {lotViewmodel.GoodsIssueLotId} doesn't exist.");
             }
-            if (lot.IsIsolated == true)
+            if (lot.IsIsolated)
             {
-                throw new Exception($"Itemlot with id {lotViewmodel.GoodsIssueLotId} is isolated.");
+                throw new EntityNotFoundException($"Itemlot with id {lotViewmodel.GoodsIssueLotId} is isolated.");
             }
 
             GoodsIssueLot goodsIssueLot = new (lotViewmodel.GoodsIssueLotId, lotViewmodel.Quantity, lotViewmodel.SublotSize,

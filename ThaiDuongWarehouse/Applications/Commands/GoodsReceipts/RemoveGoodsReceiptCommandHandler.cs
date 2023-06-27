@@ -13,7 +13,11 @@ public class RemoveGoodsReceiptCommandHandler : IRequestHandler<RemoveGoodsRecei
         var goodsReceipt = await _goodsReceiptRepository.GetGoodsReceiptById(request.GoodsReceiptId);
         if (goodsReceipt is null)
         {
-            throw new EntityNotFoundException($"{goodsReceipt} with {request.GoodsReceiptId} doesn't exist");
+            throw new EntityNotFoundException($"GoodsReceipt with {request.GoodsReceiptId} doesn't exist");
+        }
+        if (goodsReceipt.IsConfirmed)
+        {
+            throw new NotAllowedToDeleteException($"Cannot delete confirmed GoodsReceipt.");
         }
 
         _goodsReceiptRepository.Remove(goodsReceipt);

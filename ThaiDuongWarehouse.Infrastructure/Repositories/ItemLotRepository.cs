@@ -6,7 +6,7 @@ public class ItemLotRepository : BaseRepository, IItemLotRepository
     }
     public void AddLot(ItemLot itemLot)
     {
-        _context.ItemLots.Add(itemLot);
+        _context.ItemLots.AddAsync(itemLot);
     }
 
     public void Addlots(IEnumerable<ItemLot> itemLots)
@@ -17,7 +17,7 @@ public class ItemLotRepository : BaseRepository, IItemLotRepository
     public async Task<IEnumerable<ItemLot>> GetIsolatedItemLots()
     {
         return await _context.ItemLots
-            .Where(il => il.IsIsolated == true)
+            .Where(il => il.IsIsolated)
             .ToListAsync();
     }
 

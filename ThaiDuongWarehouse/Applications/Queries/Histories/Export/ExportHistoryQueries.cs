@@ -12,7 +12,7 @@ public class ExportHistoryQueries : IExportHistoryQueries
 
     public async Task<IEnumerable<GoodsIssuesHistoryViewModel>> GetByClassOrItem(TimeRangeQuery query, string? itemClassId, string? itemId)
     {
-        var goodsIssues = new List<GoodsIssue>();
+        List<GoodsIssue> goodsIssues = new();
         if (itemClassId == null && itemId != null)
         {
             goodsIssues = await _context.GoodsIssues

@@ -21,7 +21,7 @@ public class CreateLotAdjustmentCommandHandler : IRequestHandler<CreateLotAdjust
         var lotAdjustment = await _lotAdjustmentRepository.GetAdjustmentByLotId(request.LotId);
         if (lotAdjustment is not null)
         {
-            throw new Exception($"LotAdjustment with itemlot {request.LotId} has already existed.");
+            throw new DuplicateRecordException($"LotAdjustment with itemlot {request.LotId} has already existed.");
         }
 
         Item? item = await _itemRepository.GetItemById(request.ItemId, request.Unit);

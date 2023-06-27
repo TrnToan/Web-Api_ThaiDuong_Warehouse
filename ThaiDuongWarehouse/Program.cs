@@ -1,8 +1,6 @@
 using System.Reflection;
 using ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 using ThaiDuongWarehouse.Api.Applications.Mapping;
-using ThaiDuongWarehouse.Api.Applications.Queries.Histories.Export;
-using ThaiDuongWarehouse.Api.Applications.Queries.Histories.Import;
 
 var builder = WebApplication.CreateBuilder(args);
 

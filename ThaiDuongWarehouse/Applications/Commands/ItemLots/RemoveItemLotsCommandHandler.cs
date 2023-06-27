@@ -19,7 +19,7 @@ public class RemoveItemLotsCommandHandler : IRequestHandler<RemoveItemLotsComman
             throw new EntityNotFoundException($"ItemLot with Id {request.ItemLotId} doesn't exist.");
         }
             
-        if (lot.IsIsolated == false)
+        if (!lot.IsIsolated)
         {
             throw new EntityNotFoundException("It is not allowed to delete unisolated lot.");
         }           

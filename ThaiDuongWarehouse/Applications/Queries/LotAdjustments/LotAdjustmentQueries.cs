@@ -14,6 +14,9 @@ public class LotAdjustmentQueries : ILotAdjustmentQueries
     {
         var adjustments = await _context.LotAdjustments
             .AsNoTracking()
+            .Where(la => la.Timestamp >= query.StartTime &&
+            la.Timestamp <= query.EndTime)
+            .Where(la => la.IsConfirmed)
             .Include(la => la.Employee)
             .Include(la => la.Item)
             .ToListAsync();
@@ -37,7 +40,7 @@ public class LotAdjustmentQueries : ILotAdjustmentQueries
         var adjustments = await _context.LotAdjustments
             .Include(la => la.Employee)           
             .Include(la => la.Item)
-            .Where(la => la.IsConfirmed == false)
+            .Where(la => !la.IsConfirmed)
             .ToListAsync();
         var viewmodels = _mapper.Map<IEnumerable<LotAdjustment>, IEnumerable<LotAdjustmentViewModel>>(adjustments);
 

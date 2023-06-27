@@ -16,7 +16,7 @@ public class ItemLotQueries : IItemLotQueries
             .AsNoTracking()
             .Include(il => il.Location)
             .Include(il => il.Item)
-            .Where(il => il.IsIsolated == true)
+            .Where(il => il.IsIsolated)
             .ToListAsync();
 
         var viewModels = _mapper.Map<IEnumerable<ItemLot>, IEnumerable<ItemLotViewModel>>(itemLots);
@@ -41,7 +41,7 @@ public class ItemLotQueries : IItemLotQueries
             .Include(il => il.Location)
             .Include(il => il.Item)
             .Where(il => il.Item.ItemId == itemId)
-            .Where(il => il.IsIsolated == false)
+            .Where(il => !il.IsIsolated)
             .ToListAsync();
         var viewModels = _mapper.Map<IEnumerable<ItemLot>, IEnumerable<ItemLotViewModel>>(itemLots);
         return viewModels;

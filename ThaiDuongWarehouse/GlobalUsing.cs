@@ -25,3 +25,5 @@ global using ThaiDuongWarehouse.Api.Applications.Queries.InventoryLogEntries;
 global using ThaiDuongWarehouse.Api.Applications.Queries.Warnings;
 global using ThaiDuongWarehouse.Domain.AggregateModels.GoodsIssueAggregate;
 global using ThaiDuongWarehouse.Domain.AggregateModels.InventoryLogAggregate;
+global using ThaiDuongWarehouse.Api.Applications.Queries.Histories.Export;
+global using ThaiDuongWarehouse.Api.Applications.Queries.Histories.Import;

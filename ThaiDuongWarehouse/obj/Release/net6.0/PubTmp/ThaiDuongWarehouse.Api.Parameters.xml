@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <parameters>
-  <parameter name="IIS Web Application Name" description="" value="ThaiDuongWarehouse" tags="IisApp">
+  <parameter name="IIS Web Application Name" description="" value="ThaiDuongWarehouseApiDemoFablab" tags="IisApp">
     <parameterEntry kind="ProviderPath" scope="IisApp" match="^D:\\Visual\ Studio\ PJs\\ThaiDuongWarehouse\\ThaiDuongWarehouse\\obj\\Release\\net6\.0\\PubTmp\\Out\\$" />
-  </parameter>
-  <parameter name="ThaiDuongWarehouse.Infrastructure.WarehouseDbContext" description="" value="Server=tcp:thaiduongwarehousetest.database.windows.net,1433;Initial Catalog=DemoWarehouse;Persist Security Info=False;User ID=toan;Password=Viam12345678;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;" tags="dbfullsql">
-    <parameterEntry kind="ProviderPath" scope="dbfullsql" match="^D:\\Visual\ Studio\ PJs\\ThaiDuongWarehouse\\ThaiDuongWarehouse\\obj\\Release\\net6\.0\\PubTmp\\EFSQLScripts\\ThaiDuongWarehouse\.Infrastructure\.WarehouseDbContext\.sql$" />
   </parameter>
 </parameters>

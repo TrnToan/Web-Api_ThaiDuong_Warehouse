@@ -49,7 +49,7 @@ public class GoodsIssue : Entity, IAggregateRoot
         var entry = Entries.FirstOrDefault(e => e.Item.ItemId == itemId);
         if (entry == null)
         {
-            throw new ArgumentException("Entry doesn't exist");
+            throw new WarehouseDomainException("Entry doesn't exist");
         }
         entry.AddLot(lot);
     }

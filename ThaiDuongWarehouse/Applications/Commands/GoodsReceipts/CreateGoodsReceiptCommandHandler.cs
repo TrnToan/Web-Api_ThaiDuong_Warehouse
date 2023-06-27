@@ -29,7 +29,7 @@ public class CreateGoodsReceiptCommandHandler : IRequestHandler<CreateGoodsRecei
             var item = await _itemRepository.GetItemById(receiptLotViewModel.ItemId, receiptLotViewModel.Unit);
             if (item is null)
             {
-                throw new EntityNotFoundException($"Item with Id {receiptLotViewModel.ItemId} doesn't exist.");
+                throw new EntityNotFoundException($"Item with Id {receiptLotViewModel.ItemId} and unit {receiptLotViewModel.Unit} doesn't exist.");
             }
 
             var employee = await _employeeRepository.GetEmployeeById(receiptLotViewModel.EmployeeId);

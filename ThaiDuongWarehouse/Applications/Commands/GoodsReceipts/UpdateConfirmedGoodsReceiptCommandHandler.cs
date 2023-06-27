@@ -1,6 +1,4 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
-
-namespace ThaiDuongWarehouse.Api.Applications.Commands.GoodsReceipts;
+﻿namespace ThaiDuongWarehouse.Api.Applications.Commands.GoodsReceipts;
 
 public class UpdateConfirmedGoodsReceiptCommandHandler : IRequestHandler<UpdateConfirmedGoodsReceiptCommand, bool>
 {
