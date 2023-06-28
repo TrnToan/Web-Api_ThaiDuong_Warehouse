@@ -12,8 +12,8 @@ using ThaiDuongWarehouse.Infrastructure;
 namespace ThaiDuongWarehouse.Api.Migrations
 {
     [DbContext(typeof(WarehouseDbContext))]
-    [Migration("20230426084517_LotAdjustment_Item_GoodsIssueEntry")]
-    partial class LotAdjustment_Item_GoodsIssueEntry
+    [Migration("20230628043755_RebuildDatabase")]
+    partial class RebuildDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,25 +52,11 @@ namespace ThaiDuongWarehouse.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("NewPurchaseOrderNumber")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OldPurchaseOrderNumber")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Unit")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -127,6 +113,65 @@ namespace ThaiDuongWarehouse.Api.Migrations
                     b.ToTable("Employees");
                 });
 
+            modelBuilder.Entity("ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductIssueAggregate.FinisedProductIssue", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FinishedProductIssueId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Receiver")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("FinishedProductIssueId")
+                        .IsUnique();
+
+                    b.ToTable("FinisedProductIssues");
+                });
+
+            modelBuilder.Entity("ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductReceiptAggregate.FinishedProductReceipt", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FinishedProductReceiptId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("FinishedProductReceiptId")
+                        .IsUnique();
+
+                    b.ToTable("FinishedProductReceipts");
+                });
+
             modelBuilder.Entity("ThaiDuongWarehouse.Domain.AggregateModels.GoodsIssueAggregate.GoodsIssue", b =>
                 {
                     b.Property<int>("Id")
@@ -142,14 +187,7 @@ namespace ThaiDuongWarehouse.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool>("IsConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("PurchaseOrderNumber")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Receiver")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Timestamp")
@@ -179,9 +217,6 @@ namespace ThaiDuongWarehouse.Api.Migrations
                     b.Property<string>("GoodsReceiptId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("IsConfirmed")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Supplier")
                         .HasColumnType("nvarchar(max)");
@@ -222,10 +257,15 @@ namespace ThaiDuongWarehouse.Api.Migrations
                     b.Property<double>("MinimumStockLevel")
                         .HasColumnType("float");
 
+                    b.Property<string>("PacketUnit")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal?>("Price")
-                        .IsRequired()
                         .HasPrecision(12, 2)
                         .HasColumnType("decimal(12,2)");
+
+                    b.Property<double?>("SublotSize")
+                        .HasColumnType("float");
 
                     b.Property<string>("Unit")
                         .IsRequired()
@@ -269,15 +309,10 @@ namespace ThaiDuongWarehouse.Api.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ItemLotId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Unit")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -313,18 +348,11 @@ namespace ThaiDuongWarehouse.Api.Migrations
                     b.Property<DateTime?>("ProductionDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("PurchaseOrderNumber")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<double>("Quantity")
                         .HasColumnType("float");
 
-                    b.Property<double?>("SublotSize")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Unit")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -336,6 +364,34 @@ namespace ThaiDuongWarehouse.Api.Migrations
                         .IsUnique();
 
                     b.ToTable("ItemLots");
+                });
+
+            modelBuilder.Entity("ThaiDuongWarehouse.Domain.AggregateModels.ProductInventoryAggregate.FinishedProductInventory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PurchaseOrderNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Quantity")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ItemId");
+
+                    b.ToTable("FinishedProductInventories");
                 });
 
             modelBuilder.Entity("ThaiDuongWarehouse.Domain.AggregateModels.StorageAggregate.Location", b =>
@@ -406,6 +462,120 @@ namespace ThaiDuongWarehouse.Api.Migrations
                     b.Navigation("Item");
                 });
 
+            modelBuilder.Entity("ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductIssueAggregate.FinisedProductIssue", b =>
+                {
+                    b.HasOne("ThaiDuongWarehouse.Domain.AggregateModels.EmployeeAggregate.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsMany("ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductIssueAggregate.FinisedProductIssueEntry", "Entries", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<int>("FinishedProductIssueId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("ItemId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Note")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("PurchaseOrderNumber")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<double>("Quantity")
+                                .HasColumnType("float");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("FinishedProductIssueId");
+
+                            b1.HasIndex("ItemId");
+
+                            b1.ToTable("FinisedProductIssueEntry");
+
+                            b1.WithOwner()
+                                .HasForeignKey("FinishedProductIssueId");
+
+                            b1.HasOne("ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate.Item", "Item")
+                                .WithMany()
+                                .HasForeignKey("ItemId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+
+                            b1.Navigation("Item");
+                        });
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Entries");
+                });
+
+            modelBuilder.Entity("ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductReceiptAggregate.FinishedProductReceipt", b =>
+                {
+                    b.HasOne("ThaiDuongWarehouse.Domain.AggregateModels.EmployeeAggregate.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsMany("ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductReceiptAggregate.FinishedProductReceiptEntry", "Entries", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<int>("FinishedProductReceiptId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("ItemId")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Note")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("PurchaseOrderNumber")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<double>("Quantity")
+                                .HasColumnType("float");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("FinishedProductReceiptId");
+
+                            b1.HasIndex("ItemId");
+
+                            b1.ToTable("FinishedProductReceiptEntry");
+
+                            b1.WithOwner()
+                                .HasForeignKey("FinishedProductReceiptId");
+
+                            b1.HasOne("ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate.Item", "Item")
+                                .WithMany()
+                                .HasForeignKey("ItemId")
+                                .OnDelete(DeleteBehavior.Cascade)
+                                .IsRequired();
+
+                            b1.Navigation("Item");
+                        });
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Entries");
+                });
+
             modelBuilder.Entity("ThaiDuongWarehouse.Domain.AggregateModels.GoodsIssueAggregate.GoodsIssue", b =>
                 {
                     b.HasOne("ThaiDuongWarehouse.Domain.AggregateModels.EmployeeAggregate.Employee", "Employee")
@@ -430,13 +600,6 @@ namespace ThaiDuongWarehouse.Api.Migrations
 
                             b1.Property<double>("RequestedQuantity")
                                 .HasColumnType("float");
-
-                            b1.Property<double?>("RequestedSublotSize")
-                                .HasColumnType("float");
-
-                            b1.Property<string>("Unit")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("Id");
 
@@ -470,9 +633,6 @@ namespace ThaiDuongWarehouse.Api.Migrations
                                         .HasColumnType("nvarchar(max)");
 
                                     b2.Property<double>("Quantity")
-                                        .HasColumnType("float");
-
-                                    b2.Property<double?>("SublotSize")
                                         .HasColumnType("float");
 
                                     b2.HasKey("GoodsIssueEntryId", "GoodsIssueLotId");
@@ -537,18 +697,8 @@ namespace ThaiDuongWarehouse.Api.Migrations
                             b1.Property<DateTime?>("ProductionDate")
                                 .HasColumnType("datetime2");
 
-                            b1.Property<string>("PurchaseOrderNumber")
-                                .HasColumnType("nvarchar(max)");
-
                             b1.Property<double>("Quantity")
                                 .HasColumnType("float");
-
-                            b1.Property<double?>("SublotSize")
-                                .HasColumnType("float");
-
-                            b1.Property<string>("Unit")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
 
                             b1.HasKey("GoodsReceiptLotId");
 
@@ -624,6 +774,17 @@ namespace ThaiDuongWarehouse.Api.Migrations
                     b.Navigation("Item");
 
                     b.Navigation("Location");
+                });
+
+            modelBuilder.Entity("ThaiDuongWarehouse.Domain.AggregateModels.ProductInventoryAggregate.FinishedProductInventory", b =>
+                {
+                    b.HasOne("ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate.Item", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("ThaiDuongWarehouse.Domain.AggregateModels.StorageAggregate.Location", b =>

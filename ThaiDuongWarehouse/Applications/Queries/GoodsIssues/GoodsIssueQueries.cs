@@ -28,43 +28,42 @@ public class GoodsIssueQueries : IGoodsIssueQueries
         return _mapper.Map<GoodsIssue, GoodsIssueViewModel>(goodsIssue);
     }
 
-    public async Task<IEnumerable<GoodsIssueViewModel>> GetConfirmedGoodsIssuesByTime(TimeRangeQuery query)
-    {
-        var goodsIssues = await _context.GoodsIssues
-            .AsNoTracking()
-            .Include(gi => gi.Employee)
-            .Include(gi => gi.Entries)
-                .ThenInclude(gie => gie.Item)
-            .Include(gi => gi.Entries)
-                .ThenInclude(gie => gie.Lots)
-                .ThenInclude(gil => gil.Employee)
-            .Where(gi => gi.IsConfirmed == true)
-            .Where(gi =>
-                gi.Timestamp.CompareTo(query.StartTime) >= 0 &&
-                gi.Timestamp.CompareTo(query.EndTime) <= 0)
-            .OrderByDescending(gi => gi.Timestamp)
-            .ToListAsync();
+    //public async Task<IEnumerable<GoodsIssueViewModel>> GetConfirmedGoodsIssuesByTime(TimeRangeQuery query)
+    //{
+    //    var goodsIssues = await _context.GoodsIssues
+    //        .AsNoTracking()
+    //        .Include(gi => gi.Employee)
+    //        .Include(gi => gi.Entries)
+    //            .ThenInclude(gie => gie.Item)
+    //        .Include(gi => gi.Entries)
+    //            .ThenInclude(gie => gie.Lots)
+    //            .ThenInclude(gil => gil.Employee)
+    //        .Where(gi => gi.IsConfirmed == true)
+    //        .Where(gi =>
+    //            gi.Timestamp.CompareTo(query.StartTime) >= 0 &&
+    //            gi.Timestamp.CompareTo(query.EndTime) <= 0)
+    //        .OrderByDescending(gi => gi.Timestamp)
+    //        .ToListAsync();
 
-        return _mapper.Map<IEnumerable<GoodsIssue>, IEnumerable<GoodsIssueViewModel>>(goodsIssues);
-    }
+    //    return _mapper.Map<IEnumerable<GoodsIssue>, IEnumerable<GoodsIssueViewModel>>(goodsIssues);
+    //}
 
-    public async Task<IEnumerable<GoodsIssueViewModel>> GetUnconfirmedGoodsIssues()
-    {
-        var goodsIssues = await _context.GoodsIssues
-            .AsNoTracking()
-            .Include(gi => gi.Employee)
-            .Include(gi => gi.Entries)
-                .ThenInclude(gie => gie.Item)
-            .Include(gi => gi.Entries)
-                .ThenInclude(gie => gie.Lots)
-                .ThenInclude(gil => gil.Employee)
-            .Where(gi => gi.IsConfirmed == false)
-            .OrderByDescending(gi => gi.Timestamp)
-            .ToListAsync();
+    //public async Task<IEnumerable<GoodsIssueViewModel>> GetUnconfirmedGoodsIssues()
+    //{
+    //    var goodsIssues = await _context.GoodsIssues
+    //        .AsNoTracking()
+    //        .Include(gi => gi.Employee)
+    //        .Include(gi => gi.Entries)
+    //            .ThenInclude(gie => gie.Item)
+    //        .Include(gi => gi.Entries)
+    //            .ThenInclude(gie => gie.Lots)
+    //            .ThenInclude(gil => gil.Employee)
+    //        .Where(gi => gi.IsConfirmed == false)
+    //        .OrderByDescending(gi => gi.Timestamp)
+    //        .ToListAsync();
 
-        return _mapper.Map<IEnumerable<GoodsIssue>, IEnumerable<GoodsIssueViewModel>>(goodsIssues);
-
-    }
+    //    return _mapper.Map<IEnumerable<GoodsIssue>, IEnumerable<GoodsIssueViewModel>>(goodsIssues);
+    //}
 
     public async Task<IEnumerable<GoodsIssueViewModel>> GetAll()
     {

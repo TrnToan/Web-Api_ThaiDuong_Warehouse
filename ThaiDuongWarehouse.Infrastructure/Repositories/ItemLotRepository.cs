@@ -25,18 +25,13 @@ public class ItemLotRepository : BaseRepository, IItemLotRepository
     {
         return await _context.ItemLots
             .Where(il => il.Item.ItemId == itemId)
-            .Where(il => il.Unit == unit)
+            .Where(il => il.Item.Unit == unit)
             .ToListAsync();
     }
 
     public async Task<ItemLot?> GetLotByLotId(string lotId)
     {
         return await _context.ItemLots.FirstOrDefaultAsync(il => il.LotId == lotId);
-    }
-
-    public async Task<IEnumerable<ItemLot>> GetLotByPO(string purchaseOrderNumber)
-    {
-        return await _context.ItemLots.Where(il => il.PurchaseOrderNumber == purchaseOrderNumber).ToListAsync();
     }
 
     public void RemoveLot(ItemLot itemLot)

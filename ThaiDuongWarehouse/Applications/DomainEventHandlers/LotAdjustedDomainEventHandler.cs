@@ -1,6 +1,4 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels.InventoryLogAggregate;
-using ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate;
-using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
+﻿using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
 using ThaiDuongWarehouse.Domain.DomainEvents;
 
 namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
@@ -31,9 +29,9 @@ public class LotAdjustedDomainEventHandler : INotificationHandler<LotAdjustedDom
 
 #pragma warning disable CS8604 // Possible null reference argument.
         var inventoryLogEntry = new InventoryLogEntry(notification.Timestamp, notification.LotId, beforeQuantity,
-            changedQuantity, itemLot.Unit, item);
+            changedQuantity, item);
 #pragma warning restore CS8604 // Possible null reference argument.
-        itemLot.Update(notification.AfterQuantity, notification.NewPurchaseOrderNumber);
+        itemLot.Update(notification.AfterQuantity);
 
         _itemLotRepository.UpdateLot(itemLot);
         _inventoryLogEntryRepository.Add(inventoryLogEntry);

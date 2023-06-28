@@ -1,31 +1,26 @@
-﻿using MediatR;
-
-namespace ThaiDuongWarehouse.Domain.AggregateModels.GoodsIssueAggregate;
+﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.GoodsIssueAggregate;
 public class GoodsIssue : Entity, IAggregateRoot
 {
     public string GoodsIssueId { get; private set; }
-    public string Receiver { get; private set; }
-    public string? PurchaseOrderNumber { get; private set; }
-    public bool IsConfirmed { get; private set; } = false;
+    public string? Receiver { get; private set; }
     public DateTime Timestamp { get; private set; }
+
     // ForeignKey
     public int EmployeeId { get; private set; }
     public Employee Employee { get; private set; }
     public List<GoodsIssueEntry> Entries { get; private set; }
 
-    public GoodsIssue(string goodsIssueId, string? purchaseOrderNumber, DateTime timestamp,
-        string receiver, int employeeId)
+    public GoodsIssue(string goodsIssueId, DateTime timestamp, string? receiver, int employeeId)
     {
         GoodsIssueId = goodsIssueId;
-        PurchaseOrderNumber = purchaseOrderNumber;
         Timestamp = timestamp;
         Receiver = receiver;
         Entries = new List<GoodsIssueEntry>();
         EmployeeId = employeeId;
     }
-    public void AddEntry(Item item, string unit, double? requestedSublotSize, double requestedQuantity)
+    public void AddEntry(Item item, double requestedQuantity)
     {
-        var entry = new GoodsIssueEntry(item, unit, requestedSublotSize, requestedQuantity);
+        var entry = new GoodsIssueEntry(item, requestedQuantity);
         foreach(var existedEntry in Entries)
         {
             if(entry.Item == existedEntry.Item)
@@ -35,14 +30,14 @@ public class GoodsIssue : Entity, IAggregateRoot
         }
         Entries.Add(entry);
     }
-    public void UpdateEntry(string itemId, string unit, double? sublotsize, double quantity)
+    public void UpdateEntry(string itemId, string unit, double quantity)
     {
         var entry = Entries.SingleOrDefault(entry => entry.Item.ItemId == itemId && entry.Item.Unit == unit);
         if (entry == null)
         {
             throw new WarehouseDomainException($"Entry having item {itemId} with unit {unit} doesn't exist in the current GoodsIssue.");
         }
-        entry.UpdateEntry(sublotsize, quantity);
+        entry.UpdateEntry(quantity);
     }
     public void Addlot(string itemId, GoodsIssueLot lot) 
     {
@@ -78,8 +73,6 @@ public class GoodsIssue : Entity, IAggregateRoot
                 this.AddDomainEvent(new ItemLotInformationChangedDomainEvent(lot.LotId, goodsIssueLot.Quantity));   
             }
         }
-        this.AddDomainEvent(new ItemLotsExportedDomainEvent(completelyExportedLots));
-        
-        IsConfirmed = true;
+        this.AddDomainEvent(new ItemLotsExportedDomainEvent(completelyExportedLots));      
     }
 }

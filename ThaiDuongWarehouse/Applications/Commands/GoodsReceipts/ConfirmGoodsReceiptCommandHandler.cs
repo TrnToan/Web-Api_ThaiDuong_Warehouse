@@ -32,8 +32,8 @@ public class ConfirmGoodsReceiptCommandHandler : IRequestHandler<ConfirmGoodsRec
                 throw new EntityNotFoundException($"Location doesn't exist. Create new location.");
             }
 
-            ItemLot itemLot = new(lot.GoodsReceiptLotId, location.Id, lot.ItemId, lot.Quantity, lot.Unit, lot.SublotSize,
-                lot.SublotUnit, lot.PurchaseOrderNumber, lot.ProductionDate, lot.ExpirationDate);
+            ItemLot itemLot = new(lot.GoodsReceiptLotId, location.Id, lot.ItemId, lot.Quantity, DateTime.Now,
+                lot.ProductionDate, lot.ExpirationDate);
 
             itemLots.Add(itemLot);
         }

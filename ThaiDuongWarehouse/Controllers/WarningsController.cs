@@ -6,7 +6,7 @@ namespace ThaiDuongWarehouse.Api.Controllers;
 [ApiController]
 public class WarningsController : ControllerBase
 {
-	private IWarningQueries _queries;
+	private readonly IWarningQueries _queries;
 	public WarningsController(IWarningQueries queries)
 	{
 		_queries = queries;

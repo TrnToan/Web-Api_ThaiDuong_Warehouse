@@ -6,17 +6,14 @@ public class LotAdjustedDomainEvent : INotification
     public double BeforeQuantity { get; private set; }
     public double AfterQuantity { get; private set; }
     public string Unit { get; private set; }
-    public string NewPurchaseOrderNumber { get; private set; }
     public DateTime Timestamp { get; private set; }
-    public LotAdjustedDomainEvent(string lotId, string itemId, double beforeQuantity , double afterQuantity, string unit,
-        string newPurchaseOrderNumber, DateTime timestamp)
+    public LotAdjustedDomainEvent(string lotId, string itemId, double beforeQuantity , double afterQuantity, DateTime timestamp, string unit)
     {
         LotId = lotId;
         ItemId = itemId;
         BeforeQuantity = beforeQuantity;
         AfterQuantity = afterQuantity;
-        Unit = unit;
-        NewPurchaseOrderNumber = newPurchaseOrderNumber;
         Timestamp = timestamp;
+        Unit = unit;
     }
 }

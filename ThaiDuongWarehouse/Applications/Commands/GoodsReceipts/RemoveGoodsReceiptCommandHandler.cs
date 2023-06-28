@@ -15,10 +15,10 @@ public class RemoveGoodsReceiptCommandHandler : IRequestHandler<RemoveGoodsRecei
         {
             throw new EntityNotFoundException($"GoodsReceipt with {request.GoodsReceiptId} doesn't exist");
         }
-        if (goodsReceipt.IsConfirmed)
-        {
-            throw new NotAllowedToDeleteException($"Cannot delete confirmed GoodsReceipt.");
-        }
+        //if (goodsReceipt.IsConfirmed)
+        //{
+        //    throw new NotAllowedToDeleteException($"Cannot delete confirmed GoodsReceipt.");
+        //}
 
         _goodsReceiptRepository.Remove(goodsReceipt);
 

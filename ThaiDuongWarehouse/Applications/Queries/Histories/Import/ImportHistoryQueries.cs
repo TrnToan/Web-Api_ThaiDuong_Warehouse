@@ -1,8 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Net;
-using ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate;
-
-namespace ThaiDuongWarehouse.Api.Applications.Queries.Histories.Import;
+﻿namespace ThaiDuongWarehouse.Api.Applications.Queries.Histories.Import;
 
 public class ImportHistoryQueries : IImportHistoryQueries
 {
@@ -41,18 +37,18 @@ public class ImportHistoryQueries : IImportHistoryQueries
         return _mapper.Map<IEnumerable<GoodsReceiptsHistoryViewModel>>(goodsReceipts);
     }
 
-    public async Task<IEnumerable<GoodsReceiptsHistoryViewModel>> GetByPO(string purchaseOrderNumber)
-    {
-        var goodsReceipts = await _context.GoodsReceipts
-            .AsNoTracking()
-            .Include(g => g.Lots)
-            .Where(g => g.Lots.Any(lot => lot.PurchaseOrderNumber == purchaseOrderNumber))
-            .Include(g => g.Lots.Where(lot => lot.PurchaseOrderNumber == purchaseOrderNumber))
-            .ThenInclude(lot => lot.Item)
-            .ToListAsync();
+    //public async Task<IEnumerable<GoodsReceiptsHistoryViewModel>> GetByPO(string purchaseOrderNumber)
+    //{
+    //    var goodsReceipts = await _context.GoodsReceipts
+    //        .AsNoTracking()
+    //        .Include(g => g.Lots)
+    //        .Where(g => g.Lots.Any(lot => lot.PurchaseOrderNumber == purchaseOrderNumber))
+    //        .Include(g => g.Lots.Where(lot => lot.PurchaseOrderNumber == purchaseOrderNumber))
+    //        .ThenInclude(lot => lot.Item)
+    //        .ToListAsync();
 
-        return _mapper.Map<IEnumerable<GoodsReceiptsHistoryViewModel>>(goodsReceipts);
-    }
+    //    return _mapper.Map<IEnumerable<GoodsReceiptsHistoryViewModel>>(goodsReceipts);
+    //}
 
     public async Task<IEnumerable<GoodsReceiptsHistoryViewModel>> GetBySupplier(TimeRangeQuery query, string supplier)
     {

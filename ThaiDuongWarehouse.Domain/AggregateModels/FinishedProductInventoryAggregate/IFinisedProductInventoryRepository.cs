@@ -1,0 +1,4 @@
+﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductInventoryAggregate;
+public interface IFinisedProductInventoryRepository
+{
+}

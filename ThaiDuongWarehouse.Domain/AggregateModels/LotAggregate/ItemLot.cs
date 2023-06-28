@@ -1,33 +1,25 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace ThaiDuongWarehouse.Domain.AggregateModels.LotAggregate;
+﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.LotAggregate;
 public class ItemLot : Entity, IAggregateRoot
 {
-    public string LotId { get; private set; }
-    public int LocationId { get; private set; }             // ForeignKey
-    public int ItemId { get; private set; }                 // ForeignKey
-    public bool IsIsolated { get; private set; } = false;
+    public string LotId { get; private set; }   
     public double Quantity { get; private set; }
-    public string Unit { get; private set; }
-    public double? SublotSize { get; private set; }
-    public string? SublotUnit { get; private set; }
-    public string? PurchaseOrderNumber { get; private set; }
+    public DateTime Timestamp { get; private set; }
     public DateTime? ProductionDate { get; private set; }
     public DateTime? ExpirationDate { get; private set; }
+    public bool IsIsolated { get; private set; } = false;
+    public int LocationId { get; private set; }             // ForeignKey
+    public int ItemId { get; private set; }                 // ForeignKey
     public Location? Location { get; private set; }
     public Item Item { get; private set; }
 
-    public ItemLot(string lotId, int locationId, int itemId, double quantity, string unit,
-        double? sublotSize, string? sublotUnit, string? purchaseOrderNumber, DateTime? productionDate, DateTime? expirationDate)
+    public ItemLot(string lotId, int locationId, int itemId, double quantity, DateTime timestamp,
+        DateTime? productionDate, DateTime? expirationDate)
     {
         LotId = lotId;
         LocationId = locationId;
         ItemId = itemId;
         Quantity = quantity;
-        Unit = unit;
-        SublotSize = sublotSize;
-        SublotUnit = sublotUnit;
-        PurchaseOrderNumber = purchaseOrderNumber;
+        Timestamp = timestamp;
         ProductionDate = productionDate;
         ExpirationDate = expirationDate;
     }
@@ -36,17 +28,15 @@ public class ItemLot : Entity, IAggregateRoot
     {
         Quantity = quantity;
     }
-    public void Update(double quantity, string purchaseOrderNumber)
+    public void Update(double quantity)
     {
         Quantity = quantity;
-        PurchaseOrderNumber = purchaseOrderNumber;
     }
     public void UpdateConfirmedLot(int locationId, double quantity, string? purchaseOrderNumber, DateTime? productionDate, 
         DateTime? expirationDate)
     {
         LocationId = locationId;
         Quantity = quantity;
-        PurchaseOrderNumber = purchaseOrderNumber;  
         ProductionDate = productionDate;
         ExpirationDate = expirationDate;
     }

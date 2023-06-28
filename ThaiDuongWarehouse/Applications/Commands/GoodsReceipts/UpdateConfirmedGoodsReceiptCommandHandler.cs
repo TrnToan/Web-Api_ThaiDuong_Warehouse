@@ -46,16 +46,11 @@ public class UpdateConfirmedGoodsReceiptCommandHandler : IRequestHandler<UpdateC
             modifiedLot.ProductionDate ??= goodsReceiptLot.ProductionDate;
             modifiedLot.ExpirationDate ??= goodsReceiptLot.ExpirationDate;
 
-#pragma warning disable CS8604 // Possible null reference argument.
             Location? location = await _storageRepository.GetLocationById(modifiedLot.LocationId);
-#pragma warning restore CS8604 // Possible null reference argument.
             if (location is null)
                 throw new EntityNotFoundException("Location does not exist.");
 
             var item = await _itemRepository.GetItemByEntityId(goodsReceiptLot.ItemId);
-
-            // Kiem tra nguoi dung da nhap PurchaseOrderNumber
-            modifiedLot.PurchaseOrderNumber ??= goodsReceiptLot.PurchaseOrderNumber;
 
             double newQuantity = 0;
             if (itemLot is null)
@@ -69,9 +64,9 @@ public class UpdateConfirmedGoodsReceiptCommandHandler : IRequestHandler<UpdateC
                 throw new NotImplementedException();
 
             // raise domain event update Itemlot and InventoryLogEntry
-            goodsReceipt.UpdateItemLot(modifiedLot.GoodsReceiptLotId, location.Id, goodsReceiptLot.ItemId, 
-                newQuantity, goodsReceiptLot.Unit, goodsReceiptLot.SublotSize, goodsReceiptLot.SublotUnit, modifiedLot.PurchaseOrderNumber,
-                modifiedLot.ProductionDate, modifiedLot.ExpirationDate); 
+            //goodsReceipt.UpdateItemLot(modifiedLot.GoodsReceiptLotId, location.Id, goodsReceiptLot.ItemId, 
+            //    newQuantity,  modifiedLot.PurchaseOrderNumber,
+            //    modifiedLot.ProductionDate, modifiedLot.ExpirationDate); 
             
             goodsReceipt.AddLogEntry(modifiedLot.GoodsReceiptLotId, item.Id, modifiedLot.Quantity - goodsReceiptLot.Quantity);
 

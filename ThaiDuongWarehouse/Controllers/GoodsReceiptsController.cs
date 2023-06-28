@@ -23,19 +23,19 @@ public class GoodsReceiptsController : ControllerBase
         return await _queries.GetGoodsReceiptById(goodsReceiptId);
     }
 
-    [HttpGet]
-    [Route("goodsReceipts/{isConfirmed}")]
-    public async Task<IEnumerable<GoodsReceiptViewModel>> GetIsConfirmedGoodsReceiptsAsync(bool isConfirmed)
-    {
-        if (isConfirmed)
-        {
-            return await _queries.GetConfirmedGoodsReceipt();
-        }
-        else
-        {
-            return await _queries.GetUnConfirmedGoodsReceipt();
-        }
-    }
+    //[HttpGet]
+    //[Route("goodsReceipts/{isConfirmed}")]
+    //public async Task<IEnumerable<GoodsReceiptViewModel>> GetIsConfirmedGoodsReceiptsAsync(bool isConfirmed)
+    //{
+    //    if (isConfirmed)
+    //    {
+    //        return await _queries.GetConfirmedGoodsReceipt();
+    //    }
+    //    else
+    //    {
+    //        return await _queries.GetUnConfirmedGoodsReceipt();
+    //    }
+    //}
 
     [HttpGet]
     public async Task<IEnumerable<GoodsReceiptViewModel>> GetAllAsync()
@@ -43,12 +43,12 @@ public class GoodsReceiptsController : ControllerBase
         return await _queries.GetAll();
     }
 
-    [HttpGet]
-    [Route("TimeRange")]
-    public async Task<IEnumerable<GoodsReceiptViewModel>> GetGoodsReceiptsAsync([FromQuery] TimeRangeQuery query)
-    {
-        return await _queries.GetGoodsReceiptsByTime(query);
-    }
+    //[HttpGet]
+    //[Route("TimeRange")]
+    //public async Task<IEnumerable<GoodsReceiptViewModel>> GetGoodsReceiptsAsync([FromQuery] TimeRangeQuery query)
+    //{
+    //    return await _queries.GetGoodsReceiptsByTime(query);
+    //}
 
     [HttpGet]
     [Route("Suppliers")]
@@ -57,12 +57,12 @@ public class GoodsReceiptsController : ControllerBase
         return await _queries.GetSuppliers();
     }
 
-    [HttpGet]
-    [Route("PurchaseOrderNumbers")]
-    public async Task<IList<string?>> GetPOsAsync()
-    {
-        return await _queries.GetPOs();
-    }
+    //[HttpGet]
+    //[Route("PurchaseOrderNumbers")]
+    //public async Task<IList<string?>> GetPOsAsync()
+    //{
+    //    return await _queries.GetPOs();
+    //}
 
     [HttpPost]
     public async Task<IActionResult> PostAsync([FromBody] CreateGoodsReceiptCommand cmd)

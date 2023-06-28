@@ -1,6 +1,4 @@
 ﻿using ThaiDuongWarehouse.Api.Applications.Queries;
-using ThaiDuongWarehouse.Api.Applications.Queries.Histories.Export;
-using ThaiDuongWarehouse.Api.Applications.Queries.Histories.Import;
 
 namespace ThaiDuongWarehouse.Api.Controllers;
 
@@ -16,12 +14,12 @@ public class InventoryHistoriesController : ControllerBase
         _exportQueries = exportQueries;
     }
 
-    [HttpGet]
-    [Route("ByPO/Import")]
-    public async Task<IEnumerable<GoodsReceiptsHistoryViewModel>> GetImportHistoriesByPOAsync([FromQuery]string purchaseOrderNumber)
-    {
-        return await _importQueries.GetByPO(purchaseOrderNumber);
-    }
+    //[HttpGet]
+    //[Route("ByPO/Import")]
+    //public async Task<IEnumerable<GoodsReceiptsHistoryViewModel>> GetImportHistoriesByPOAsync([FromQuery]string purchaseOrderNumber)
+    //{
+    //    return await _importQueries.GetByPO(purchaseOrderNumber);
+    //}
 
     [HttpGet]
     [Route("BySupplier/Import")]
@@ -37,12 +35,12 @@ public class InventoryHistoriesController : ControllerBase
         return await _importQueries.GetByClassOrItem(query, itemClassId, itemId);
     }
 
-    [HttpGet]
-    [Route("ByPO/Export")]
-    public async Task<IEnumerable<GoodsIssuesHistoryViewModel>> GetExportHistoriesByPOAsync([FromQuery] string purchaseOrderNumber)
-    {
-        return await _exportQueries.GetByPO(purchaseOrderNumber);
-    }
+    //[HttpGet]
+    //[Route("ByPO/Export")]
+    //public async Task<IEnumerable<GoodsIssuesHistoryViewModel>> GetExportHistoriesByPOAsync([FromQuery] string purchaseOrderNumber)
+    //{
+    //    return await _exportQueries.GetByPO(purchaseOrderNumber);
+    //}
 
     [HttpGet]
     [Route("ByReceiver/Export")]

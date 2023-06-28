@@ -19,8 +19,7 @@ public class ConfirmLotAdjustmentCommandHandler : IRequestHandler<ConfirmLotAdju
 
         var item = await _itemRepository.GetItemByEntityId(lotAdjustment.ItemId);
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-        lotAdjustment.Confirm(lotAdjustment.LotId, item.ItemId, lotAdjustment.Unit,
-            lotAdjustment.BeforeQuantity, lotAdjustment.AfterQuantity, lotAdjustment.NewPurchaseOrderNumber);
+        lotAdjustment.Confirm(lotAdjustment.LotId, item.ItemId, lotAdjustment.BeforeQuantity, lotAdjustment.AfterQuantity, item.Unit);
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 
         _lotAdjustmentRepository.Update(lotAdjustment);

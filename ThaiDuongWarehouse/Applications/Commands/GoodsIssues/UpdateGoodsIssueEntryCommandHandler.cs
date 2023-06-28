@@ -18,11 +18,11 @@ public class UpdateGoodsIssueEntryCommandHandler : IRequestHandler<UpdateGoodsIs
             throw new EntityNotFoundException($"GoodsIssue with Id {request.GoodsIssueId} doesn't exist.");
         }
 
-        if (goodsIssue.IsConfirmed)
-        {
-            throw new Exception("GoodsIssueEntry contained in confirmed GoodsIssue can't be modified.");
-        }
-        goodsIssue.UpdateEntry(request.ItemId, request.Unit, request.RequestedSublotSize, request.RequestedQuantity);
+        //if (goodsIssue.IsConfirmed)
+        //{
+        //    throw new Exception("GoodsIssueEntry contained in confirmed GoodsIssue can't be modified.");
+        //}
+        //goodsIssue.UpdateEntry(request.ItemId, request.Unit, request.RequestedSublotSize, request.RequestedQuantity);
 
         _goodsIssueRepository.Update(goodsIssue);
         return await _goodsIssueRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);

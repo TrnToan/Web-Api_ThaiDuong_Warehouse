@@ -46,7 +46,7 @@ public class InventoryLogEntryChangedDomainEventHandler : INotificationHandler<I
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
         }                
         InventoryLogEntry newEntry = new (notification.ItemId, notification.ItemLotId, notification.Timestamp,
-            beforeQuantity, notification.Quantity, item.Unit);
+            beforeQuantity, notification.Quantity);
 
         _service.AddEntry(newEntry);
         _inventoryLogEntryRepository.Add(newEntry);

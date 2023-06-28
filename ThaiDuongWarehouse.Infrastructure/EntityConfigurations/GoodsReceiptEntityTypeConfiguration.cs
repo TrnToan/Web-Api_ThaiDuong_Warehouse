@@ -7,7 +7,6 @@ public class GoodsReceiptEntityTypeConfiguration : IEntityTypeConfiguration<Good
         builder.HasIndex(gr => gr.GoodsReceiptId).IsUnique();
         builder.Property(gr => gr.Supplier);
         builder.Property(gr => gr.Timestamp).IsRequired();
-        builder.Property(gr => gr.IsConfirmed).IsRequired();
         builder.HasOne(gr => gr.Employee).WithMany();
 
         builder.OwnsMany(gr => gr.Lots, grl =>
@@ -16,10 +15,7 @@ public class GoodsReceiptEntityTypeConfiguration : IEntityTypeConfiguration<Good
 
             grl.HasKey(lot => lot.GoodsReceiptLotId);
             grl.Property(lot => lot.LocationId);
-            grl.Property(lot => lot.Quantity).IsRequired();
-            grl.Property(lot => lot.SublotSize);
-            grl.Property(lot => lot.SublotUnit);
-            grl.Property(lot => lot.PurchaseOrderNumber);
+            grl.Property(lot => lot.Quantity).IsRequired();           
             grl.Property(lot => lot.ProductionDate);
             grl.Property(lot => lot.ExpirationDate);
 

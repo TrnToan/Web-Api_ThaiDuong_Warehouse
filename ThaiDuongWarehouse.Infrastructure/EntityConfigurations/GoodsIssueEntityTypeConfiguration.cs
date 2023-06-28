@@ -11,11 +11,6 @@ public class GoodsIssueEntityTypeConfiguration : IEntityTypeConfiguration<GoodsI
         builder
             .Property(g => g.Receiver);
         builder
-            .Property(g => g.PurchaseOrderNumber);
-        builder
-            .Property(g => g.IsConfirmed)
-            .IsRequired();
-        builder
             .Property(g => g.Timestamp)
             .IsRequired();
         builder
@@ -29,9 +24,7 @@ public class GoodsIssueEntityTypeConfiguration : IEntityTypeConfiguration<GoodsI
 
             ge.HasKey(entry => entry.Id);
             ge.Property(entry => entry.Id).ValueGeneratedOnAdd().IsRequired();
-            ge.Property(entry => entry.RequestedSublotSize);
             ge.Property(entry => entry.RequestedQuantity).IsRequired();
-            ge.Property(entry => entry.Unit).IsRequired();
 
             ge.HasOne(entry => entry.Item).WithMany().IsRequired().HasForeignKey(entry => entry.ItemId);
             ge.OwnsMany(entry => entry.Lots, lot =>
@@ -39,8 +32,6 @@ public class GoodsIssueEntityTypeConfiguration : IEntityTypeConfiguration<GoodsI
                 lot.WithOwner();
                 lot.HasKey(gil => new { gil.GoodsIssueEntryId, gil.GoodsIssueLotId });
                 lot.Property(gil => gil.Quantity).IsRequired();
-                lot.Property(gil => gil.SublotSize);
-                lot.Property(gil => gil.SublotUnit);
                 lot.Property(gil => gil.Note);
 
                 lot.HasOne(gil => gil.Employee).WithMany().HasForeignKey(gil => gil.EmployeeId).OnDelete(DeleteBehavior.Restrict).IsRequired();

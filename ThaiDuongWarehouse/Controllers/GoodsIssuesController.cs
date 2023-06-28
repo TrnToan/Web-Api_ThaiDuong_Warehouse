@@ -29,18 +29,18 @@ public class GoodsIssuesController : ControllerBase
         return await _queries.GetGoodsIssueById(goodsIssueId);
     }
 
-    [HttpGet]
-    public async Task<IEnumerable<GoodsIssueViewModel>> GetGoodsIssuesAsync([FromQuery] TimeRangeQuery query)
-    {
-        return await _queries.GetConfirmedGoodsIssuesByTime(query);
-    }
+    //[HttpGet]
+    //public async Task<IEnumerable<GoodsIssueViewModel>> GetGoodsIssuesAsync([FromQuery] TimeRangeQuery query)
+    //{
+    //    return await _queries.GetConfirmedGoodsIssuesByTime(query);
+    //}
 
-    [HttpGet]
-    [Route("Unconfirmed")]
-    public async Task<IEnumerable<GoodsIssueViewModel>> GetUnconfirmedGoodsIssuesAsync()
-    {
-        return await _queries.GetUnconfirmedGoodsIssues();
-    }
+    //[HttpGet]
+    //[Route("Unconfirmed")]
+    //public async Task<IEnumerable<GoodsIssueViewModel>> GetUnconfirmedGoodsIssuesAsync()
+    //{
+    //    return await _queries.GetUnconfirmedGoodsIssues();
+    //}
 
     [HttpGet]
     [Route("Receivers")]

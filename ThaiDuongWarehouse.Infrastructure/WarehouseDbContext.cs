@@ -8,19 +8,21 @@ public class WarehouseDbContext : DbContext, IUnitOfWork
     public DbSet<Department> Departments { get; set; }
     public DbSet<Employee> Employees { get; set; }
     public DbSet<GoodsIssue> GoodsIssues { get; set; }
+    public DbSet<FinisedProductIssue> FinisedProductIssues { get; set; }
     public DbSet<GoodsReceipt> GoodsReceipts { get; set; }
+    public DbSet<FinishedProductReceipt> FinishedProductReceipts { get; set; }
     public DbSet<InventoryLogEntry> InventoryLogEntries { get; set; }
     public DbSet<Item> Items { get; set; }
     public DbSet<ItemLot> ItemLots { get; set; }
+    public DbSet<FinishedProductInventory> FinishedProductInventories { get; set; }
     public DbSet<Warehouse> Warehouses { get; set; }
     public DbSet<Location> Locations { get; set; }
 
     private IDbContextTransaction? _currentTransaction;
     private readonly IMediator _mediator;
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public WarehouseDbContext(DbContextOptions options) : base(options) { }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+
     public IDbContextTransaction? GetCurrentTransaction() => _currentTransaction;
     public bool HasActiveTransaction => _currentTransaction != null;
     public WarehouseDbContext(DbContextOptions options, IMediator mediator) : base(options)
@@ -34,10 +36,13 @@ public class WarehouseDbContext : DbContext, IUnitOfWork
         modelBuilder.ApplyConfiguration(new DepartmentEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new EmployeeEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new GoodsIssueEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new FinisedProductIssueEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new GoodsReceiptEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new FinishedProductReceiptEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new InventoryLogEntryEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ItemEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ItemLotEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new FinishedProductInventoryEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new WarehouseEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ItemClassEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new LocationEntityTypeConfiguration());

@@ -20,8 +20,7 @@ public class CreateGoodsIssueCommandHandler : IRequestHandler<CreateGoodsIssueCo
         {
             throw new EntityNotFoundException($"Employee with Id {request.EmployeeId} doesn't exist.");
         }
-        var goodsIssue = new GoodsIssue(request.GoodsIssueId, request.PurchaseOrderNumber, request.Timestamp, 
-            request.Receiver, employee.Id);
+        var goodsIssue = new GoodsIssue(request.GoodsIssueId, request.Timestamp, request.Receiver, employee.Id);
 
         foreach (var entry in request.Entries)
         {
@@ -31,7 +30,7 @@ public class CreateGoodsIssueCommandHandler : IRequestHandler<CreateGoodsIssueCo
                 throw new EntityNotFoundException($"Item with Id {entry.ItemId} doesn't exist.");
             }
 
-            goodsIssue.AddEntry(item, entry.Unit, entry.RequestedSublotSize, entry.RequestedQuantity);
+            goodsIssue.AddEntry(item, entry.RequestedQuantity);
         }
         _goodsIssueRepository.Add(goodsIssue);
 

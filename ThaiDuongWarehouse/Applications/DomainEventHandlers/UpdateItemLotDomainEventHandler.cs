@@ -17,9 +17,8 @@ public class UpdateItemLotDomainEventHandler : INotificationHandler<UpdateItemLo
 
         if (itemLot is null)
         {
-            var newLot = new ItemLot(notification.ItemLotId, notification.LocationId, notification.ItemId, notification.Quantity,
-               notification.Unit, notification.SublotSize, notification.SublotUnit, notification.PurchaseOrderNumber,
-               notification.ProductionDate, notification.ExpirationDate);
+            var newLot = new ItemLot(notification.ItemLotId, notification.LocationId, notification.ItemId, notification.Quantity,              
+               DateTime.Now, notification.ProductionDate, notification.ExpirationDate);
 
             _itemLotRepository.AddLot(newLot);
         }

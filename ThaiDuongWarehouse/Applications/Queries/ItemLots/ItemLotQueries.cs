@@ -47,17 +47,17 @@ public class ItemLotQueries : IItemLotQueries
         return viewModels;
     }
 
-    public async Task<IEnumerable<ItemLotViewModel>> GetItemLotsByPO(string purchaseOrderNumber)
-    {
-        var itemLots = await _context.ItemLots
-            .AsNoTracking()
-            .Include(il => il.Location)
-            .Include(il => il.Item)
-            .Where(il => il.PurchaseOrderNumber == purchaseOrderNumber)
-            .ToListAsync();
-        var viewModels = _mapper.Map<IEnumerable<ItemLot>, IEnumerable<ItemLotViewModel>>(itemLots);
-        return viewModels;
-    }
+    //public async Task<IEnumerable<ItemLotViewModel>> GetItemLotsByPO(string purchaseOrderNumber)
+    //{
+    //    var itemLots = await _context.ItemLots
+    //        .AsNoTracking()
+    //        .Include(il => il.Location)
+    //        .Include(il => il.Item)
+    //        .Where(il => il.PurchaseOrderNumber == purchaseOrderNumber)
+    //        .ToListAsync();
+    //    var viewModels = _mapper.Map<IEnumerable<ItemLot>, IEnumerable<ItemLotViewModel>>(itemLots);
+    //    return viewModels;
+    //}
 
     public async Task<IList<ItemLotViewModel>> GetItemLotsByLocationId(string locationId)
     {

@@ -4,32 +4,28 @@ public class GoodsReceipt : Entity, IAggregateRoot
     public string GoodsReceiptId { get; private set; }
     public string? Supplier { get; private set; }
     public DateTime Timestamp { get; private set; }
-    public bool IsConfirmed { get; private set; } = false;
     public Employee Employee { get; private set; }
     public List<GoodsReceiptLot> Lots { get; private set; }
 
     private GoodsReceipt() { }
 
-    public GoodsReceipt(string goodsReceiptId, string? supplier, DateTime timestamp, bool isConfirmed, 
-        Employee employee) : this() 
+    public GoodsReceipt(string goodsReceiptId, string? supplier, DateTime timestamp, Employee employee) : this() 
     {
         GoodsReceiptId = goodsReceiptId;
         Supplier = supplier;
         Timestamp = timestamp;
-        IsConfirmed = isConfirmed;
         Lots = new List<GoodsReceiptLot>();
         Employee = employee;       
     }
 
-    public void UpdateLot(string lotId, double quantity, double? sublotSize, string? sublotUnit, string? purchaseOrderNumber,
-        string locationId, DateTime productionDate, DateTime expirationDate, string? note)
+    public void UpdateLot(string lotId, double quantity, string locationId, DateTime productionDate, DateTime expirationDate, string? note)
     {
         var lot = Lots.FirstOrDefault(e => e.GoodsReceiptLotId == lotId);
         if (lot == null)
         {
             throw new WarehouseDomainException("Lot doesn't exist in the current GoodsReceipt");
         }
-        lot.Update(quantity, sublotSize, sublotUnit, purchaseOrderNumber, locationId, productionDate, expirationDate, note);
+        lot.Update(quantity, locationId, productionDate, expirationDate, note);
     }
 
     public void UpdateConfirmedLot(string lotId, double quantity, string? purchaseOrderNumber, string? locationId, 
@@ -71,12 +67,12 @@ public class GoodsReceipt : Entity, IAggregateRoot
         lot.SetQuantity(quantity);
     }
 
-    public void UpdateItemLot(string lotId, int locationId, int itemId, double quantity, string unit,
-        double? sublotSize, string? sublotUnit, string? purchaseOrderNumber, DateTime? productionDate, DateTime? expirationDate)
-    {
-        this.AddDomainEvent(new UpdateItemLotDomainEvent(lotId, locationId, itemId, quantity, unit, sublotSize,
-            sublotUnit, purchaseOrderNumber, productionDate, expirationDate));
-    }
+    //public void UpdateItemLot(string lotId, int locationId, int itemId, double quantity, 
+    //    double? sublotSize, string? sublotUnit, string? purchaseOrderNumber, DateTime? productionDate, DateTime? expirationDate)
+    //{
+    //    this.AddDomainEvent(new UpdateItemLotDomainEvent(lotId, locationId, itemId, quantity, sublotSize,
+    //        sublotUnit, purchaseOrderNumber, productionDate, expirationDate));
+    //}
 
     public void AddLogEntry(string lotId, int itemId, double quantity)
     {
@@ -90,7 +86,5 @@ public class GoodsReceipt : Entity, IAggregateRoot
         {
             this.AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.LotId, lot.Quantity, lot.ItemId));
         }
-
-        IsConfirmed = true;
     }
 }

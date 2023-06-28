@@ -42,9 +42,9 @@ public class CreateLotAdjustmentCommandHandler : IRequestHandler<CreateLotAdjust
             throw new EntityNotFoundException($"Employee {request.EmployeeName} does not exist");
         }
         
-        var newLotAdjustment = new LotAdjustment(request.LotId, request.OldPurchaseOrderNumber,  request.BeforeQuantity, 
-            request.Unit, request.Note, DateTime.Now, item.Id, employee.Id);
-        newLotAdjustment.Update(request.AfterQuantity, request.NewPurchaseOrderNumber);
+        var newLotAdjustment = new LotAdjustment(request.LotId, request.BeforeQuantity, request.Note, DateTime.Now, 
+            item.Id, employee.Id);
+        newLotAdjustment.Update(request.AfterQuantity);
         _lotAdjustmentRepository.Add(newLotAdjustment);
 
         return await _lotAdjustmentRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);

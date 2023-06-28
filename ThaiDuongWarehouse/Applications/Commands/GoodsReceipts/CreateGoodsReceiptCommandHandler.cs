@@ -21,7 +21,7 @@ public class CreateGoodsReceiptCommandHandler : IRequestHandler<CreateGoodsRecei
             throw new EntityNotFoundException($"Employee in the GoodsReceipt {request.GoodsReceiptId} doesn't exist in the context.");
         }
    
-        var goodsReceipt = new GoodsReceipt(request.GoodsReceiptId, request.Supplier, request.Timestamp, false,
+        var goodsReceipt = new GoodsReceipt(request.GoodsReceiptId, request.Supplier, request.Timestamp, 
             goodsReceiptEmployee);
         
         foreach (var receiptLotViewModel in request.GoodsReceiptLots)

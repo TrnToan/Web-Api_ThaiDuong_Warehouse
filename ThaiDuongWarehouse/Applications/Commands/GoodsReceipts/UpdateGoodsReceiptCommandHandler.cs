@@ -16,14 +16,14 @@ public class UpdateGoodsReceiptCommandHandler : IRequestHandler<UpdateGoodsRecei
         {
             throw new EntityNotFoundException($"GoodsReceipt with Id {request.GoodsReceiptId} doesn't exist.");
         }
-        if (goodsReceipt.IsConfirmed)
-        {
-            throw new Exception("Confirmed goodsreceipt is not allowed to modify.");
-        }
+        //if (goodsReceipt.IsConfirmed)
+        //{
+        //    throw new Exception("Confirmed goodsreceipt is not allowed to modify.");
+        //}
         foreach (var lot in request.GoodsReceiptLots)
         {
-            goodsReceipt.UpdateLot(lot.GoodsReceiptLotId, lot.Quantity, lot.SublotSize, lot.SublotUnit, lot.PurchaseOrderNumber, 
-                lot.LocationId, lot.ProductionDate, lot.ExpirationDate, lot.Note);
+            goodsReceipt.UpdateLot(lot.GoodsReceiptLotId, lot.Quantity, lot.LocationId, lot.ProductionDate, 
+                lot.ExpirationDate, lot.Note);
         }
 
         _goodsReceiptRepository.Update(goodsReceipt);

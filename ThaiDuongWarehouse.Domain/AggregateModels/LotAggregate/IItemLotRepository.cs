@@ -8,6 +8,5 @@ public interface IItemLotRepository : IRepository<ItemLot>
     void RemoveLot(ItemLot itemLot);
     Task<ItemLot?> GetLotByLotId(string lotId);
     Task<IEnumerable<ItemLot>> GetLotsByItemId(string itemId, string unit);
-    Task<IEnumerable<ItemLot>> GetLotByPO(string purchaseOrderNumber);
     Task<IEnumerable<ItemLot>> GetIsolatedItemLots();
 }
