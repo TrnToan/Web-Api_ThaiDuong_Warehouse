@@ -15,8 +15,8 @@ public class GoodsReceiptLot
     public Employee Employee { get; private set; }
 
     private GoodsReceiptLot() { }
-    public GoodsReceiptLot(string goodsReceiptLotId, string? locationId, double quantity, string unit, double? sublotSize, 
-        string? purchaseOrderNumber, DateTime? productionDate, DateTime? expirationDate, int itemId, int goodsReceiptId, string? sublotUnit)
+    public GoodsReceiptLot(string goodsReceiptLotId, string? locationId, double quantity, 
+        DateTime? productionDate, DateTime? expirationDate, int itemId, int goodsReceiptId)
     {
         GoodsReceiptLotId = goodsReceiptLotId;
         LocationId = locationId;
@@ -26,8 +26,7 @@ public class GoodsReceiptLot
         ItemId = itemId;
         GoodsReceiptId = goodsReceiptId;
     }
-    public GoodsReceiptLot(string goodsReceiptLotId, double quantity, string unit, double? sublotSize, string? sublotUnit, 
-        string purchaseOrderNumber, Employee employee, Item item, string? note, int goodsReceiptId)
+    public GoodsReceiptLot(string goodsReceiptLotId, double quantity, Employee employee, Item item, string? note, int goodsReceiptId)
     {
         GoodsReceiptLotId = goodsReceiptLotId;
         Quantity = quantity;

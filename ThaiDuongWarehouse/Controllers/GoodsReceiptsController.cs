@@ -105,27 +105,6 @@ public class GoodsReceiptsController : ControllerBase
     }
 
     [HttpPatch]
-    [Route("Confirm/{goodsReceiptId}")]
-    public async Task<IActionResult> PatchAsync([FromRoute] string goodsReceiptId)
-    {
-        ConfirmGoodsReceiptCommand command = new (goodsReceiptId);
-        try
-        {
-            var result = await _mediator.Send(command);
-
-            if (!result)
-            {
-                return BadRequest();
-            }
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpPatch]
     [Route("Reconfirm/{goodsReceiptId}")]
     public async Task<IActionResult> UpdateConfirmedGoodsReceiptAsync(string goodsReceiptId, List<UpdateConfirmedGoodsReceiptLotViewModel> goodsReceiptLots)
     {

@@ -41,9 +41,13 @@ public class GoodsReceipt : Entity, IAggregateRoot
 
     public void AddLot(GoodsReceiptLot goodsReceiptLot)
     {
-        if (goodsReceiptLot is null)
-            throw new ArgumentNullException(nameof(goodsReceiptLot));
-
+        foreach(var existedLot in Lots)
+        {
+            if (existedLot.GoodsReceiptLotId == goodsReceiptLot.GoodsReceiptLotId)
+            {
+                throw new WarehouseDomainException($"GoodsReceiptLot with Id {goodsReceiptLot.GoodsReceiptLotId} existed in this GoodsReceipt.");
+            }
+        }
         Lots.Add(goodsReceiptLot);
     }
 
@@ -76,15 +80,15 @@ public class GoodsReceipt : Entity, IAggregateRoot
 
     public void AddLogEntry(string lotId, int itemId, double quantity)
     {
-        AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lotId, quantity, itemId));
+        AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lotId, quantity, itemId, DateTime.Now));
     }
 
     public void Confirm(List<ItemLot> itemLots)
     {
-        this.AddDomainEvent(new ItemLotsImportedDomainEvent(itemLots));
+        AddDomainEvent(new ItemLotsImportedDomainEvent(itemLots));
         foreach (var lot in itemLots)
         {
-            this.AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.LotId, lot.Quantity, lot.ItemId));
+            AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.LotId, lot.Quantity, lot.ItemId, lot.Timestamp));
         }
     }
 }

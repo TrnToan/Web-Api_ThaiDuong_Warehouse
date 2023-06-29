@@ -12,9 +12,7 @@ public class ItemLotsImportedDomainEventHandler : INotificationHandler<ItemLotsI
 
     public Task Handle(ItemLotsImportedDomainEvent notification, CancellationToken cancellationToken)
     {
-        List<ItemLot> addedLots = notification.ItemLots;
-        
-        _itemLotRepository.Addlots(addedLots);
+        _itemLotRepository.Addlots(notification.ItemLots);
         return Task.CompletedTask;
     }
 }

@@ -5,8 +5,8 @@ public class CreateGoodsReceiptCommandHandler : IRequestHandler<CreateGoodsRecei
     private readonly IGoodsReceiptRepository _goodsReceiptRepository;
     private readonly IItemRepository _itemRepository;
     private readonly IEmployeeRepository _employeeRepository;
-    public CreateGoodsReceiptCommandHandler(IGoodsReceiptRepository goodsReceiptRepository,
-        IItemRepository itemRepository, IEmployeeRepository employeeRepository)
+    public CreateGoodsReceiptCommandHandler(IGoodsReceiptRepository goodsReceiptRepository, IItemRepository itemRepository, 
+        IEmployeeRepository employeeRepository)
     {
         _goodsReceiptRepository = goodsReceiptRepository;
         _itemRepository = itemRepository;
@@ -21,32 +21,33 @@ public class CreateGoodsReceiptCommandHandler : IRequestHandler<CreateGoodsRecei
             throw new EntityNotFoundException($"Employee in the GoodsReceipt {request.GoodsReceiptId} doesn't exist in the context.");
         }
    
-        var goodsReceipt = new GoodsReceipt(request.GoodsReceiptId, request.Supplier, request.Timestamp, 
-            goodsReceiptEmployee);
+        var goodsReceipt = new GoodsReceipt(request.GoodsReceiptId, request.Supplier, DateTime.Now, goodsReceiptEmployee);
+        var itemLots = new List<ItemLot>();
         
         foreach (var receiptLotViewModel in request.GoodsReceiptLots)
         {
-            var item = await _itemRepository.GetItemById(receiptLotViewModel.ItemId, receiptLotViewModel.Unit);
+            Item? item = await _itemRepository.GetItemById(receiptLotViewModel.ItemId, receiptLotViewModel.Unit);
             if (item is null)
             {
                 throw new EntityNotFoundException($"Item with Id {receiptLotViewModel.ItemId} and unit {receiptLotViewModel.Unit} doesn't exist.");
             }
 
-            var employee = await _employeeRepository.GetEmployeeById(receiptLotViewModel.EmployeeId);
+            Employee? employee = await _employeeRepository.GetEmployeeById(receiptLotViewModel.EmployeeId);
             if (employee is null)
             {
                 throw new EntityNotFoundException($"Employee with Id {receiptLotViewModel.EmployeeId} doesn't exist.");
             }
 
-            var goodsReceiptLot = new GoodsReceiptLot(receiptLotViewModel.GoodsReceiptLotId, receiptLotViewModel.Quantity,
-                receiptLotViewModel.Unit, receiptLotViewModel.SublotSize, receiptLotViewModel.SublotUnit, receiptLotViewModel.PurchaseOrderNumber,
+            GoodsReceiptLot goodsReceiptLot = new (receiptLotViewModel.GoodsReceiptLotId, receiptLotViewModel.Quantity,
                 employee, item, receiptLotViewModel.Note, goodsReceipt.Id);
+            ItemLot itemLot = new (receiptLotViewModel.GoodsReceiptLotId, receiptLotViewModel.Quantity, DateTime.Now, item.Id);
 
+            itemLots.Add(itemLot);
             goodsReceipt.AddLot(goodsReceiptLot);
         }
+        goodsReceipt.Confirm(itemLots);
 
         _goodsReceiptRepository.Add(goodsReceipt);
-
         return await _goodsReceiptRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
     }
 }

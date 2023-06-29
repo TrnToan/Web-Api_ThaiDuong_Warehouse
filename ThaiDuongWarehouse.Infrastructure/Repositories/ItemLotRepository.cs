@@ -11,7 +11,7 @@ public class ItemLotRepository : BaseRepository, IItemLotRepository
 
     public void Addlots(IEnumerable<ItemLot> itemLots)
     {
-        _context.ItemLots.AddRange(itemLots);
+        _context.ItemLots.AddRangeAsync(itemLots);
     }
 
     public async Task<IEnumerable<ItemLot>> GetIsolatedItemLots()

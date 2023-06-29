@@ -7,12 +7,12 @@ public class ItemLot : Entity, IAggregateRoot
     public DateTime? ProductionDate { get; private set; }
     public DateTime? ExpirationDate { get; private set; }
     public bool IsIsolated { get; private set; } = false;
-    public int LocationId { get; private set; }             // ForeignKey
+    public int? LocationId { get; private set; }             // ForeignKey
     public int ItemId { get; private set; }                 // ForeignKey
     public Location? Location { get; private set; }
     public Item Item { get; private set; }
 
-    public ItemLot(string lotId, int locationId, int itemId, double quantity, DateTime timestamp,
+    public ItemLot(string lotId, int? locationId, int itemId, double quantity, DateTime timestamp,
         DateTime? productionDate, DateTime? expirationDate)
     {
         LotId = lotId;
@@ -22,6 +22,14 @@ public class ItemLot : Entity, IAggregateRoot
         Timestamp = timestamp;
         ProductionDate = productionDate;
         ExpirationDate = expirationDate;
+    }
+
+    public ItemLot(string lotId, double quantity, DateTime timestamp, int itemId)
+    {
+        LotId = lotId;
+        Quantity = quantity;
+        Timestamp = timestamp;
+        ItemId = itemId;
     }
 
     public void SetQuantity(double quantity)
@@ -46,6 +54,6 @@ public class ItemLot : Entity, IAggregateRoot
     }
     public static void Reject(ItemLot lot)
     {
-        lot.AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.LotId, -lot.Quantity, lot.ItemId));
+        lot.AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.LotId, -lot.Quantity, lot.ItemId, DateTime.Now));
     }
 }

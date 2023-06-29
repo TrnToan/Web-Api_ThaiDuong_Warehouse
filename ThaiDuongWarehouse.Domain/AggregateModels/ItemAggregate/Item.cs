@@ -18,8 +18,7 @@ public class Item : Entity, IAggregateRoot
         PacketUnit = packetUnit;
     }
 
-    public Item(string itemId, string itemClassId, string unit, string itemName,
-        double minimumStockLevel, decimal? price)
+    public Item(string itemId, string itemClassId, string unit, string itemName, double minimumStockLevel, decimal? price)
     {
         ItemId = itemId;
         ItemClassId = itemClassId;

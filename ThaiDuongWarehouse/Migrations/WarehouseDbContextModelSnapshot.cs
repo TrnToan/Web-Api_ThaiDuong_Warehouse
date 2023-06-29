@@ -335,7 +335,7 @@ namespace ThaiDuongWarehouse.Api.Migrations
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
 
-                    b.Property<int>("LocationId")
+                    b.Property<int?>("LocationId")
                         .HasColumnType("int");
 
                     b.Property<string>("LotId")
@@ -764,9 +764,7 @@ namespace ThaiDuongWarehouse.Api.Migrations
 
                     b.HasOne("ThaiDuongWarehouse.Domain.AggregateModels.StorageAggregate.Location", "Location")
                         .WithMany("ItemLots")
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LocationId");
 
                     b.Navigation("Item");
 

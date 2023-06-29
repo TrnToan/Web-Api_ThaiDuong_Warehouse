@@ -7,8 +7,6 @@ public class CreateGoodsReceiptCommand : IRequest<bool>
     [DataMember]
     public string GoodsReceiptId { get; set; }
     [DataMember]
-    public DateTime Timestamp { get; set; } = DateTime.Now;
-    [DataMember]
     public string? Supplier { get; set; }
     [DataMember]
     public string EmployeeId { get; set; }
