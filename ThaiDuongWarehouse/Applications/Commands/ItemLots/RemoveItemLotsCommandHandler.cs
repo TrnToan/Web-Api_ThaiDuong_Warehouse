@@ -23,7 +23,7 @@ public class RemoveItemLotsCommandHandler : IRequestHandler<RemoveItemLotsComman
         {
             throw new EntityNotFoundException("It is not allowed to delete unisolated lot.");
         }           
-        ItemLot.Reject(lot);
+        //ItemLot.Reject(lot);
         _itemLotRepository.RemoveLot(lot);
         return await _itemLotRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
     }

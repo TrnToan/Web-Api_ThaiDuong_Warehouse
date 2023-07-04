@@ -40,9 +40,9 @@ public class ItemLot : Entity, IAggregateRoot
     {
         Quantity = quantity;
     }
-    public void UpdateConfirmedLot(int locationId, double quantity, string? purchaseOrderNumber, DateTime? productionDate, 
-        DateTime? expirationDate)
+    public void UpdateExistedLot(string lotId, int? locationId, double quantity, DateTime? productionDate, DateTime? expirationDate)
     {
+        LotId = lotId;
         LocationId = locationId;
         Quantity = quantity;
         ProductionDate = productionDate;
@@ -54,6 +54,6 @@ public class ItemLot : Entity, IAggregateRoot
     }
     public static void Reject(ItemLot lot)
     {
-        lot.AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.LotId, -lot.Quantity, lot.ItemId, DateTime.Now));
+        //lot.AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.LotId, -lot.Quantity, lot.ItemId, DateTime.Now));
     }
 }

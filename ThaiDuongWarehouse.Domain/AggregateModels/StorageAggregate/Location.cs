@@ -7,7 +7,7 @@ public class Location : Entity
 
     public Location(string locationId, int warehouseId)
     {
-        LocationId = locationId;
+        LocationId = locationId; 
         ItemLots = new List<ItemLot>();
         WarehouseId = warehouseId;
     }

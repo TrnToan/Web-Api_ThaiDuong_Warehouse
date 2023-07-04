@@ -14,20 +14,6 @@ public class GoodsReceiptRepository : BaseRepository, IGoodsReceiptRepository
             return goodsReceipt;
     }
 
-    //public async Task<IEnumerable<GoodsReceipt>> GetConfirmedGoodsReceipt()
-    //{
-    //    return await _context.GoodsReceipts
-    //        .Where(gr => gr.IsConfirmed)
-    //        .ToListAsync();
-    //}
-
-    //public async Task<IEnumerable<GoodsReceipt>> GetUnConfirmedGoodsReceipt()
-    //{
-    //    return await _context.GoodsReceipts
-    //        .Where(gr => !gr.IsConfirmed)
-    //        .ToListAsync();
-    //}
-
     public async Task<GoodsReceipt?> GetGoodsReceiptById(string goodsReceiptId)
     {
         return await _context.GoodsReceipts

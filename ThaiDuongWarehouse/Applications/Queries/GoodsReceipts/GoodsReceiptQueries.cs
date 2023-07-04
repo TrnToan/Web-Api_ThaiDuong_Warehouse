@@ -1,4 +1,4 @@
-﻿using GoodsReceipt = ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate.GoodsReceipt;
+﻿using ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate;
 
 namespace ThaiDuongWarehouse.Api.Applications.Queries.GoodsReceipt;
 
@@ -26,20 +26,24 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
         return _mapper.Map<IEnumerable<GoodsReceiptViewModel>>(goodsReceipts);
     }
 
-    //public async Task<IEnumerable<GoodsReceiptViewModel>> GetConfirmedGoodsReceipt()
-    //{
-    //    var goodsReceipts = await _context.GoodsReceipts
-    //        .AsNoTracking()
-    //        .Include(gr => gr.Employee)
-    //        .Include(gr => gr.Lots)
-    //            .ThenInclude(grl => grl.Item)
-    //        .Include(gr => gr.Lots)
-    //            .ThenInclude(grl => grl.Employee)
-    //        .Where(gr => gr.IsConfirmed == true)
-    //        .ToListAsync();
+    public async Task<IEnumerable<GoodsReceiptViewModel>> GetCompletedGoodsReceipts()
+    {
+        var goodsReceipts = await _context.GoodsReceipts
+            .AsNoTracking()
+            .Include(gr => gr.Employee)
+            .Include(g => g.Lots)
+                .ThenInclude(grl => grl.Item)
+            .Include(gr => gr.Lots)
+                .ThenInclude(gr => gr.Employee)
+            .Where(g => g.Lots
+                .All(lot => lot.LocationId != null &&
+                          lot.ProductionDate != null &&
+                          lot.ExpirationDate != null))
+            .ToListAsync();
 
-    //    return _mapper.Map<IEnumerable<GoodsReceiptViewModel>>(goodsReceipts);
-    //}
+        var goodsReceiptViewModels = _mapper.Map<IEnumerable<GoodsReceiptViewModel>>(goodsReceipts);
+        return goodsReceiptViewModels;
+    }
 
     public async Task<GoodsReceiptViewModel?> GetGoodsReceiptById(string goodsReceiptId)
     {
@@ -55,37 +59,26 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
         return _mapper.Map<GoodsReceiptViewModel?>(goodsReceipt);
     }
 
-    //public async Task<IEnumerable<GoodsReceiptViewModel>> GetGoodsReceiptsByTime(TimeRangeQuery query)
-    //{
-    //    var goodsReceipts = await _context.GoodsReceipts
-    //        .AsNoTracking()
-    //        .Include(gr => gr.Employee)
-    //        .Include(gr => gr.Lots)
-    //            .ThenInclude(grl => grl.Item)
-    //        .Include(gr => gr.Lots)
-    //            .ThenInclude(grl => grl.Employee)
-    //        .Where(gr =>
-    //        gr.Timestamp.CompareTo(query.StartTime) >= 0 &&
-    //        gr.Timestamp.CompareTo(query.EndTime) <= 0)
-    //        .Where(gr => gr.IsConfirmed == true)
-    //        .OrderByDescending(gr => gr.Timestamp)
-    //        .ToListAsync();
+    public async Task<IEnumerable<GoodsReceiptViewModel>> GetGoodsReceiptsByTime(TimeRangeQuery query, bool isCompleted)
+    {
+        IEnumerable<GoodsReceiptViewModel> goodsReceipts;
+        if (isCompleted)
+        {
+            goodsReceipts = await GetCompletedGoodsReceipts();           
+        }
+        else
+        {
+            goodsReceipts = await GetUnCompletedGoodsReceipts();
+        }
+        var resultedGoodsReceipts = goodsReceipts
+                .Where(gr => gr.Timestamp >= query.StartTime
+                && gr.Timestamp <= query.EndTime)
+                .Skip((query.Page - 1) * query.ItemsPerPage)
+                .Take(query.ItemsPerPage)
+                .ToList();
 
-    //    return _mapper.Map<IEnumerable<Domain.AggregateModels.GoodsReceiptAggregate.GoodsReceipt> ,IEnumerable<GoodsReceiptViewModel>>(goodsReceipts);
-    //}
-
-    //public async Task<IList<string?>> GetPOs()
-    //{
-    //    var purchaseOrderNumbers = await _context.GoodsReceipts
-    //        .AsNoTracking()
-    //        .SelectMany(gr => gr.Lots)
-    //        .Where(lot => lot.PurchaseOrderNumber != null)
-    //        .Select(lot => lot.PurchaseOrderNumber)
-    //        .Distinct()
-    //        .ToListAsync();
-
-    //    return purchaseOrderNumbers;
-    //}
+        return resultedGoodsReceipts;
+    }
 
     public async Task<IList<string?>> GetSuppliers()
     {
@@ -98,21 +91,22 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
         return suppliers;
     }
 
-    //public async Task<IEnumerable<GoodsReceiptViewModel>> GetUnConfirmedGoodsReceipt()
-    //{
-    //    var goodsReceipts = await _context.GoodsReceipts
-    //        .AsNoTracking()
-    //        .Include(gr => gr.Employee)
-    //        .Include(gr => gr.Lots)
-    //            .ThenInclude(grl => grl.Item)
-    //        .Include(gr => gr.Lots)
-    //            .ThenInclude(grl => grl.Employee)
-    //        .Where(gr => gr.IsConfirmed == false)
-    //        .ToListAsync();
+    public async Task<IEnumerable<GoodsReceiptViewModel>> GetUnCompletedGoodsReceipts()
+    {
+        var goodsReceipts = await _context.GoodsReceipts
+            .AsNoTracking()
+            .Include(g => g.Employee)
+            .Include(g => g.Lots)
+                .ThenInclude(grl => grl.Item)
+            .Include(gr => gr.Lots)
+                .ThenInclude(gr => gr.Employee)
+            .Where(g => g.Lots
+                .Any(lot => lot.LocationId == null ||
+                          lot.ProductionDate == null ||
+                          lot.ExpirationDate == null))
+            .ToListAsync();
 
-    //    var goodsReceiptViewModels = _mapper.Map<IEnumerable<GoodsReceiptViewModel>>(goodsReceipts);
-    //    return goodsReceiptViewModels;
-    //}
-
-    
+        var goodsReceiptViewModels = _mapper.Map<IEnumerable<GoodsReceiptViewModel>>(goodsReceipts);
+        return goodsReceiptViewModels;
+    }
 }

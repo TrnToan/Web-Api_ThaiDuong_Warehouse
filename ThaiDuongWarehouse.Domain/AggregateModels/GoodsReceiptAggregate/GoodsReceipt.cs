@@ -15,28 +15,18 @@ public class GoodsReceipt : Entity, IAggregateRoot
         Supplier = supplier;
         Timestamp = timestamp;
         Lots = new List<GoodsReceiptLot>();
-        Employee = employee;       
+        Employee = employee;      
     }
 
-    public void UpdateLot(string lotId, double quantity, string locationId, DateTime productionDate, DateTime expirationDate, string? note)
+    public void UpdateLot(string oldLotId, string? newLowId, double quantity, string? locationId, DateTime? productionDate, 
+        DateTime? expirationDate, string? note)
     {
-        var lot = Lots.FirstOrDefault(e => e.GoodsReceiptLotId == lotId);
+        string lotId = newLowId ?? oldLotId;
+        var lot = Lots.FirstOrDefault(gr => gr.GoodsReceiptLotId == oldLotId);
         if (lot == null)
-        {
-            throw new WarehouseDomainException("Lot doesn't exist in the current GoodsReceipt");
-        }
-        lot.Update(quantity, locationId, productionDate, expirationDate, note);
-    }
+            throw new WarehouseDomainException($"GoodsReceiptLot with Id {lotId} does not exist.");
 
-    public void UpdateConfirmedLot(string lotId, double quantity, string? purchaseOrderNumber, string? locationId, 
-        DateTime? productionDate, DateTime? expirationDate)
-    {
-        var lot = Lots.FirstOrDefault(e => e.GoodsReceiptLotId == lotId);
-        if (lot == null)
-        {
-            throw new WarehouseDomainException("Lot doesn't exist in the current GoodsReceipt.");
-        }
-        lot.UpdateConfirmedLot(quantity, purchaseOrderNumber, locationId, productionDate, expirationDate);
+        lot.Update(lotId, quantity, locationId, productionDate, expirationDate, note);
     }
 
     public void AddLot(GoodsReceiptLot goodsReceiptLot)
@@ -51,36 +41,43 @@ public class GoodsReceipt : Entity, IAggregateRoot
         Lots.Add(goodsReceiptLot);
     }
 
-    public void RemoveLot(string goodsReceiptLotId)
+    public void RemoveLot(GoodsReceiptLot goodsReceiptLot)
     {
-        var lot = Lots.FirstOrDefault(e => e.GoodsReceiptLotId == goodsReceiptLotId);
-        if (lot == null)
+        if (goodsReceiptLot == null)
         {
-            throw new WarehouseDomainException("Lot doesn't exist in the current GoodsReceipt.");
+            throw new WarehouseDomainException($"GoodsReceiptLot does not exist.");
         }
-        Lots.Remove(lot);
+        Lots.Remove(goodsReceiptLot);
     }
 
-    public void SetQuantity(string lotId, double quantity)
+    public void RemoveItemLotEntities(List<GoodsReceiptLot> lots)
     {
-        var lot = Lots.First(lot => lot.GoodsReceiptLotId == lotId);
-        if (lot == null)
-        {
-            throw new WarehouseDomainException("Lot doesn't exist in the current GoodsReceipt.");
-        }
-        lot.SetQuantity(quantity);
+        AddDomainEvent(new RemoveItemLotsDomainEvent(lots));
     }
 
-    //public void UpdateItemLot(string lotId, int locationId, int itemId, double quantity, 
-    //    double? sublotSize, string? sublotUnit, string? purchaseOrderNumber, DateTime? productionDate, DateTime? expirationDate)
-    //{
-    //    this.AddDomainEvent(new UpdateItemLotDomainEvent(lotId, locationId, itemId, quantity, sublotSize,
-    //        sublotUnit, purchaseOrderNumber, productionDate, expirationDate));
-    //}
-
-    public void AddLogEntry(string lotId, int itemId, double quantity)
+    public void UpdateItemLotEntity(string oldLotId, string? newLotId, Location? location, double quantity, 
+        DateTime? productionDate, DateTime? expirationDate)
     {
-        AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lotId, quantity, itemId, DateTime.Now));
+        AddDomainEvent(new UpdateItemLotDomainEvent(oldLotId, newLotId, location, quantity, productionDate, expirationDate));
+    }
+
+    public void AddUpdatedGoodsReceiptLogEntry(string lotId, int itemId, double changedQuantity, DateTime timestamp)
+    {
+        double receivedQuantity = changedQuantity;
+        double shippedQuantity = 0;
+        AddDomainEvent(new InventoryLogEntryAddedDomainEvent(lotId, changedQuantity, receivedQuantity, shippedQuantity, itemId, timestamp));
+    }
+
+    public void AddDeletedGoodsReceiptLotLogEntry(string lotId, int itemId, double changedQuantity, DateTime timestamp)
+    {
+        double receivedQuantity = 0, shippedQuantity = 0;
+        AddDomainEvent(new InventoryLogEntryAddedDomainEvent(lotId, changedQuantity, receivedQuantity, shippedQuantity, itemId,
+            timestamp));
+    }
+
+    public void UpdateLogEntry(string newLotId, string oldLotId, int ItemId, DateTime timestamp)
+    {
+        AddDomainEvent(new InventoryLogEntryChangedDomainEvent(oldLotId, newLotId, ItemId, timestamp));
     }
 
     public void Confirm(List<ItemLot> itemLots)
@@ -88,7 +85,9 @@ public class GoodsReceipt : Entity, IAggregateRoot
         AddDomainEvent(new ItemLotsImportedDomainEvent(itemLots));
         foreach (var lot in itemLots)
         {
-            AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.LotId, lot.Quantity, lot.ItemId, lot.Timestamp));
+            double receivedQuantity = lot.Quantity;
+            AddDomainEvent(new InventoryLogEntryAddedDomainEvent(lot.LotId, lot.Quantity, receivedQuantity, 0, 
+                lot.ItemId, lot.Timestamp));
         }
     }
 }

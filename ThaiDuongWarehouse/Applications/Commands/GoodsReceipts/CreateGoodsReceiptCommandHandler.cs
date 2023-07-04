@@ -10,7 +10,7 @@ public class CreateGoodsReceiptCommandHandler : IRequestHandler<CreateGoodsRecei
     {
         _goodsReceiptRepository = goodsReceiptRepository;
         _itemRepository = itemRepository;
-        _employeeRepository = employeeRepository;
+        _employeeRepository = employeeRepository; 
     }
 
     public async Task<bool> Handle(CreateGoodsReceiptCommand request, CancellationToken cancellationToken)
@@ -40,7 +40,7 @@ public class CreateGoodsReceiptCommandHandler : IRequestHandler<CreateGoodsRecei
 
             GoodsReceiptLot goodsReceiptLot = new (receiptLotViewModel.GoodsReceiptLotId, receiptLotViewModel.Quantity,
                 employee, item, receiptLotViewModel.Note, goodsReceipt.Id);
-            ItemLot itemLot = new (receiptLotViewModel.GoodsReceiptLotId, receiptLotViewModel.Quantity, DateTime.Now, item.Id);
+            ItemLot itemLot = new (receiptLotViewModel.GoodsReceiptLotId, receiptLotViewModel.Quantity, goodsReceipt.Timestamp, item.Id);
 
             itemLots.Add(itemLot);
             goodsReceipt.AddLot(goodsReceiptLot);

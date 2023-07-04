@@ -9,6 +9,8 @@ public class InventoryLogEntryEntityTypeConfiguration : IEntityTypeConfiguration
         builder.Property(log => log.Timestamp).IsRequired();
         builder.Property(log => log.BeforeQuantity).IsRequired();
         builder.Property(log => log.ChangedQuantity).IsRequired();
+        builder.Property(log => log.ShippedQuantity);
+        builder.Property(log => log.ReceivedQuantity);
 
         builder.HasOne(log => log.Item).WithMany().HasForeignKey(log => log.ItemId);
     }

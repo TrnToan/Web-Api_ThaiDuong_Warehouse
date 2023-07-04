@@ -8,7 +8,7 @@ public class CreateGoodsReceiptCommand : IRequest<bool>
     public string GoodsReceiptId { get; set; }
     [DataMember]
     public string? Supplier { get; set; }
-    [DataMember]
+    [DataMember] 
     public string EmployeeId { get; set; }
     [DataMember]
     public List<CreateGoodsReceiptLotViewModel> GoodsReceiptLots { get; set; }

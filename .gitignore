@@ -1,0 +1,11 @@
+/system/
+/config/
+
+/ThaiDuongWarehouse.Domain/bin/
+/ThaiDuongWarehouse.Domain/obj/
+
+/ThaiDuongWarehouse.Infrastructure/bin/
+/ThaiDuongWarehouse.Infrastructure/obj/
+
+/ThaiDuongWarehouse/bin/
+/ThaiDuongWarehouse/obj/

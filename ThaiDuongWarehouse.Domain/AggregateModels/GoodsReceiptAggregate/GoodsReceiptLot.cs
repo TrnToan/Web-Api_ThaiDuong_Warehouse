@@ -1,6 +1,7 @@
 ﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate;
-public class GoodsReceiptLot
+public class GoodsReceiptLot 
 {
+    public int Id { get; set; }         
     public string GoodsReceiptLotId { get; private set; }
     public string? LocationId { get; private set; }
     public double Quantity { get; private set; }
@@ -10,7 +11,6 @@ public class GoodsReceiptLot
     // Foreign Key
     public int ItemId { get; private set; }                      
     public int GoodsReceiptId { get; private set; }
-
     public Item Item { get; private set; }
     public Employee Employee { get; private set; }
 
@@ -36,13 +36,23 @@ public class GoodsReceiptLot
         GoodsReceiptId = goodsReceiptId;
     }
 
-    public void Update(double quantity, string locationId, DateTime? productionDate, DateTime? expirationDate, string? note)
+    public void Update(string newLotId, double quantity, string? locationId, 
+        DateTime? productionDate, DateTime? expirationDate, string? note)
     {
+        GoodsReceiptLotId = newLotId;
         Quantity = quantity;
-        LocationId = locationId;
-        ProductionDate = productionDate;
-        ExpirationDate = expirationDate;
-        Note = note;
+
+        if (locationId != null) 
+            LocationId = locationId;
+
+        if (productionDate != null) 
+            ProductionDate = productionDate;
+
+        if (expirationDate != null) 
+            ExpirationDate = expirationDate;
+
+        if (note != null)
+            Note = note;
     }
 
     public void UpdateConfirmedLot(double quantity, string? purchaseOrderNumber, string? locationId,

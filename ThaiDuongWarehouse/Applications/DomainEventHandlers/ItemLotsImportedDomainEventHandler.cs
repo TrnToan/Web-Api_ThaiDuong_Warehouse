@@ -16,3 +16,4 @@ public class ItemLotsImportedDomainEventHandler : INotificationHandler<ItemLotsI
         return Task.CompletedTask;
     }
 }
+ 

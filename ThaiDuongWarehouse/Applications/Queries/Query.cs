@@ -2,6 +2,6 @@
 
 public class Query
 {
-    public uint Page { get; set; } = 1;
-    public uint ItemsPerPage { get; set; } = 20;
+    public int Page { get; set; } = 1;
+    public int ItemsPerPage { get; set; } = 20;
 }

@@ -10,11 +10,14 @@ public class InventoryLogEntryRepository : BaseRepository, IInventoryLogEntryRep
         _context.InventoryLogEntries.AddAsync(logEntry);
     }
 
-    public async Task<IEnumerable<InventoryLogEntry>> GetAll()
+    public void Update(InventoryLogEntry logEntry)
     {
-        return await _context.InventoryLogEntries
-            .OrderByDescending(i => i.Timestamp)
-            .ToListAsync();
+        _context.InventoryLogEntries.Update(logEntry);
+    }
+
+    public void Remove(InventoryLogEntry logEntry)
+    {
+        _context.InventoryLogEntries.Remove(logEntry);
     }
 
     public async Task<IEnumerable<InventoryLogEntry>> GetByItem(string itemId)
@@ -41,8 +44,8 @@ public class InventoryLogEntryRepository : BaseRepository, IInventoryLogEntryRep
     public async Task<InventoryLogEntry?> GetLatestLogEntry(int itemId)
     {
         return await _context.InventoryLogEntries
-            .OrderByDescending(log => log.Timestamp)
             .Include(log => log.Item)
+            .OrderByDescending(log => log.Id)
             .FirstOrDefaultAsync(log => log.Item.Id == itemId);
     }
 
@@ -50,6 +53,6 @@ public class InventoryLogEntryRepository : BaseRepository, IInventoryLogEntryRep
     {
         return await _context.InventoryLogEntries
             .Where(log => log.Timestamp == timestamp)
-            .FirstOrDefaultAsync(log => log.ItemLotId == lotId);
+            .SingleOrDefaultAsync(log => log.ItemLotId == lotId);
     }
 }

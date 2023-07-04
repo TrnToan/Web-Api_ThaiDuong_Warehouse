@@ -1,6 +1,4 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate;
-
-namespace ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductReceiptAggregate;
+﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductReceiptAggregate;
 public class FinishedProductReceiptEntry
 {
     public int Id { get; private set; }

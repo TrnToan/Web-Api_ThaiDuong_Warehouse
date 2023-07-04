@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ThaiDuongWarehouse.Api.Applications.Commands.GoodsReceipts;
+﻿using ThaiDuongWarehouse.Api.Applications.Commands.GoodsReceipts;
 using ThaiDuongWarehouse.Api.Applications.Queries;
 
 namespace ThaiDuongWarehouse.Api.Controllers;
@@ -23,19 +22,19 @@ public class GoodsReceiptsController : ControllerBase
         return await _queries.GetGoodsReceiptById(goodsReceiptId);
     }
 
-    //[HttpGet]
-    //[Route("goodsReceipts/{isConfirmed}")]
-    //public async Task<IEnumerable<GoodsReceiptViewModel>> GetIsConfirmedGoodsReceiptsAsync(bool isConfirmed)
-    //{
-    //    if (isConfirmed)
-    //    {
-    //        return await _queries.GetConfirmedGoodsReceipt();
-    //    }
-    //    else
-    //    {
-    //        return await _queries.GetUnConfirmedGoodsReceipt();
-    //    }
-    //}
+    [HttpGet]
+    [Route("goodsReceipts/{isCompleted}")]
+    public async Task<IEnumerable<GoodsReceiptViewModel>> GetIsConfirmedGoodsReceiptsAsync(bool isCompleted)
+    {
+        if (isCompleted)
+        {
+            return await _queries.GetCompletedGoodsReceipts();
+        }
+        else
+        {
+            return await _queries.GetUnCompletedGoodsReceipts();
+        }
+    }
 
     [HttpGet]
     public async Task<IEnumerable<GoodsReceiptViewModel>> GetAllAsync()
@@ -43,12 +42,12 @@ public class GoodsReceiptsController : ControllerBase
         return await _queries.GetAll();
     }
 
-    //[HttpGet]
-    //[Route("TimeRange")]
-    //public async Task<IEnumerable<GoodsReceiptViewModel>> GetGoodsReceiptsAsync([FromQuery] TimeRangeQuery query)
-    //{
-    //    return await _queries.GetGoodsReceiptsByTime(query);
-    //}
+    [HttpGet]
+    [Route("TimeRange/{isCompleted}")]
+    public async Task<IEnumerable<GoodsReceiptViewModel>> GetGoodsReceiptsAsync(bool isCompleted, [FromQuery] TimeRangeQuery query)
+    {
+        return await _queries.GetGoodsReceiptsByTime(query, isCompleted);
+    }
 
     [HttpGet]
     [Route("Suppliers")]
@@ -56,13 +55,6 @@ public class GoodsReceiptsController : ControllerBase
     {
         return await _queries.GetSuppliers();
     }
-
-    //[HttpGet]
-    //[Route("PurchaseOrderNumbers")]
-    //public async Task<IList<string?>> GetPOsAsync()
-    //{
-    //    return await _queries.GetPOs();
-    //}
 
     [HttpPost]
     public async Task<IActionResult> PostAsync([FromBody] CreateGoodsReceiptCommand cmd)
@@ -105,31 +97,10 @@ public class GoodsReceiptsController : ControllerBase
     }
 
     [HttpPatch]
-    [Route("Reconfirm/{goodsReceiptId}")]
-    public async Task<IActionResult> UpdateConfirmedGoodsReceiptAsync(string goodsReceiptId, List<UpdateConfirmedGoodsReceiptLotViewModel> goodsReceiptLots)
+    [Route("{goodsReceiptId}/goodsReceiptLots")]
+    public async Task<IActionResult> RemoveLotsAsync([FromRoute] string goodsReceiptId, [FromBody] List<string> goodsReceiptLotIds)
     {
-        UpdateConfirmedGoodsReceiptCommand command = new (goodsReceiptId, goodsReceiptLots);
-        try
-        {
-            var result = await _mediator.Send(command);
-
-            if (!result)
-            {
-                return BadRequest();
-            }
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
-
-    [HttpDelete]
-    [Route("{goodsReceiptId}")]
-    public async Task<IActionResult> RemoveAsync([FromRoute] string goodsReceiptId)
-    {
-        RemoveGoodsReceiptCommand command = new(goodsReceiptId);
+        RemoveGoodsReceiptLotsCommand command = new(goodsReceiptId, goodsReceiptLotIds);
         try
         {
             var result = await _mediator.Send(command);

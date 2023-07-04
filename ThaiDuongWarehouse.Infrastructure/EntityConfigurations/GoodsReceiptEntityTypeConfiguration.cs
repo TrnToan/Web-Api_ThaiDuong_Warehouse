@@ -13,7 +13,8 @@ public class GoodsReceiptEntityTypeConfiguration : IEntityTypeConfiguration<Good
         {
             grl.WithOwner().HasForeignKey(l => l.GoodsReceiptId);
 
-            grl.HasKey(lot => lot.GoodsReceiptLotId);
+            grl.HasKey(lot => lot.Id);
+            grl.HasIndex(lot => lot.GoodsReceiptLotId).IsUnique();
             grl.Property(lot => lot.LocationId);
             grl.Property(lot => lot.Quantity).IsRequired();           
             grl.Property(lot => lot.ProductionDate);

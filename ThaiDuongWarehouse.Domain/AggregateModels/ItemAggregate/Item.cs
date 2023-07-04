@@ -4,7 +4,7 @@ public class Item : Entity, IAggregateRoot
     public string ItemId { get; private set; }
     public string ItemName { get; private set; }
     public string Unit { get; private set; }
-    public string ItemClassId { get; private set; }             // ForeignKey
+    public string ItemClassId { get; private set; }              // ForeignKey
     public double MinimumStockLevel { get; private set; }
     public decimal? Price { get; private set; }
     public double? SublotSize { get; private set; }

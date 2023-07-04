@@ -7,7 +7,7 @@ public class FinishedProductReceiptEntityTypeConfiguration : IEntityTypeConfigur
         builder.HasIndex(fpr => fpr.FinishedProductReceiptId).IsUnique();
         builder.Property(fpr => fpr.Timestamp);
 
-        builder.HasOne(fpr => fpr.Employee).WithMany().HasForeignKey(fpr =>  fpr.EmployeeId).IsRequired();
+        builder.HasOne(fpr => fpr.Employee).WithMany().HasForeignKey(fpr => fpr.EmployeeId).IsRequired();
         builder.OwnsMany(fpr => fpr.Entries, fpre =>
         {
             fpre.WithOwner().HasForeignKey(fpre => fpre.FinishedProductReceiptId);

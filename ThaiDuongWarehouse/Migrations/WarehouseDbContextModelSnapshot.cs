@@ -308,6 +308,12 @@ namespace ThaiDuongWarehouse.Api.Migrations
                     b.Property<string>("ItemLotId")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<double>("ReceivedQuantity")
+                        .HasColumnType("float");
+
+                    b.Property<double>("ShippedQuantity")
+                        .HasColumnType("float");
+
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
 
@@ -670,8 +676,11 @@ namespace ThaiDuongWarehouse.Api.Migrations
 
                     b.OwnsMany("ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate.GoodsReceiptLot", "Lots", b1 =>
                         {
-                            b1.Property<string>("GoodsReceiptLotId")
-                                .HasColumnType("nvarchar(450)");
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
 
                             b1.Property<int>("EmployeeId")
                                 .HasColumnType("int");
@@ -681,6 +690,10 @@ namespace ThaiDuongWarehouse.Api.Migrations
 
                             b1.Property<int>("GoodsReceiptId")
                                 .HasColumnType("int");
+
+                            b1.Property<string>("GoodsReceiptLotId")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(450)");
 
                             b1.Property<int>("ItemId")
                                 .HasColumnType("int");
@@ -697,11 +710,14 @@ namespace ThaiDuongWarehouse.Api.Migrations
                             b1.Property<double>("Quantity")
                                 .HasColumnType("float");
 
-                            b1.HasKey("GoodsReceiptLotId");
+                            b1.HasKey("Id");
 
                             b1.HasIndex("EmployeeId");
 
                             b1.HasIndex("GoodsReceiptId");
+
+                            b1.HasIndex("GoodsReceiptLotId")
+                                .IsUnique();
 
                             b1.HasIndex("ItemId");
 

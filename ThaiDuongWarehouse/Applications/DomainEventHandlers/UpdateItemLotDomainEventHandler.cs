@@ -13,18 +13,16 @@ public class UpdateItemLotDomainEventHandler : INotificationHandler<UpdateItemLo
 
     public async Task Handle(UpdateItemLotDomainEvent notification, CancellationToken cancellationToken)
     {
-        var itemLot = await _itemLotRepository.GetLotByLotId(notification.ItemLotId);     
+        var itemLot = await _itemLotRepository.GetLotByLotId(notification.OldItemLotId);     
 
         if (itemLot is null)
         {
-            var newLot = new ItemLot(notification.ItemLotId, notification.LocationId, notification.ItemId, notification.Quantity,              
-               DateTime.Now, notification.ProductionDate, notification.ExpirationDate);
-
-            _itemLotRepository.AddLot(newLot);
+            throw new EntityNotFoundException($"Itemlot with Id {notification.OldItemLotId} doesn't exist.");
         }
         else
         {
-            itemLot.UpdateConfirmedLot(notification.LocationId, notification.Quantity, notification.PurchaseOrderNumber,
+            string lotId = notification.NewItemLotId ?? notification.OldItemLotId;
+            itemLot.UpdateExistedLot(lotId, notification.Location.Id, notification.Quantity, 
                 notification.ProductionDate, notification.ExpirationDate);
 
             _itemLotRepository.UpdateLot(itemLot);

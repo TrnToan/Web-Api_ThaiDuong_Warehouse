@@ -3,10 +3,9 @@
 public interface IGoodsReceiptQueries
 {
     Task<IEnumerable<GoodsReceiptViewModel>> GetAll();
-    //Task<IEnumerable<GoodsReceiptViewModel>> GetConfirmedGoodsReceipt();
-    //Task<IEnumerable<GoodsReceiptViewModel>> GetUnConfirmedGoodsReceipt();
-    //Task<IEnumerable<GoodsReceiptViewModel>> GetGoodsReceiptsByTime(TimeRangeQuery query);
+    Task<IEnumerable<GoodsReceiptViewModel>> GetCompletedGoodsReceipts();
+    Task<IEnumerable<GoodsReceiptViewModel>> GetUnCompletedGoodsReceipts();
+    Task<IEnumerable<GoodsReceiptViewModel>> GetGoodsReceiptsByTime(TimeRangeQuery query, bool isCompleted);
     Task<IList<string?>> GetSuppliers();
-    //Task<IList<string?>> GetPOs();
     Task<GoodsReceiptViewModel?> GetGoodsReceiptById(string goodsReceiptId);   
 }
