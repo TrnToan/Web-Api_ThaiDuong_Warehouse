@@ -10,10 +10,18 @@ public class ItemLotsImportedDomainEventHandler : INotificationHandler<ItemLotsI
         _itemLotRepository = itemLotRepository;
     }
 
-    public Task Handle(ItemLotsImportedDomainEvent notification, CancellationToken cancellationToken)
+    public async Task Handle(ItemLotsImportedDomainEvent notification, CancellationToken cancellationToken)
     {
+        foreach (var lotId in notification.ItemLots.Select(lot => lot.LotId))
+        {
+            var isExistedItemLot = await _itemLotRepository.GetLotByLotId(lotId);
+            if (isExistedItemLot is not null)
+            {
+                throw new DuplicateRecordException($"ItemLot with Id {lotId} already existed.");
+            }
+        }
         _itemLotRepository.Addlots(notification.ItemLots);
-        return Task.CompletedTask;
+        await Task.CompletedTask;
     }
 }
  

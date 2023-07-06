@@ -7,16 +7,14 @@ public class ItemLot : Entity, IAggregateRoot
     public DateTime? ProductionDate { get; private set; }
     public DateTime? ExpirationDate { get; private set; }
     public bool IsIsolated { get; private set; } = false;
-    public int? LocationId { get; private set; }             // ForeignKey
     public int ItemId { get; private set; }                 // ForeignKey
-    public Location? Location { get; private set; }
+    public List<Location>? Locations { get; private set; }
     public Item Item { get; private set; }
 
-    public ItemLot(string lotId, int? locationId, int itemId, double quantity, DateTime timestamp,
+    public ItemLot(string lotId, int itemId, double quantity, DateTime timestamp,
         DateTime? productionDate, DateTime? expirationDate)
     {
         LotId = lotId;
-        LocationId = locationId;
         ItemId = itemId;
         Quantity = quantity;
         Timestamp = timestamp;
@@ -40,13 +38,21 @@ public class ItemLot : Entity, IAggregateRoot
     {
         Quantity = quantity;
     }
-    public void UpdateExistedLot(string lotId, int? locationId, double quantity, DateTime? productionDate, DateTime? expirationDate)
+    public void UpdateExistedLot(string lotId, List<Location>? locations, double quantity, DateTime? productionDate, DateTime? expirationDate)
     {
+        // Mã lô có thể là mã cũ hoặc mã mới (nếu người dùng thay đổi mã)
         LotId = lotId;
-        LocationId = locationId;
+        // Cập nhật lại các vị trí của lô nếu người dùng thay đổi thông tin 
+        if (locations is not null)
+            Locations = locations;
+
         Quantity = quantity;
-        ProductionDate = productionDate;
-        ExpirationDate = expirationDate;
+
+        if (productionDate is not null)
+            ProductionDate = productionDate;
+
+        if (expirationDate is not null)
+            ExpirationDate = expirationDate;
     }
     public void UpdateState(bool isIsolated)
     {

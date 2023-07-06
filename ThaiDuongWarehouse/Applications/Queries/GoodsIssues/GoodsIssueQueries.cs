@@ -24,6 +24,8 @@ public class GoodsIssueQueries : IGoodsIssueQueries
                 .ThenInclude(gie => gie.Lots)
                 .ThenInclude(gil => gil.Employee)
             .FirstOrDefaultAsync(gi => gi.GoodsIssueId == id);
+        if (goodsIssue is null)
+            throw new EntityNotFoundException($"GoodsIssue with Id {id} does not exist.");
 
         return _mapper.Map<GoodsIssue, GoodsIssueViewModel>(goodsIssue);
     }
@@ -94,7 +96,9 @@ public class GoodsIssueQueries : IGoodsIssueQueries
             .ToListAsync();
         
         var allReceivers = new List<string>();
-        allReceivers.AddRange(goodsIssueReceivers);
+        if (goodsIssueReceivers is not null)
+            allReceivers.AddRange(goodsIssueReceivers);
+
         allReceivers.AddRange(departmentReceivers);
 
         List<string> receivers = allReceivers

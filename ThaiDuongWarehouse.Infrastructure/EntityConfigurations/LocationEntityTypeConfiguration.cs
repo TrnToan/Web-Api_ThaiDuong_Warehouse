@@ -8,6 +8,6 @@ public class LocationEntityTypeConfiguration : IEntityTypeConfiguration<Location
         builder.Property(l => l.LocationId).IsRequired();
         builder.Ignore(d => d.DomainEvents);
 
-        builder.HasMany(i => i.ItemLots).WithOne(l => l.Location).HasForeignKey(l => l.LocationId);
+        builder.HasMany(i => i.ItemLots).WithMany(l => l.Locations);
     }   
 }

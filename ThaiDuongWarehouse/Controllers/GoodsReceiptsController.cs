@@ -76,7 +76,7 @@ public class GoodsReceiptsController : ControllerBase
     }
 
     [HttpPatch]
-    [Route("{goodsReceiptId}")]
+    [Route("{goodsReceiptId}/updatedGoodsReceiptLots")]
     public async Task<IActionResult> UpdateGoodsReceiptAsync(string goodsReceiptId, List<UpdateGoodsReceiptLotViewModel> goodsReceiptLots)
     {
         UpdateGoodsReceiptCommand command = new UpdateGoodsReceiptCommand(goodsReceiptId, goodsReceiptLots);
@@ -97,7 +97,28 @@ public class GoodsReceiptsController : ControllerBase
     }
 
     [HttpPatch]
-    [Route("{goodsReceiptId}/goodsReceiptLots")]
+    [Route("{goodsReceiptId}/addedGoodsReceiptLots")]
+    public async Task<IActionResult> RemoveLotsAsync([FromRoute] string goodsReceiptId, [FromBody] List<CreateGoodsReceiptLotViewModel> goodsReceiptLots)
+    {
+        AddLotsToGoodsReceiptCommand command = new(goodsReceiptId, goodsReceiptLots);
+        try
+        {
+            var result = await _mediator.Send(command);
+
+            if (!result)
+            {
+                return BadRequest();
+            }
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPatch]
+    [Route("{goodsReceiptId}/removedGoodsReceiptLots")]
     public async Task<IActionResult> RemoveLotsAsync([FromRoute] string goodsReceiptId, [FromBody] List<string> goodsReceiptLotIds)
     {
         RemoveGoodsReceiptLotsCommand command = new(goodsReceiptId, goodsReceiptLotIds);

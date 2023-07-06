@@ -14,7 +14,7 @@ public class WarningQueries : IWarningQueries
     {
         List<ItemLot> lots = await _context.ItemLots
             .AsNoTracking()
-            .Include(il => il.Location)
+            .Include(il => il.Locations)
             .Include(il => il.Item)
             .ToListAsync();
 
@@ -45,7 +45,7 @@ public class WarningQueries : IWarningQueries
         {
             List<ItemLot> lots = await _context.ItemLots
                 .AsNoTracking()
-                .Include(il => il.Location)
+                .Include(il => il.Locations)
                 .Include(il => il.Item)
                 .Where(il => il.Item.ItemId == item.ItemId)
                 .ToListAsync();

@@ -15,7 +15,6 @@ public class GoodsReceiptEntityTypeConfiguration : IEntityTypeConfiguration<Good
 
             grl.HasKey(lot => lot.Id);
             grl.HasIndex(lot => lot.GoodsReceiptLotId).IsUnique();
-            grl.Property(lot => lot.LocationId);
             grl.Property(lot => lot.Quantity).IsRequired();           
             grl.Property(lot => lot.ProductionDate);
             grl.Property(lot => lot.ExpirationDate);

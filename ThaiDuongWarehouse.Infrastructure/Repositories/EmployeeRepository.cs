@@ -17,7 +17,6 @@ public class EmployeeRepository : BaseRepository, IEmployeeRepository
     public async Task<IEnumerable<Employee>> GetAllAsync()
     {
         return await _context.Employees.ToListAsync();
-        // Khi dùng tới lệnh ToListAsync Database gọi tới Queries
     }
 
     public async Task<Employee?> GetEmployeeById(string employeeId)

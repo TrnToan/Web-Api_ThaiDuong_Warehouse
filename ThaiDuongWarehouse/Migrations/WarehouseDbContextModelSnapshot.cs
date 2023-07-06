@@ -22,6 +22,21 @@ namespace ThaiDuongWarehouse.Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("ItemLotLocation", b =>
+                {
+                    b.Property<int>("ItemLotsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LocationsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ItemLotsId", "LocationsId");
+
+                    b.HasIndex("LocationsId");
+
+                    b.ToTable("ItemLotLocation");
+                });
+
             modelBuilder.Entity("ThaiDuongWarehouse.Domain.AggregateModels.AdjustmentAggregate.LotAdjustment", b =>
                 {
                     b.Property<int>("Id")
@@ -341,9 +356,6 @@ namespace ThaiDuongWarehouse.Api.Migrations
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("LocationId")
-                        .HasColumnType("int");
-
                     b.Property<string>("LotId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -360,8 +372,6 @@ namespace ThaiDuongWarehouse.Api.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ItemId");
-
-                    b.HasIndex("LocationId");
 
                     b.HasIndex("LotId")
                         .IsUnique();
@@ -444,6 +454,21 @@ namespace ThaiDuongWarehouse.Api.Migrations
                         .IsUnique();
 
                     b.ToTable("Warehouses");
+                });
+
+            modelBuilder.Entity("ItemLotLocation", b =>
+                {
+                    b.HasOne("ThaiDuongWarehouse.Domain.AggregateModels.LotAggregate.ItemLot", null)
+                        .WithMany()
+                        .HasForeignKey("ItemLotsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ThaiDuongWarehouse.Domain.AggregateModels.StorageAggregate.Location", null)
+                        .WithMany()
+                        .HasForeignKey("LocationsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ThaiDuongWarehouse.Domain.AggregateModels.AdjustmentAggregate.LotAdjustment", b =>
@@ -698,9 +723,6 @@ namespace ThaiDuongWarehouse.Api.Migrations
                             b1.Property<int>("ItemId")
                                 .HasColumnType("int");
 
-                            b1.Property<string>("LocationId")
-                                .HasColumnType("nvarchar(max)");
-
                             b1.Property<string>("Note")
                                 .HasColumnType("nvarchar(max)");
 
@@ -778,13 +800,7 @@ namespace ThaiDuongWarehouse.Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ThaiDuongWarehouse.Domain.AggregateModels.StorageAggregate.Location", "Location")
-                        .WithMany("ItemLots")
-                        .HasForeignKey("LocationId");
-
                     b.Navigation("Item");
-
-                    b.Navigation("Location");
                 });
 
             modelBuilder.Entity("ThaiDuongWarehouse.Domain.AggregateModels.ProductInventoryAggregate.FinishedProductInventory", b =>
@@ -810,11 +826,6 @@ namespace ThaiDuongWarehouse.Api.Migrations
             modelBuilder.Entity("ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate.ItemClass", b =>
                 {
                     b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("ThaiDuongWarehouse.Domain.AggregateModels.StorageAggregate.Location", b =>
-                {
-                    b.Navigation("ItemLots");
                 });
 
             modelBuilder.Entity("ThaiDuongWarehouse.Domain.AggregateModels.StorageAggregate.Warehouse", b =>

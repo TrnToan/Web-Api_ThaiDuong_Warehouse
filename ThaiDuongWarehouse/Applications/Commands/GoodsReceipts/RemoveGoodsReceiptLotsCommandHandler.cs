@@ -1,5 +1,6 @@
 ﻿namespace ThaiDuongWarehouse.Api.Applications.Commands.GoodsReceipts;
 
+// Trường hợp người dùng nhập sai mã sản phẩm thì phải xoá đi GoodsReceiptLot chứa sản phẩm đó trong phiếu rồi add lô mới
 public class RemoveGoodsReceiptLotsCommandHandler : IRequestHandler<RemoveGoodsReceiptLotsCommand, bool>
 {
     private readonly IGoodsReceiptRepository _goodsReceiptRepository;
@@ -17,6 +18,7 @@ public class RemoveGoodsReceiptLotsCommandHandler : IRequestHandler<RemoveGoodsR
         }
 
         var removedLots = new List<GoodsReceiptLot>();
+        // Duyệt từng mã lô trong danh sách lô cần xoá
         foreach (string lotId in request.GoodsReceiptLotIds)
         {
             var lot = goodsReceipt.Lots.FirstOrDefault(l => l.GoodsReceiptLotId == lotId);
@@ -26,10 +28,12 @@ public class RemoveGoodsReceiptLotsCommandHandler : IRequestHandler<RemoveGoodsR
             }
             removedLots.Add(lot);
 
-            goodsReceipt.RemoveLot(lot);
+            goodsReceipt.RemoveLot(lot);    // Xoá lô khỏi lịch sử nhập
+            // Ghi nhận lại số lượng sản phẩm trừ đi trước khi xoá khỏi tồn kho - InventoryLogEntry - DomainEvent
             goodsReceipt.AddDeletedGoodsReceiptLotLogEntry(lotId, lot.ItemId, -lot.Quantity, goodsReceipt.Timestamp);
         }
 
+        // Cập nhật lại phần tồn kho sau khi xoá lô - DomainEvent
         goodsReceipt.RemoveItemLotEntities(removedLots);
         _goodsReceiptRepository.Update(goodsReceipt);
         return await _goodsReceiptRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);

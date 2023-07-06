@@ -3,7 +3,6 @@
 public class GoodsReceiptLotViewModel
 {
     public string GoodsReceiptLotId { get; private set; }
-    public string? LocationId { get; private set; }
     public double Quantity { get; private set; }
     public DateTime? ProductionDate { get; private set; }
     public DateTime? ExpirationDate { get; private set; }
@@ -11,11 +10,10 @@ public class GoodsReceiptLotViewModel
     public EmployeeViewModel Employee { get; private set; }
     public string? Note { get; private set; }
 
-    public GoodsReceiptLotViewModel(string goodsReceiptLotId, string? locationId, double quantity, DateTime? productionDate, 
+    public GoodsReceiptLotViewModel(string goodsReceiptLotId, double quantity, DateTime? productionDate, 
         DateTime? expirationDate, ItemViewModel item, EmployeeViewModel employee, string? note)
     {
         GoodsReceiptLotId = goodsReceiptLotId;
-        LocationId = locationId;
         Quantity = quantity;
         ProductionDate = productionDate;
         ExpirationDate = expirationDate;

@@ -15,4 +15,55 @@ public class FinishedProductReceipt : Entity, IAggregateRoot
         EmployeeId = employeeId;
         Entries = new List<FinishedProductReceiptEntry>();
     }
+
+    public void AddReceiptEntry(FinishedProductReceiptEntry entry)
+    {
+        foreach (var existedEntry in Entries)
+        {
+            if (entry.Item == existedEntry.Item && entry.PurchaseOrderNumber == existedEntry.PurchaseOrderNumber)
+            {
+                throw new WarehouseDomainException($"One of the Entries already existed in this Receipt.");
+            }
+        }
+        Entries.Add(entry);
+    }
+
+    public void UpdateReceiptEntry(FinishedProductReceiptEntry entry, string purchaseOrderNumber, double quantity)
+    {
+        entry.UpdateEntry(purchaseOrderNumber, quantity);
+    }
+
+    public void RemoveReceiptEntry(Item item, string purchaseOrderNumber)
+    {
+        var entry = Entries.FirstOrDefault(e => e.Item == item && e.PurchaseOrderNumber == purchaseOrderNumber);
+        if (entry == null)
+        {
+            throw new WarehouseDomainException($"Entry with item {item.ItemName} & {purchaseOrderNumber} not found.");
+        }
+        Entries.Remove(entry);
+    }
+
+    public void AddLogEntry(Item item, double changedQuantity, double receivedQuantity, DateTime timestamp)
+    {
+        double shippedQuantity = 0;
+        AddDomainEvent(new InventoryLogEntryAddedDomainEvent(item.ItemId, changedQuantity, receivedQuantity, shippedQuantity,
+            item.Id, timestamp));
+    }
+
+    public void AddFinishedProductInventory(Item item, string purchaseOrderNumber, double quantity, DateTime timestamp)
+    {
+        AddDomainEvent(new AddFinishedProductInventoryDomainEvent(purchaseOrderNumber, quantity, timestamp, item));
+    }
+
+    public void UpdateFinishedProductInventory(Item item, string oldPurchaseOrderNumber, string newPurchaseOrderNumber,
+        double quantity, DateTime timestamp)
+    {
+        AddDomainEvent(new UpdateFinishedProductInventoryDomainEvent(oldPurchaseOrderNumber, newPurchaseOrderNumber, 
+            quantity, timestamp, item));
+    }
+
+    public void RemoveFinishedProductInventory(Item item, string purchaseOrderNumber, DateTime timestamp)
+    {
+        AddDomainEvent(new RemoveFinishedProductInventoryDomainEvent(item, purchaseOrderNumber, timestamp));
+    }
 }

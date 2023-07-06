@@ -3,7 +3,6 @@ public class GoodsReceiptLot
 {
     public int Id { get; set; }         
     public string GoodsReceiptLotId { get; private set; }
-    public string? LocationId { get; private set; }
     public double Quantity { get; private set; }
     public DateTime? ProductionDate { get; private set; }
     public DateTime? ExpirationDate { get; private set; }
@@ -15,11 +14,10 @@ public class GoodsReceiptLot
     public Employee Employee { get; private set; }
 
     private GoodsReceiptLot() { }
-    public GoodsReceiptLot(string goodsReceiptLotId, string? locationId, double quantity, 
-        DateTime? productionDate, DateTime? expirationDate, int itemId, int goodsReceiptId)
+    public GoodsReceiptLot(string goodsReceiptLotId, double quantity, DateTime? productionDate, DateTime? expirationDate, 
+        int itemId, int goodsReceiptId)
     {
         GoodsReceiptLotId = goodsReceiptLotId;
-        LocationId = locationId;
         Quantity = quantity;
         ProductionDate = productionDate;
         ExpirationDate = expirationDate;
@@ -36,14 +34,10 @@ public class GoodsReceiptLot
         GoodsReceiptId = goodsReceiptId;
     }
 
-    public void Update(string newLotId, double quantity, string? locationId, 
-        DateTime? productionDate, DateTime? expirationDate, string? note)
+    public void Update(string newLotId, double quantity, DateTime? productionDate, DateTime? expirationDate, string? note)
     {
         GoodsReceiptLotId = newLotId;
         Quantity = quantity;
-
-        if (locationId != null) 
-            LocationId = locationId;
 
         if (productionDate != null) 
             ProductionDate = productionDate;
@@ -55,11 +49,9 @@ public class GoodsReceiptLot
             Note = note;
     }
 
-    public void UpdateConfirmedLot(double quantity, string? purchaseOrderNumber, string? locationId,
-        DateTime? productionDate, DateTime? expirationDate)
+    public void UpdateConfirmedLot(double quantity, DateTime? productionDate, DateTime? expirationDate)
     {
         Quantity = quantity;
-        LocationId = locationId;
         ProductionDate = productionDate;
         ExpirationDate = expirationDate;
     }

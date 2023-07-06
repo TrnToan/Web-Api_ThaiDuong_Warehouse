@@ -18,15 +18,15 @@ public class GoodsReceipt : Entity, IAggregateRoot
         Employee = employee;      
     }
 
-    public void UpdateLot(string oldLotId, string? newLowId, double quantity, string? locationId, DateTime? productionDate, 
-        DateTime? expirationDate, string? note)
+    public void UpdateLot(string oldLotId, string? newLowId, double quantity, DateTime? productionDate, DateTime? expirationDate, 
+        string? note)
     {
         string lotId = newLowId ?? oldLotId;
         var lot = Lots.FirstOrDefault(gr => gr.GoodsReceiptLotId == oldLotId);
         if (lot == null)
             throw new WarehouseDomainException($"GoodsReceiptLot with Id {lotId} does not exist.");
 
-        lot.Update(lotId, quantity, locationId, productionDate, expirationDate, note);
+        lot.Update(lotId, quantity, productionDate, expirationDate, note);
     }
 
     public void AddLot(GoodsReceiptLot goodsReceiptLot)
@@ -35,7 +35,7 @@ public class GoodsReceipt : Entity, IAggregateRoot
         {
             if (existedLot.GoodsReceiptLotId == goodsReceiptLot.GoodsReceiptLotId)
             {
-                throw new WarehouseDomainException($"GoodsReceiptLot with Id {goodsReceiptLot.GoodsReceiptLotId} existed in this GoodsReceipt.");
+                throw new WarehouseDomainException($"GoodsReceiptLot with Id {goodsReceiptLot.GoodsReceiptLotId} already existed in this GoodsReceipt.");
             }
         }
         Lots.Add(goodsReceiptLot);
@@ -55,10 +55,10 @@ public class GoodsReceipt : Entity, IAggregateRoot
         AddDomainEvent(new RemoveItemLotsDomainEvent(lots));
     }
 
-    public void UpdateItemLotEntity(string oldLotId, string? newLotId, Location? location, double quantity, 
+    public void UpdateItemLotEntity(string oldLotId, string? newLotId, List<Location>? locations, double quantity, 
         DateTime? productionDate, DateTime? expirationDate)
     {
-        AddDomainEvent(new UpdateItemLotDomainEvent(oldLotId, newLotId, location, quantity, productionDate, expirationDate));
+        AddDomainEvent(new UpdateItemLotDomainEvent(oldLotId, newLotId, locations, quantity, productionDate, expirationDate));
     }
 
     public void AddUpdatedGoodsReceiptLogEntry(string lotId, int itemId, double changedQuantity, DateTime timestamp)

@@ -21,4 +21,10 @@ public class FinishedProductReceiptEntry
     {
         Item = item;
     }
+
+    public void UpdateEntry(string purchaseOrderNumber, double quantity)
+    {
+        PurchaseOrderNumber = purchaseOrderNumber;
+        Quantity = quantity;
+    }
 }

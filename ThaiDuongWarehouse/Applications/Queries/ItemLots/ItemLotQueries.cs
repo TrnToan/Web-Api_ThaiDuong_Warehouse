@@ -14,7 +14,7 @@ public class ItemLotQueries : IItemLotQueries
     {
         var itemLots = await _context.ItemLots
             .AsNoTracking()
-            .Include(il => il.Location)
+            .Include(il => il.Locations)
             .Include(il => il.Item)
             .Where(il => il.IsIsolated)
             .ToListAsync();
@@ -27,7 +27,7 @@ public class ItemLotQueries : IItemLotQueries
     {
         var itemLot = await _context.ItemLots
             .AsNoTracking()
-            .Include(il => il.Location)
+            .Include(il => il.Locations)
             .Include(il => il.Item)
             .FirstOrDefaultAsync(il => il.LotId == lotId);
         var viewModel = _mapper.Map<ItemLot?, ItemLotViewModel>(itemLot);
@@ -38,7 +38,7 @@ public class ItemLotQueries : IItemLotQueries
     {
         var itemLots = await _context.ItemLots
             .AsNoTracking()
-            .Include(il => il.Location)
+            .Include(il => il.Locations)
             .Include(il => il.Item)
             .Where(il => il.Item.ItemId == itemId)
             .Where(il => !il.IsIsolated)
@@ -51,7 +51,7 @@ public class ItemLotQueries : IItemLotQueries
     //{
     //    var itemLots = await _context.ItemLots
     //        .AsNoTracking()
-    //        .Include(il => il.Location)
+    //        .Include(il => il.Locations)
     //        .Include(il => il.Item)
     //        .Where(il => il.PurchaseOrderNumber == purchaseOrderNumber)
     //        .ToListAsync();
@@ -63,9 +63,9 @@ public class ItemLotQueries : IItemLotQueries
     {
         List<ItemLot> itemlots = await _context.ItemLots
             .AsNoTracking()
-            .Include(il => il.Location)
+            .Include(il => il.Locations)
             .Include(il => il.Item)
-            .Where(il => il.Location.LocationId == locationId)
+            .Where(il => il.Locations.Any(l => l.LocationId == locationId))
             .ToListAsync();
 
         var viewModels = _mapper.Map<IList<ItemLot>, IList<ItemLotViewModel>>(itemlots);
@@ -76,7 +76,7 @@ public class ItemLotQueries : IItemLotQueries
     {
         List<ItemLot> itemlots = await _context.ItemLots
             .AsNoTracking()
-            .Include(il => il.Location)
+            .Include(il => il.Locations)
             .Include(il => il.Item)
             .ToListAsync();
 

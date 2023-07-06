@@ -36,9 +36,8 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
             .Include(gr => gr.Lots)
                 .ThenInclude(gr => gr.Employee)
             .Where(g => g.Lots
-                .All(lot => lot.LocationId != null &&
-                          lot.ProductionDate != null &&
-                          lot.ExpirationDate != null))
+                .All(lot => lot.ProductionDate != null &&
+                            lot.ExpirationDate != null))
             .ToListAsync();
 
         var goodsReceiptViewModels = _mapper.Map<IEnumerable<GoodsReceiptViewModel>>(goodsReceipts);
@@ -101,8 +100,7 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
             .Include(gr => gr.Lots)
                 .ThenInclude(gr => gr.Employee)
             .Where(g => g.Lots
-                .Any(lot => lot.LocationId == null ||
-                          lot.ProductionDate == null ||
+                .Any(lot => lot.ProductionDate == null ||
                           lot.ExpirationDate == null))
             .ToListAsync();
 

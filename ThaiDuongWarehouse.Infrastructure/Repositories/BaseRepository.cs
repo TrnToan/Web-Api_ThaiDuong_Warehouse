@@ -10,7 +10,7 @@ public abstract class BaseRepository
         }
     }
 
-    public BaseRepository(WarehouseDbContext context)
+    protected BaseRepository(WarehouseDbContext context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
