@@ -8,7 +8,7 @@ public class WarehouseDbContext : DbContext, IUnitOfWork
     public DbSet<Department> Departments { get; set; }
     public DbSet<Employee> Employees { get; set; }
     public DbSet<GoodsIssue> GoodsIssues { get; set; }
-    public DbSet<FinisedProductIssue> FinisedProductIssues { get; set; }
+    public DbSet<FinishedProductIssue> FinisedProductIssues { get; set; }
     public DbSet<GoodsReceipt> GoodsReceipts { get; set; }
     public DbSet<FinishedProductReceipt> FinishedProductReceipts { get; set; }
     public DbSet<InventoryLogEntry> InventoryLogEntries { get; set; }
@@ -17,6 +17,7 @@ public class WarehouseDbContext : DbContext, IUnitOfWork
     public DbSet<FinishedProductInventory> FinishedProductInventories { get; set; }
     public DbSet<Warehouse> Warehouses { get; set; }
     public DbSet<Location> Locations { get; set; }
+    public DbSet<ItemLotLocation> ItemLotLocations { get; set; }
 
     private IDbContextTransaction? _currentTransaction;
     private readonly IMediator _mediator;
@@ -48,6 +49,7 @@ public class WarehouseDbContext : DbContext, IUnitOfWork
         modelBuilder.ApplyConfiguration(new WarehouseEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new ItemClassEntityTypeConfiguration());
         modelBuilder.ApplyConfiguration(new LocationEntityTypeConfiguration());
+        modelBuilder.ApplyConfiguration(new ItemLotLocationEntityTypeConfiguration());
     }
     public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)
     {

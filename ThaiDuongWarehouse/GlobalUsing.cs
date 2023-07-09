@@ -29,3 +29,4 @@ global using ThaiDuongWarehouse.Domain.AggregateModels.InventoryLogAggregate;
 global using ThaiDuongWarehouse.Api.Applications.Queries.Histories.Export;
 global using ThaiDuongWarehouse.Api.Applications.Queries.Histories.Import;
 global using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductReceiptAggregate;
+global using ThaiDuongWarehouse.Api.Applications.Queries.FinishedProductReceipts;

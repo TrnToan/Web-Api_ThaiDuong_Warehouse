@@ -101,7 +101,8 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
                 .ThenInclude(gr => gr.Employee)
             .Where(g => g.Lots
                 .Any(lot => lot.ProductionDate == null ||
-                          lot.ExpirationDate == null))
+                          lot.ExpirationDate == null) || 
+                          g.Supplier == null)
             .ToListAsync();
 
         var goodsReceiptViewModels = _mapper.Map<IEnumerable<GoodsReceiptViewModel>>(goodsReceipts);

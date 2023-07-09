@@ -1,7 +1,7 @@
 ﻿namespace ThaiDuongWarehouse.Infrastructure.EntityConfigurations;
-public class FinisedProductIssueEntityTypeConfiguration : IEntityTypeConfiguration<FinisedProductIssue>
+public class FinisedProductIssueEntityTypeConfiguration : IEntityTypeConfiguration<FinishedProductIssue>
 {
-    public void Configure(EntityTypeBuilder<FinisedProductIssue> builder)
+    public void Configure(EntityTypeBuilder<FinishedProductIssue> builder)
     {
         builder.HasKey(fpr => fpr.Id);
         builder.HasIndex(fpr => fpr.FinishedProductIssueId).IsUnique();

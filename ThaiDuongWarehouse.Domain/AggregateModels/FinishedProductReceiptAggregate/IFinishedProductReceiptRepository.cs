@@ -4,4 +4,5 @@ public interface IFinishedProductReceiptRepository : IRepository<FinishedProduct
     Task<FinishedProductReceipt?> GetReceiptById(string finishedProductReceiptId);
     Task<FinishedProductReceipt> Add(FinishedProductReceipt finishedProductReceipt);
     void Update(FinishedProductReceipt finishedProductReceipt);
+    void Remove(FinishedProductReceipt finishedProductReceipt);
 }

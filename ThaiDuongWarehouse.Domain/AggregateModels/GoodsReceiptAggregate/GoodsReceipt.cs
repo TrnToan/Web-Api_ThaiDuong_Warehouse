@@ -55,10 +55,10 @@ public class GoodsReceipt : Entity, IAggregateRoot
         AddDomainEvent(new RemoveItemLotsDomainEvent(lots));
     }
 
-    public void UpdateItemLotEntity(string oldLotId, string? newLotId, List<Location>? locations, double quantity, 
+    public void UpdateItemLotEntity(string oldLotId, string? newLotId, List<ItemLotLocation>? itemLotLocations, double quantity, 
         DateTime? productionDate, DateTime? expirationDate)
     {
-        AddDomainEvent(new UpdateItemLotDomainEvent(oldLotId, newLotId, locations, quantity, productionDate, expirationDate));
+        AddDomainEvent(new UpdateItemLotDomainEvent(oldLotId, newLotId, itemLotLocations, quantity, productionDate, expirationDate));
     }
 
     public void AddUpdatedGoodsReceiptLogEntry(string lotId, int itemId, double changedQuantity, DateTime timestamp)

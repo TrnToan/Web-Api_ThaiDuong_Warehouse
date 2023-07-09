@@ -1,6 +1,4 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductReceiptAggregate;
-
-namespace ThaiDuongWarehouse.Api.Applications.Commands.FinishedProductReceipts;
+﻿namespace ThaiDuongWarehouse.Api.Applications.Commands.FinishedProductReceipts;
 
 public class CreateFinishedProductReceiptCommandHandler : IRequestHandler<CreateFinishedProductReceiptCommand, bool>
 {

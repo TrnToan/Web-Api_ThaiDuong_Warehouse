@@ -1,7 +1,10 @@
 using System.Reflection;
 using ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 using ThaiDuongWarehouse.Api.Applications.Mapping;
+using ThaiDuongWarehouse.Api.Applications.Queries;
+using ThaiDuongWarehouse.Api.Applications.Queries.FinishedProductReceipts;
 using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductInventoryAggregate;
+using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductIssueAggregate;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +46,7 @@ builder.Services.AddScoped<IGoodsReceiptRepository, GoodsReceiptRepository>();
 builder.Services.AddScoped<IGoodsIssueRepository, GoodsIssueRepository>();
 builder.Services.AddScoped<IFinishedProductReceiptRepository, FinishedProductReceiptRepository>();
 builder.Services.AddScoped<IFinishedProductInventoryRepository, FinishedProductInventoryRepository>();
+builder.Services.AddScoped<IFinishedProductIssueRepository, FinishedProductIssueRepository>();
 
 builder.Services.AddScoped<IEmployeeQueries, EmployeeQueries>();
 builder.Services.AddScoped<IItemQueries, ItemQueries>();
@@ -56,6 +60,7 @@ builder.Services.AddScoped<IWarningQueries, WarningQueries>();
 builder.Services.AddScoped<IGoodsIssueQueries, GoodsIssueQueries>();
 builder.Services.AddScoped<IImportHistoryQueries, ImportHistoryQueries>();
 builder.Services.AddScoped<IExportHistoryQueries, ExportHistoryQueries>();
+builder.Services.AddScoped<IFinishedProductReceiptQueries, FinishedProductReceiptQueries>();
 
 builder.Services.AddScoped<InventoryLogEntryService>();
 

@@ -1,5 +1,5 @@
 ﻿using ThaiDuongWarehouse.Api.Applications.Commands.FinishedProductReceipts;
-using ThaiDuongWarehouse.Api.Applications.Commands.GoodsReceipts;
+using ThaiDuongWarehouse.Api.Applications.Queries;
 
 namespace ThaiDuongWarehouse.Api.Controllers;
 
@@ -8,10 +8,26 @@ namespace ThaiDuongWarehouse.Api.Controllers;
 public class FinishedProductReceiptsController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly IFinishedProductReceiptQueries _queries;
 
-    public FinishedProductReceiptsController(IMediator mediator)
+    public FinishedProductReceiptsController(IMediator mediator, IFinishedProductReceiptQueries queries)
     {
         _mediator = mediator;
+        _queries = queries;
+    }
+
+    [HttpGet]
+    [Route("{finishedProductReceiptId}")]
+    public async Task<FinishedProductReceiptViewModel?> GetAsync(string finishedProductReceiptId)
+    {
+        return await _queries.GetReceiptById(finishedProductReceiptId);
+    }
+
+    [HttpGet]
+    [Route("TimeRange")]
+    public async Task<IEnumerable<FinishedProductReceiptViewModel>> GetReceiptsAsync(TimeRangeQuery query)
+    {
+        return await _queries.GetReceiptsAsync(query);
     }
 
     [HttpPost]
@@ -80,6 +96,26 @@ public class FinishedProductReceiptsController : ControllerBase
     public async Task<IActionResult> RemoveEntryAsync(string finishedProductReceiptId, List<RemoveFinishedProductEntryViewModel> entries)
     {
         RemoveFinishedProductReceiptEntriesCommand command = new (finishedProductReceiptId, entries);
+        try
+        {
+            var result = await _mediator.Send(command);
+
+            if (!result)
+            {
+                return BadRequest();
+            }
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> RemoveAsync(string finishedProductReceiptId)
+    {
+        DeleteFinishedProductReceiptCommand command = new DeleteFinishedProductReceiptCommand(finishedProductReceiptId);
         try
         {
             var result = await _mediator.Send(command);

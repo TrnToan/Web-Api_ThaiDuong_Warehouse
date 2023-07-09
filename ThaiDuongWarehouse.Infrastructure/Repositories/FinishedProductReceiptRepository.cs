@@ -23,7 +23,13 @@ public class FinishedProductReceiptRepository : BaseRepository, IFinishedProduct
         return await _context.FinishedProductReceipts
             .Include(gr => gr.Employee)
             .Include(gr => gr.Entries)
+                .ThenInclude(e => e.Item)
             .FirstOrDefaultAsync(gr => gr.FinishedProductReceiptId == finishedProductReceiptId);
+    }
+
+    public void Remove(FinishedProductReceipt finishedProductReceipt)
+    {
+        _context.FinishedProductReceipts.Remove(finishedProductReceipt);
     }
 
     public void Update(FinishedProductReceipt finishedProductReceipt)

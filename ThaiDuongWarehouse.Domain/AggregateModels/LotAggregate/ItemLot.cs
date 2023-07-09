@@ -8,7 +8,7 @@ public class ItemLot : Entity, IAggregateRoot
     public DateTime? ExpirationDate { get; private set; }
     public bool IsIsolated { get; private set; } = false;
     public int ItemId { get; private set; }                 // ForeignKey
-    public List<Location>? Locations { get; private set; }
+    public List<ItemLotLocation>? ItemLotLocations { get; private set; }
     public Item Item { get; private set; }
 
     public ItemLot(string lotId, int itemId, double quantity, DateTime timestamp,
@@ -38,13 +38,13 @@ public class ItemLot : Entity, IAggregateRoot
     {
         Quantity = quantity;
     }
-    public void UpdateExistedLot(string lotId, List<Location>? locations, double quantity, DateTime? productionDate, DateTime? expirationDate)
+    public void UpdateExistedLot(string lotId, List<ItemLotLocation>? itemLotLocations, double quantity, DateTime? productionDate, DateTime? expirationDate)
     {
         // Mã lô có thể là mã cũ hoặc mã mới (nếu người dùng thay đổi mã)
         LotId = lotId;
         // Cập nhật lại các vị trí của lô nếu người dùng thay đổi thông tin 
-        if (locations is not null)
-            Locations = locations;
+        if (itemLotLocations is not null)
+            ItemLotLocations = itemLotLocations;
 
         Quantity = quantity;
 

@@ -1,6 +1,4 @@
-﻿using ThaiDuongWarehouse.Api.Applications.Queries.Histories.Export;
-using ThaiDuongWarehouse.Api.Applications.Queries.Histories.Import;
-using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
+﻿using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
 
 namespace ThaiDuongWarehouse.Api.Applications.Mapping;
 
@@ -26,5 +24,7 @@ public class ModelToViewModelProfile : Profile
 		CreateMap<GoodsIssue, GoodsIssuesHistoryViewModel>();
 		CreateMap<GoodsIssueEntry, GoodsIssueEntryHistoryViewModel>();
 		CreateMap<GoodsIssueLot, GoodsIssueLotsHistoryViewModel>();
+		CreateMap<FinishedProductReceipt, FinishedProductReceiptViewModel>();
+		CreateMap<FinishedProductReceiptEntry, FinishedProductReceiptEntryViewModel>();
 	}
 }

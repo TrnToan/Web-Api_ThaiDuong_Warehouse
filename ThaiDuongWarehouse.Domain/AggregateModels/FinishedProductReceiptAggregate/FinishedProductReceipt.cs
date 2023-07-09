@@ -52,13 +52,13 @@ public class FinishedProductReceipt : Entity, IAggregateRoot
 
     public void AddFinishedProductInventory(Item item, string purchaseOrderNumber, double quantity, DateTime timestamp)
     {
-        AddDomainEvent(new AddFinishedProductInventoryDomainEvent(purchaseOrderNumber, quantity, timestamp, item));
+        AddDomainEvent(new UpdateProductInventoryOnProductReceiptDomainEvent(purchaseOrderNumber, quantity, timestamp, item));
     }
 
     public void UpdateFinishedProductInventory(Item item, string oldPurchaseOrderNumber, string newPurchaseOrderNumber,
         double quantity, DateTime timestamp)
     {
-        AddDomainEvent(new UpdateFinishedProductInventoryDomainEvent(oldPurchaseOrderNumber, newPurchaseOrderNumber, 
+        AddDomainEvent(new UpdateProductInventoryDomainEvent(oldPurchaseOrderNumber, newPurchaseOrderNumber, 
             quantity, timestamp, item));
     }
 

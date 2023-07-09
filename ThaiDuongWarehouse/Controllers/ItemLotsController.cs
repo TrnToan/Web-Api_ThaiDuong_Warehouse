@@ -48,13 +48,13 @@ public class ItemLotsController : ControllerBase
 	//	return await _queries.GetItemLotsByPO(purchaseOrderNumber);
 	//}
 
-	[HttpGet]
-	[Route("ByLocation/{locationId}")]
-	public async Task<IList<ItemLotViewModel>> GetItemLotsByLocationAsync(string locationId)
-	{
-		return await _queries.GetItemLotsByLocationId(locationId);
+	//[HttpGet]
+	//[Route("ByLocation/{locationId}")]
+	//public async Task<IList<ItemLotViewModel>> GetItemLotsByLocationAsync(string locationId)
+	//{
+	//	return await _queries.GetItemLotsByLocationId(locationId);
 
-    }
+ //   }
 
 	[HttpPatch]
 	[Route("{itemLotId}")]
