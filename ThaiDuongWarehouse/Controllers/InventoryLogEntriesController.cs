@@ -23,7 +23,7 @@ public class InventoryLogEntriesController : ControllerBase
 	[HttpGet]
 	public async Task<IEnumerable<InventoryLogEntryViewModel>> GetByTimeAsync([FromQuery] TimeRangeQuery query)
 	{
-		return await _queries.GetByTime(query);	
+		return await _queries.GetEntries(query);	
 	}
 
 
@@ -32,5 +32,12 @@ public class InventoryLogEntriesController : ControllerBase
 	public async Task<IEnumerable<ExtendedInventoryLogEntryViewModel>> GetLogEntriesByItemClassAsync(string? itemClassId, string? itemId, [FromQuery]TimeRangeQuery query) 
 	{
 		return await _queries.GetExtendedLogEntries(query, itemClassId, itemId);
+	}
+
+	[HttpGet]
+	[Route("itemLots")]
+	public async Task<IEnumerable<ItemLotLogEntryViewModel>> GetItemLotsAsync(DateTime trackingTime, string itemId)
+	{
+		return await _queries.GetItemLotsLogEntry(trackingTime, itemId);
 	}
 }

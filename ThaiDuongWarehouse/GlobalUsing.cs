@@ -30,3 +30,5 @@ global using ThaiDuongWarehouse.Api.Applications.Queries.Histories.Export;
 global using ThaiDuongWarehouse.Api.Applications.Queries.Histories.Import;
 global using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductReceiptAggregate;
 global using ThaiDuongWarehouse.Api.Applications.Queries.FinishedProductReceipts;
+global using ThaiDuongWarehouse.Api.Applications.Queries;
+global using ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;

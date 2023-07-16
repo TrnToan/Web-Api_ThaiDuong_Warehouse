@@ -1,4 +1,4 @@
-﻿using System.Runtime.Serialization;
+﻿using ThaiDuongWarehouse.Api.Applications.Commands.GoodsReceipts;
 
 namespace ThaiDuongWarehouse.Api.Applications.Commands.GoodsIssues;
 
@@ -10,25 +10,22 @@ public class CreateGoodsIssueLotViewModel
     [DataMember]
     public string ItemId { get; private set; }
     [DataMember]
-    public double Quantity { get; private set; }
+    public string Unit { get; private set; }
     [DataMember]
-    public double? SublotSize { get; private set; }
-    [DataMember]
-    public string? SublotUnit { get; private set; }
+    public List<ItemLotLocationViewModel> ItemLotLocations { get; private set; }
     [DataMember]
     public string? Note { get; private set; }
     [DataMember]
     public string EmployeeId { get; private set; }
-    public CreateGoodsIssueLotViewModel(string goodsIssueLotId, string itemId, double quantity, double? sublotSize, string? sublotUnit,
-        string? note, string employeeId)
+
+    public CreateGoodsIssueLotViewModel(string goodsIssueLotId, string itemId, string unit,
+        List<ItemLotLocationViewModel> itemLotLocations, string? note, string employeeId)
     {
         GoodsIssueLotId = goodsIssueLotId;
         ItemId = itemId;
-        Quantity = quantity;
-        SublotSize = sublotSize;
-        SublotUnit = sublotUnit;
+        Unit = unit;
+        ItemLotLocations = itemLotLocations;
         Note = note;
         EmployeeId = employeeId;
-        SublotUnit = sublotUnit;
     }
 }

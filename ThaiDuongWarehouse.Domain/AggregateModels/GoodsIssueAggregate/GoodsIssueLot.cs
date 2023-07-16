@@ -8,6 +8,7 @@ public class GoodsIssueLot
     public int GoodsIssueEntryId { get; private set; }
     public int EmployeeId { get; private set; }
     public Employee Employee { get; private set; }
+    public List<GoodsIssueSublot> Sublots { get; private set; }
 
     private GoodsIssueLot() { }
 
@@ -17,5 +18,14 @@ public class GoodsIssueLot
         Quantity = quantity;
         Note = note;
         EmployeeId = employeeId;
+    }
+
+    public GoodsIssueLot(string goodsIssueLotId, double quantity, string? note, int employeeId, List<GoodsIssueSublot> sublots)
+    {
+        GoodsIssueLotId = goodsIssueLotId;
+        Quantity = quantity;
+        Note = note;
+        EmployeeId = employeeId;
+        Sublots = sublots;
     }
 }

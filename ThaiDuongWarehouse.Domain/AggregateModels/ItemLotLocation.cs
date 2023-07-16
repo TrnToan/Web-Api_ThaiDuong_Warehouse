@@ -13,4 +13,9 @@ public class ItemLotLocation
         LocationId = locationId;
         QuantityPerLocation = quantityPerLocation;
     }
+
+    public void UpdateQuantity (double quantity)
+    {
+        QuantityPerLocation = quantity;
+    }
 }

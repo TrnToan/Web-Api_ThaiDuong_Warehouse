@@ -24,32 +24,29 @@ public class UpdateGoodsReceiptCommandHandler : IRequestHandler<UpdateGoodsRecei
             throw new EntityNotFoundException($"GoodsReceipt with Id {request.GoodsReceiptId} doesn't exist.");
         }
 
-        foreach (var lot in request.GoodsReceiptLots)
+        foreach (var updatedLot in request.GoodsReceiptLots)
         {
             // Truy xuất lô với mã phiếu cũ
-            var goodsReceiptLot = goodsReceipt.Lots.FirstOrDefault(l => l.GoodsReceiptLotId == lot.OldGoodsReceiptLotId);
+            var goodsReceiptLot = goodsReceipt.Lots.FirstOrDefault(l => l.GoodsReceiptLotId == updatedLot.OldGoodsReceiptLotId);
             if (goodsReceiptLot is null)
             {
-                throw new EntityNotFoundException($"GoodsReceiptLot with Id {lot.OldGoodsReceiptLotId} does not exist.");
+                throw new EntityNotFoundException($"GoodsReceiptLot with Id {updatedLot.OldGoodsReceiptLotId} does not exist.");
             }
 
-            var itemLot = await _itemLotRepository.GetLotByLotId(lot.OldGoodsReceiptLotId);
+            var itemLot = await _itemLotRepository.GetLotByLotId(updatedLot.OldGoodsReceiptLotId);
             if (itemLot is null)
-                throw new EntityNotFoundException($"ItemLot with Id {lot.OldGoodsReceiptLotId} no longer exists.");
+                continue;
 
             // Chênh lệch giữa số lượng mới chỉnh sửa và trước khi chính sửa
-            double changedQuantity = lot.Quantity - goodsReceiptLot.Quantity;
-
-            // Cập nhật thông tin mới của lô trong phần Lịch sử GoodsReceiptLot (ghi đè mã lô mới hoặc số lượng mới nếu có)
-            goodsReceipt.UpdateLot(lot.OldGoodsReceiptLotId, lot.NewGoodsReceiptLotId, lot.Quantity,
-                lot.ProductionDate, lot.ExpirationDate, lot.Note);
-
+            double changedQuantity = updatedLot.Quantity - goodsReceiptLot.Quantity;
+            
             List<ItemLotLocation>? itemLotLocations = new ();
+            List<GoodsReceiptSublot>? sublots = new ();
             // Kiểm tra nếu người dùng cập nhật các vị trí của lô hàng
-            if (lot.ItemLotLocations is not null)
+            if (updatedLot.ItemLotLocations is not null)
             {
                 double totalLotQuantity = 0;
-                foreach (var itemLotLocationVM in lot.ItemLotLocations)
+                foreach (var itemLotLocationVM in updatedLot.ItemLotLocations)
                 {
                     var location = await _storageRepository.GetLocationById(itemLotLocationVM.LocationId);
                     if (location is null)
@@ -58,31 +55,38 @@ public class UpdateGoodsReceiptCommandHandler : IRequestHandler<UpdateGoodsRecei
                     }
                     else
                     {
+                        GoodsReceiptSublot sublot = new (itemLotLocationVM.LocationId, itemLotLocationVM.QuantityPerLocation);
+                        sublots.Add(sublot);
+                        
                         ItemLotLocation itemLotLocation = new (itemLot.Id, location.Id, itemLotLocationVM.QuantityPerLocation); 
                         itemLotLocations.Add(itemLotLocation);
                         totalLotQuantity += itemLotLocationVM.QuantityPerLocation;
                     }
                 }
-                if (totalLotQuantity != lot.Quantity)
-                    throw new InvalidItemLotException($"The sum of quantity per location {totalLotQuantity} is not equal to that of total quantity {lot.Quantity}");
-            }            
+                if (totalLotQuantity != updatedLot.Quantity)
+                    throw new InvalidItemLotException($"The sum of quantity per location {totalLotQuantity} is not equal to that of total quantity {updatedLot.Quantity}");
+            }
+
+            // Cập nhật thông tin mới của lô trong phần Lịch sử GoodsReceiptLot (ghi đè mã lô mới hoặc số lượng mới nếu có)
+            goodsReceipt.UpdateLot(updatedLot.OldGoodsReceiptLotId, updatedLot.NewGoodsReceiptLotId, updatedLot.Quantity, sublots,
+                updatedLot.ProductionDate, updatedLot.ExpirationDate, updatedLot.Note);
 
             // Cập nhật thông tin lô hàng ở mục tồn kho - DomainEvent
-            goodsReceipt.UpdateItemLotEntity(lot.OldGoodsReceiptLotId, lot.NewGoodsReceiptLotId, itemLotLocations, lot.Quantity, 
-                lot.ProductionDate, lot.ExpirationDate);
+            goodsReceipt.UpdateItemLotEntity(updatedLot.OldGoodsReceiptLotId, updatedLot.NewGoodsReceiptLotId, itemLotLocations, updatedLot.Quantity, 
+                updatedLot.ProductionDate, updatedLot.ExpirationDate);
             
             // Nếu người dùng thay đổi mã lô thì sửa lại InventoryLogEntry tương ứng
-            if (lot.NewGoodsReceiptLotId != null && lot.NewGoodsReceiptLotId != lot.OldGoodsReceiptLotId)
+            if (updatedLot.NewGoodsReceiptLotId != null && updatedLot.NewGoodsReceiptLotId != updatedLot.OldGoodsReceiptLotId)
             {
-                goodsReceipt.UpdateLogEntry(lot.NewGoodsReceiptLotId, lot.OldGoodsReceiptLotId, goodsReceiptLot.ItemId, 
+                goodsReceipt.UpdateLogEntry(updatedLot.NewGoodsReceiptLotId, updatedLot.OldGoodsReceiptLotId, goodsReceiptLot.ItemId, 
                     goodsReceipt.Timestamp);
             }
 
             // Nếu Số lượng hàng trong lô thay đổi thì ghi nhận lại ở InventoryLogEntry
             if (changedQuantity != 0)
             {
-                goodsReceipt.AddUpdatedGoodsReceiptLogEntry(lot.NewGoodsReceiptLotId ?? lot.OldGoodsReceiptLotId, goodsReceiptLot.ItemId, 
-                    changedQuantity, goodsReceipt.Timestamp);
+                goodsReceipt.UpdateGoodsReceiptLogEntries(updatedLot.OldGoodsReceiptLotId, goodsReceiptLot.ItemId, 
+                    updatedLot.Quantity, goodsReceipt.Timestamp);
             }
         }
 

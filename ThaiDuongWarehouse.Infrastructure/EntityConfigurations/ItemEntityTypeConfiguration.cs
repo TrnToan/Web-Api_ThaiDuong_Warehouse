@@ -9,7 +9,7 @@ public class ItemEntityTypeConfiguration : IEntityTypeConfiguration<Item>
         builder.Property(i => i.Unit).IsRequired();
         builder.Property(i => i.MinimumStockLevel).IsRequired();
         builder.Property(i => i.Price).HasPrecision(12, 2);
-        builder.Property(i => i.SublotSize);
+        builder.Property(i => i.PacketSize);
         builder.Property(i => i.PacketUnit);
         builder.Ignore(d => d.DomainEvents);
 

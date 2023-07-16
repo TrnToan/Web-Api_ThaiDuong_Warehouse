@@ -254,15 +254,15 @@ namespace ThaiDuongWarehouse.Api.Migrations
                     b.Property<double>("MinimumStockLevel")
                         .HasColumnType("float");
 
+                    b.Property<double?>("PacketSize")
+                        .HasColumnType("float");
+
                     b.Property<string>("PacketUnit")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("Price")
                         .HasPrecision(12, 2)
                         .HasColumnType("decimal(12,2)");
-
-                    b.Property<double?>("SublotSize")
-                        .HasColumnType("float");
 
                     b.Property<string>("Unit")
                         .IsRequired()
@@ -333,6 +333,9 @@ namespace ThaiDuongWarehouse.Api.Migrations
                         .HasColumnType("float");
 
                     b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("TrackingTime")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -666,7 +669,38 @@ namespace ThaiDuongWarehouse.Api.Migrations
                                     b2.WithOwner()
                                         .HasForeignKey("GoodsIssueEntryId");
 
+                                    b2.OwnsMany("ThaiDuongWarehouse.Domain.AggregateModels.GoodsIssueAggregate.GoodsIssueSublot", "Sublots", b3 =>
+                                        {
+                                            b3.Property<int>("GoodsIssueLotGoodsIssueEntryId")
+                                                .HasColumnType("int");
+
+                                            b3.Property<string>("GoodsIssueLotId")
+                                                .HasColumnType("nvarchar(450)");
+
+                                            b3.Property<int>("Id")
+                                                .ValueGeneratedOnAdd()
+                                                .HasColumnType("int");
+
+                                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b3.Property<int>("Id"));
+
+                                            b3.Property<string>("LocationId")
+                                                .IsRequired()
+                                                .HasColumnType("nvarchar(max)");
+
+                                            b3.Property<double>("QuantityPerLocation")
+                                                .HasColumnType("float");
+
+                                            b3.HasKey("GoodsIssueLotGoodsIssueEntryId", "GoodsIssueLotId", "Id");
+
+                                            b3.ToTable("GoodsIssueSublot");
+
+                                            b3.WithOwner()
+                                                .HasForeignKey("GoodsIssueLotGoodsIssueEntryId", "GoodsIssueLotId");
+                                        });
+
                                     b2.Navigation("Employee");
+
+                                    b2.Navigation("Sublots");
                                 });
 
                             b1.Navigation("Item");
@@ -748,9 +782,37 @@ namespace ThaiDuongWarehouse.Api.Migrations
                                 .OnDelete(DeleteBehavior.Cascade)
                                 .IsRequired();
 
+                            b1.OwnsMany("ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate.GoodsReceiptSublot", "Sublots", b2 =>
+                                {
+                                    b2.Property<int>("GoodsReceiptLotId")
+                                        .HasColumnType("int");
+
+                                    b2.Property<int>("Id")
+                                        .ValueGeneratedOnAdd()
+                                        .HasColumnType("int");
+
+                                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b2.Property<int>("Id"));
+
+                                    b2.Property<string>("LocationId")
+                                        .IsRequired()
+                                        .HasColumnType("nvarchar(max)");
+
+                                    b2.Property<double>("QuantityPerLocation")
+                                        .HasColumnType("float");
+
+                                    b2.HasKey("GoodsReceiptLotId", "Id");
+
+                                    b2.ToTable("GoodsReceiptSublot");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("GoodsReceiptLotId");
+                                });
+
                             b1.Navigation("Employee");
 
                             b1.Navigation("Item");
+
+                            b1.Navigation("Sublots");
                         });
 
                     b.Navigation("Employee");

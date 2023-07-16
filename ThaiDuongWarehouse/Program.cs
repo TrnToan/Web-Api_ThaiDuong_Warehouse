@@ -1,8 +1,5 @@
 using System.Reflection;
-using ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 using ThaiDuongWarehouse.Api.Applications.Mapping;
-using ThaiDuongWarehouse.Api.Applications.Queries;
-using ThaiDuongWarehouse.Api.Applications.Queries.FinishedProductReceipts;
 using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductInventoryAggregate;
 using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductIssueAggregate;
 
@@ -62,6 +59,7 @@ builder.Services.AddScoped<IImportHistoryQueries, ImportHistoryQueries>();
 builder.Services.AddScoped<IExportHistoryQueries, ExportHistoryQueries>();
 builder.Services.AddScoped<IFinishedProductReceiptQueries, FinishedProductReceiptQueries>();
 
+builder.Services.AddScoped<ItemLotLocationRepository>();
 builder.Services.AddScoped<InventoryLogEntryService>();
 
 builder.Services.AddAutoMapper(typeof(ModelToViewModelProfile).Assembly);

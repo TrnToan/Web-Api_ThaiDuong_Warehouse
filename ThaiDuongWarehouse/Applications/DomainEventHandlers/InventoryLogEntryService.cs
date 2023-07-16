@@ -1,4 +1,5 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
+﻿using Microsoft.EntityFrameworkCore;
+using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
 
 namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 
@@ -34,7 +35,23 @@ public class InventoryLogEntryService
 	{
 		return Entries
 			.Where(log => log.ItemId == itemId)
-			.Where(log => log.Timestamp >= timestamp)
+			.Where(log => log.TrackingTime >= timestamp)
 			.ToList();
 	}
+
+	public async Task<InventoryLogEntry?> GetPreviousLogEntry(int itemId, DateTime trackingTime)
+	{
+		return Entries
+			.Where(log => log.TrackingTime < trackingTime)
+            .OrderBy(log => log.TrackingTime)
+            .LastOrDefault(log => log.ItemId == itemId);
+    }
+
+    public async Task<List<InventoryLogEntry>> GetLatestLogEntries(int itemId, DateTime timestamp)
+	{
+        return Entries
+            .Where(log => log.ItemId == itemId)
+            .Where(log => log.TrackingTime >= timestamp)
+            .ToList();
+    }
 }

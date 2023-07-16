@@ -31,7 +31,9 @@ public class ItemLotRepository : BaseRepository, IItemLotRepository
 
     public async Task<ItemLot?> GetLotByLotId(string lotId)
     {
-        return await _context.ItemLots.FirstOrDefaultAsync(il => il.LotId == lotId);
+        return await _context.ItemLots
+            .Include(il => il.ItemLotLocations)
+            .FirstOrDefaultAsync(il => il.LotId == lotId);
     }
 
     public void RemoveLot(ItemLot itemLot)

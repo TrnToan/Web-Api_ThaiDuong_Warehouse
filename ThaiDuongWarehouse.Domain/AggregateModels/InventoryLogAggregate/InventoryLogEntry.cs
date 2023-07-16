@@ -8,6 +8,7 @@ public class InventoryLogEntry : Entity, IAggregateRoot
     public double ReceivedQuantity { get; private set; }
     public double ShippedQuantity { get; private set; }
     public DateTime Timestamp { get; private set; }
+    public DateTime TrackingTime { get; private set; }
     public Item Item { get; private set; }
 
     public InventoryLogEntry(int itemId, string? itemLotId, DateTime timestamp, double beforeQuantity, double changedQuantity,
@@ -20,6 +21,7 @@ public class InventoryLogEntry : Entity, IAggregateRoot
         ChangedQuantity = changedQuantity;
         ReceivedQuantity = receivedQuantity;
         ShippedQuantity = shippedQuantity;
+        TrackingTime = DateTime.UtcNow.AddHours(7);
     }
 
     public InventoryLogEntry(DateTime timestamp, string? itemLotId, double beforeQuantity, double changedQuantity, Item item)
@@ -29,6 +31,7 @@ public class InventoryLogEntry : Entity, IAggregateRoot
         BeforeQuantity = beforeQuantity;
         ChangedQuantity = changedQuantity;
         Item = item;
+        TrackingTime = DateTime.UtcNow.AddHours(7);
     }
 
     public void ModifyLogEntry(string newLotId)
@@ -36,13 +39,19 @@ public class InventoryLogEntry : Entity, IAggregateRoot
         ItemLotId = newLotId;
     }
 
-    public void UpdateQuantity(double quantity)
+    public void UpdateQuantity(double changedQuantity)
     {
-        ChangedQuantity = quantity;
+        ChangedQuantity = changedQuantity;
+        ReceivedQuantity = changedQuantity;
     }
 
     public void UpdateEntry(double beforeQuantity, double changedQuantity)
     {
         BeforeQuantity = beforeQuantity + changedQuantity;
+    }
+
+    public void ResetQuantity()
+    {
+        BeforeQuantity = 0;
     }
 }

@@ -13,7 +13,7 @@ public class RemoveItemLotsDomainEventHandler : INotificationHandler<RemoveItemL
 
     public async Task Handle(RemoveItemLotsDomainEvent notification, CancellationToken cancellationToken)
     {
-        List<ItemLot> lots = new ();
+        List<ItemLot> lots = new();
         foreach (var lotId in notification.ItemLots.Select(l => l.GoodsReceiptLotId))
         {
             var itemLot = await _itemLotRepository.GetLotByLotId(lotId);

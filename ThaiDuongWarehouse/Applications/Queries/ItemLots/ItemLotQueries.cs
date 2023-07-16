@@ -47,31 +47,6 @@ public class ItemLotQueries : IItemLotQueries
         return viewModels;
     }
 
-    //public async Task<IEnumerable<ItemLotViewModel>> GetItemLotsByPO(string purchaseOrderNumber)
-    //{
-    //    var itemLots = await _context.ItemLots
-    //        .AsNoTracking()
-    //        .Include(il => il.Locations)
-    //        .Include(il => il.Item)
-    //        .Where(il => il.PurchaseOrderNumber == purchaseOrderNumber)
-    //        .ToListAsync();
-    //    var viewModels = _mapper.Map<IEnumerable<ItemLot>, IEnumerable<ItemLotViewModel>>(itemLots);
-    //    return viewModels;
-    //}
-
-    //public async Task<IList<ItemLotViewModel>> GetItemLotsByLocationId(string locationId)
-    //{
-    //    List<ItemLot> itemlots = await _context.ItemLots
-    //        .AsNoTracking()
-    //        .Include(il => il.ItemLotLocations)
-    //        .Include(il => il.Item)
-    //        .Where(il => il.ItemLotLocations.Any(l => l.LocationId == locationId))
-    //        .ToListAsync();
-
-    //    var viewModels = _mapper.Map<IList<ItemLot>, IList<ItemLotViewModel>>(itemlots);
-    //    return viewModels;
-    //}
-
     public async Task<IEnumerable<ItemLotViewModel>> GetAll()
     {
         List<ItemLot> itemlots = await _context.ItemLots

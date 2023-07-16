@@ -30,11 +30,19 @@ public class GoodsIssueEntityTypeConfiguration : IEntityTypeConfiguration<GoodsI
             ge.OwnsMany(entry => entry.Lots, lot =>
             {
                 lot.WithOwner();
+
                 lot.HasKey(gil => new { gil.GoodsIssueEntryId, gil.GoodsIssueLotId });
                 lot.Property(gil => gil.Quantity).IsRequired();
                 lot.Property(gil => gil.Note);
 
                 lot.HasOne(gil => gil.Employee).WithMany().HasForeignKey(gil => gil.EmployeeId).OnDelete(DeleteBehavior.Restrict).IsRequired();
+                lot.OwnsMany(gil => gil.Sublots, sub =>
+                {
+                    sub.WithOwner();
+
+                    sub.Property(lot => lot.LocationId);
+                    sub.Property(lot => lot.QuantityPerLocation);
+                });
             });
         });
         builder.Ignore(d => d.DomainEvents);

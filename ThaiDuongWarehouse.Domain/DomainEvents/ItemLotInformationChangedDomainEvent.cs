@@ -1,11 +1,14 @@
-﻿namespace ThaiDuongWarehouse.Domain.DomainEvents;
+﻿using ThaiDuongWarehouse.Domain.AggregateModels.GoodsIssueAggregate;
+
+namespace ThaiDuongWarehouse.Domain.DomainEvents;
 public class ItemLotInformationChangedDomainEvent : INotification
 {
-    public string ItemLotId { get; private set; }
-    public double Quantity { get; private set; }
-    public ItemLotInformationChangedDomainEvent(string itemLotId, double quantity)
+    public ItemLot ItemLot { get; private set; }
+    public GoodsIssueLot GoodsIssueLot { get; private set; }
+
+    public ItemLotInformationChangedDomainEvent(ItemLot itemLot, GoodsIssueLot goodsIssueLot)
     {
-        ItemLotId = itemLotId;
-        Quantity = quantity;
+        ItemLot = itemLot;
+        GoodsIssueLot = goodsIssueLot;
     }
 }

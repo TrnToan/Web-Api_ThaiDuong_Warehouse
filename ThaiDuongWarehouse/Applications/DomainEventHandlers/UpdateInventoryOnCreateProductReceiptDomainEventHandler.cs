@@ -4,16 +4,16 @@ using ThaiDuongWarehouse.Domain.DomainEvents;
 
 namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 
-public class UpdateProductInventoryOnProductReceiptDomainEventHandler : INotificationHandler<UpdateProductInventoryOnProductReceiptDomainEvent>
+public class UpdateInventoryOnCreateProductReceiptDomainEventHandler : INotificationHandler<UpdateInventoryOnCreateProductReceiptDomainEvent>
 {
     private readonly IFinishedProductInventoryRepository _finisedProductInventoryRepository;
 
-    public UpdateProductInventoryOnProductReceiptDomainEventHandler(IFinishedProductInventoryRepository finisedProductInventoryRepository)
+    public UpdateInventoryOnCreateProductReceiptDomainEventHandler(IFinishedProductInventoryRepository finisedProductInventoryRepository)
     {
         _finisedProductInventoryRepository = finisedProductInventoryRepository;
     }
 
-    public async Task Handle(UpdateProductInventoryOnProductReceiptDomainEvent notification, CancellationToken cancellationToken)
+    public async Task Handle(UpdateInventoryOnCreateProductReceiptDomainEvent notification, CancellationToken cancellationToken)
     {
         var productInventory = new FinishedProductInventory(notification.PurchaseOrderNumber, notification.Quantity,
             notification.Timestamp, notification.Item);

@@ -12,6 +12,7 @@ public class GoodsReceiptLot
     public int GoodsReceiptId { get; private set; }
     public Item Item { get; private set; }
     public Employee Employee { get; private set; }
+    public List<GoodsReceiptSublot> Sublots { get; private set; }
 
     private GoodsReceiptLot() { }
     public GoodsReceiptLot(string goodsReceiptLotId, double quantity, DateTime? productionDate, DateTime? expirationDate, 
@@ -34,7 +35,8 @@ public class GoodsReceiptLot
         GoodsReceiptId = goodsReceiptId;
     }
 
-    public void Update(string newLotId, double quantity, DateTime? productionDate, DateTime? expirationDate, string? note)
+    public void Update(string newLotId, double quantity, DateTime? productionDate, DateTime? expirationDate, string? note,
+        List<GoodsReceiptSublot> receiptSublots)
     {
         GoodsReceiptLotId = newLotId;
         Quantity = quantity;
@@ -47,6 +49,8 @@ public class GoodsReceiptLot
 
         if (note != null)
             Note = note;
+
+        Sublots = receiptSublots;
     }
 
     public void UpdateConfirmedLot(double quantity, DateTime? productionDate, DateTime? expirationDate)

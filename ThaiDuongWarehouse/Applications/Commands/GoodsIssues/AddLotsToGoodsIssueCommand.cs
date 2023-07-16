@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace ThaiDuongWarehouse.Api.Applications.Commands.GoodsIssues;
+﻿namespace ThaiDuongWarehouse.Api.Applications.Commands.GoodsIssues;
 
 [DataContract]
 public class AddLotsToGoodsIssueCommand : IRequest<bool>

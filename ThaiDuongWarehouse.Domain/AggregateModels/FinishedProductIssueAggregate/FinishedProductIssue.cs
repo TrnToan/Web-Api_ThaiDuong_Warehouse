@@ -34,6 +34,6 @@ public class FinishedProductIssue : Entity, IAggregateRoot
 
     public void UpdateFinishedProductInventory(Item item, string purchaseOrderNumber, double quantity, DateTime timestamp)
     {
-        AddDomainEvent(new UpdateProductInventoryOnProductReceiptDomainEvent(purchaseOrderNumber, quantity, timestamp, item));
+        AddDomainEvent(new UpdateInventoryOnCreateProductIssueDomainEvent(item, purchaseOrderNumber, quantity, timestamp));
     }
 }

@@ -1,6 +1,4 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels.EmployeeAggregate;
-using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductIssueAggregate;
-using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductReceiptAggregate;
+﻿using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductIssueAggregate;
 
 namespace ThaiDuongWarehouse.Api.Applications.Commands.FinishedProductIssues;
 

@@ -21,6 +21,14 @@ public class GoodsReceiptEntityTypeConfiguration : IEntityTypeConfiguration<Good
 
             grl.HasOne(lot => lot.Item).WithMany().HasForeignKey(lot => lot.ItemId);
             grl.HasOne(e => e.Employee).WithMany().OnDelete(DeleteBehavior.Restrict).IsRequired();
+
+            grl.OwnsMany(sub => sub.Sublots, lot =>
+            {
+                lot.WithOwner();
+
+                lot.Property(sublot => sublot.LocationId);
+                lot.Property(sublot => sublot.QuantityPerLocation);
+            });
         });
         builder.Ignore(d => d.DomainEvents);
     }

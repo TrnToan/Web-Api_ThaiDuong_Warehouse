@@ -1,5 +1,5 @@
 ﻿namespace ThaiDuongWarehouse.Domain.DomainEvents;
-public class UpdateProductInventoryDomainEvent : INotification
+public class UpdateInventoryOnModifyProductReceiptEntryDomainEvent : INotification
 {
     public string OldPurchaseOrderNumber { get; private set; }
     public string NewPurchaseOrderNumber { get; private set; }
@@ -7,7 +7,7 @@ public class UpdateProductInventoryDomainEvent : INotification
     public DateTime Timestamp { get; private set; }
     public Item Item { get; private set; }
 
-    public UpdateProductInventoryDomainEvent(string oldPurchaseOrderNumber, string newPurchaseOrderNumber, 
+    public UpdateInventoryOnModifyProductReceiptEntryDomainEvent(string oldPurchaseOrderNumber, string newPurchaseOrderNumber, 
         double quantity, DateTime timestamp, Item item)
     {
         OldPurchaseOrderNumber = oldPurchaseOrderNumber;

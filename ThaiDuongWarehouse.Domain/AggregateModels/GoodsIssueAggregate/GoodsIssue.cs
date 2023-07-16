@@ -25,7 +25,7 @@ public class GoodsIssue : Entity, IAggregateRoot
         {
             if(entry.Item == existedEntry.Item)
             {
-                throw new WarehouseDomainException($"Entry with Item {entry.Item} has already existed in the GoodsIssue");
+                throw new WarehouseDomainException($"Entry with Item {entry.Item.ItemId} has already existed in the GoodsIssue");
             }
         }
         Entries.Add(entry);
@@ -48,31 +48,35 @@ public class GoodsIssue : Entity, IAggregateRoot
         }
         entry.AddLot(lot);
     }
-    public void Confirm(List<ItemLot> lots)
+    public void Confirm(List<ItemLot> itemLots)
     {
         foreach (GoodsIssueEntry entry in Entries)
         {
             foreach (GoodsIssueLot lot in entry.Lots)
             {
-                //this.AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.GoodsIssueLotId, -lot.Quantity, entry.Item.Id, DateTime.Now));
+                AddDomainEvent(new InventoryLogEntryAddedDomainEvent(lot.GoodsIssueLotId, -lot.Quantity, 0, lot.Quantity,
+                    entry.Item.Id, Timestamp));
             }
         }
 
-        var completelyExportedLots = new List<ItemLot>();
-
-        foreach (var lot in lots)
+        List<ItemLot> removedLots = new();
+        foreach (var lot in itemLots)
         {
             var goodsIssueLot = Entries.SelectMany(e => e.Lots).First(l => l.GoodsIssueLotId == lot.LotId);           
 
-            if (goodsIssueLot.Quantity == lot.Quantity)
+            if (goodsIssueLot.Quantity > lot.Quantity)
             {
-                completelyExportedLots.Add(lot);
+                throw new WarehouseDomainException($"Invalid goodsIssueLot quantity, {goodsIssueLot.Quantity}");
+            }
+            else if (goodsIssueLot.Quantity == lot.Quantity)
+            {
+                removedLots.Add(lot);
             }
             else
             {
-                this.AddDomainEvent(new ItemLotInformationChangedDomainEvent(lot.LotId, goodsIssueLot.Quantity));   
+                AddDomainEvent(new ItemLotInformationChangedDomainEvent(lot, goodsIssueLot));   
             }
         }
-        this.AddDomainEvent(new ItemLotsExportedDomainEvent(completelyExportedLots));      
+        AddDomainEvent(new ItemLotExportedDomainEvent(removedLots));
     }
 }

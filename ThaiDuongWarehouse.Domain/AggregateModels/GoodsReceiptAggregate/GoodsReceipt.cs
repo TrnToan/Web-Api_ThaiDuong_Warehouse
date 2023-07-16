@@ -18,15 +18,15 @@ public class GoodsReceipt : Entity, IAggregateRoot
         Employee = employee;      
     }
 
-    public void UpdateLot(string oldLotId, string? newLowId, double quantity, DateTime? productionDate, DateTime? expirationDate, 
-        string? note)
+    public void UpdateLot(string oldLotId, string? newLowId, double quantity, List<GoodsReceiptSublot> sublots,
+        DateTime? productionDate, DateTime? expirationDate, string? note)
     {
         string lotId = newLowId ?? oldLotId;
         var lot = Lots.FirstOrDefault(gr => gr.GoodsReceiptLotId == oldLotId);
         if (lot == null)
             throw new WarehouseDomainException($"GoodsReceiptLot with Id {lotId} does not exist.");
 
-        lot.Update(lotId, quantity, productionDate, expirationDate, note);
+        lot.Update(lotId, quantity, productionDate, expirationDate, note, sublots);
     }
 
     public void AddLot(GoodsReceiptLot goodsReceiptLot)
@@ -61,18 +61,16 @@ public class GoodsReceipt : Entity, IAggregateRoot
         AddDomainEvent(new UpdateItemLotDomainEvent(oldLotId, newLotId, itemLotLocations, quantity, productionDate, expirationDate));
     }
 
-    public void AddUpdatedGoodsReceiptLogEntry(string lotId, int itemId, double changedQuantity, DateTime timestamp)
+    public void UpdateGoodsReceiptLogEntries(string lotId, int itemId, double changedQuantity, DateTime timestamp)
     {
         double receivedQuantity = changedQuantity;
         double shippedQuantity = 0;
-        AddDomainEvent(new InventoryLogEntryAddedDomainEvent(lotId, changedQuantity, receivedQuantity, shippedQuantity, itemId, timestamp));
+        AddDomainEvent(new UpdateInventoryLogEntriesDomainEvent(lotId, changedQuantity, receivedQuantity, shippedQuantity, itemId, timestamp));
     }
 
-    public void AddDeletedGoodsReceiptLotLogEntry(string lotId, int itemId, double changedQuantity, DateTime timestamp)
+    public void DeletedGoodsReceiptLotLogEntry(string lotId, DateTime timestamp)
     {
-        double receivedQuantity = 0, shippedQuantity = 0;
-        AddDomainEvent(new InventoryLogEntryAddedDomainEvent(lotId, changedQuantity, receivedQuantity, shippedQuantity, itemId,
-            timestamp));
+        AddDomainEvent(new DeleteInventoryLogEntryDomainEvent(lotId, timestamp));
     }
 
     public void UpdateLogEntry(string newLotId, string oldLotId, int ItemId, DateTime timestamp)

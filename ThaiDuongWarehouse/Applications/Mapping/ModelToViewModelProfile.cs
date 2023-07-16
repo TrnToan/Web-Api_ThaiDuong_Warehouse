@@ -1,4 +1,5 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
+﻿using ThaiDuongWarehouse.Api.Applications.Queries.GoodsReceipts;
+using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
 
 namespace ThaiDuongWarehouse.Api.Applications.Mapping;
 
@@ -14,6 +15,7 @@ public class ModelToViewModelProfile : Profile
 		CreateMap<ItemLot, ItemLotViewModel>();
 		CreateMap<LotAdjustment, LotAdjustmentViewModel>();
         CreateMap<GoodsReceiptLot, GoodsReceiptLotViewModel>();
+		CreateMap<GoodsReceiptSublot, GoodsReceiptSublotViewModel>();
 		CreateMap<GoodsReceipt, GoodsReceiptViewModel>();
 		CreateMap<GoodsIssue, GoodsIssueViewModel>();
 		CreateMap<GoodsIssueEntry, GoodsIssueEntryViewModel>();

@@ -79,7 +79,7 @@ public class GoodsReceiptsController : ControllerBase
     [Route("{goodsReceiptId}/updatedGoodsReceiptLots")]
     public async Task<IActionResult> UpdateGoodsReceiptAsync(string goodsReceiptId, List<UpdateGoodsReceiptLotViewModel> goodsReceiptLots)
     {
-        UpdateGoodsReceiptCommand command = new UpdateGoodsReceiptCommand(goodsReceiptId, goodsReceiptLots);
+        UpdateGoodsReceiptCommand command = new (goodsReceiptId, goodsReceiptLots);
         try
         {
             var result = await _mediator.Send(command);

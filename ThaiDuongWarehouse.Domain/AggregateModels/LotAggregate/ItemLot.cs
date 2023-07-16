@@ -28,6 +28,7 @@ public class ItemLot : Entity, IAggregateRoot
         Quantity = quantity;
         Timestamp = timestamp;
         ItemId = itemId;
+        ItemLotLocations = new List<ItemLotLocation>();
     }
 
     public void SetQuantity(double quantity)
@@ -58,8 +59,23 @@ public class ItemLot : Entity, IAggregateRoot
     {
         IsIsolated = isIsolated;
     }
+
+    public void RemoveItemLotLocation (ItemLotLocation itemLotLocation)
+    {
+        ItemLotLocations?.Remove(itemLotLocation);
+    }
+
+    public void UpdateItemLotLocation (int itemLotId, int locationId, double quantityPerLocation)
+    {
+        var subItemLot = ItemLotLocations?.Find(ill => ill.ItemLotId == itemLotId && ill.LocationId == locationId);
+        if (subItemLot == null)
+        {
+            throw new WarehouseDomainException($"ItemLotLocation not found.");
+        }
+        subItemLot.UpdateQuantity(quantityPerLocation);
+    }
     public static void Reject(ItemLot lot)
     {
-        //lot.AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.LotId, -lot.Quantity, lot.ItemId, DateTime.Now));
+        //lot.AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.LotId, -lot.ChangedQuantity, lot.ItemId, DateTime.Now));
     }
 }

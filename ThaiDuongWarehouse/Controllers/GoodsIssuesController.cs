@@ -111,24 +111,4 @@ public class GoodsIssuesController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
-
-    [HttpPatch]
-    [Route("Confirm/{goodsIssueId}")]
-    public async Task<IActionResult> ConfirmGoodsIssue([FromRoute] string goodsIssueId)
-    {
-        ConfirmExportingGoodsIssueLotsCommand command = new(goodsIssueId);
-        bool result = await _mediator.Send(command);
-        try
-        {
-            if (result != true)
-            {
-                return BadRequest(result);
-            }
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
-    }
 }

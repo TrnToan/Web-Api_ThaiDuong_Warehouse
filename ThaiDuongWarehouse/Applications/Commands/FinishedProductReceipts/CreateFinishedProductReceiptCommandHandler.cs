@@ -36,7 +36,7 @@ public class CreateFinishedProductReceiptCommandHandler : IRequestHandler<Create
             finishedProductReceipt.AddReceiptEntry(finishedProductReceiptEntry);
 
             finishedProductReceipt.AddFinishedProductInventory(item, entry.PurchaseOrderNumber, entry.Quantity, finishedProductReceipt.Timestamp);
-            // ReceivedQuantity = ChangedQuantity = Quantity 1 entry với trường hợp tạo mới phiếu 
+            // ReceivedQuantity = ChangedQuantity = ChangedQuantity 1 entry với trường hợp tạo mới phiếu 
             finishedProductReceipt.AddLogEntry(item, entry.Quantity, entry.Quantity, finishedProductReceipt.Timestamp);
         }
 

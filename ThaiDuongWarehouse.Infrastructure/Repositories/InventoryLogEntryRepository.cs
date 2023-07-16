@@ -15,9 +15,9 @@ public class InventoryLogEntryRepository : BaseRepository, IInventoryLogEntryRep
         _context.InventoryLogEntries.Update(logEntry);
     }
 
-    public void Remove(InventoryLogEntry logEntry)
+    public void UpdateEntries(IEnumerable<InventoryLogEntry> entries)
     {
-        _context.InventoryLogEntries.Remove(logEntry);
+        _context.InventoryLogEntries.UpdateRange(entries);
     }
 
     public async Task<IEnumerable<InventoryLogEntry>> GetByItem(string itemId)
@@ -36,7 +36,7 @@ public class InventoryLogEntryRepository : BaseRepository, IInventoryLogEntryRep
     {
         return await _context.InventoryLogEntries
             .Where(log => log.ItemId == itemId)
-            .Where(log => log.Timestamp >= timestamp)
+            .Where(log => log.TrackingTime >= timestamp)
             .Include(log => log.Item)
             .ToListAsync();
     }
@@ -54,5 +54,18 @@ public class InventoryLogEntryRepository : BaseRepository, IInventoryLogEntryRep
         return await _context.InventoryLogEntries
             .Where(log => log.Timestamp == timestamp)
             .SingleOrDefaultAsync(log => log.ItemLotId == lotId);
+    }
+
+    public async Task<InventoryLogEntry?> GetPreviousLogEntry(int itemId, DateTime trackingTime)
+    {
+        return await _context.InventoryLogEntries
+            .Where(log => log.TrackingTime < trackingTime)
+            .OrderBy(log => log.TrackingTime)
+            .LastOrDefaultAsync(log => log.ItemId == itemId);
+    }
+
+    public void Delete(InventoryLogEntry logEntry)
+    {
+        _context.InventoryLogEntries.Remove(logEntry);
     }
 }

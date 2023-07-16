@@ -41,21 +41,6 @@ public class ItemLotsController : ControllerBase
 		return await _queries.GetItemLotsByItemId(itemId);
 	}
 
-	//[HttpGet]
-	//[Route("ByPO/{purchaseOrderNumber}")]
-	//public async Task<IEnumerable<ItemLotViewModel>> GetItemLotByPoAsync(string purchaseOrderNumber)
-	//{
-	//	return await _queries.GetItemLotsByPO(purchaseOrderNumber);
-	//}
-
-	//[HttpGet]
-	//[Route("ByLocation/{locationId}")]
-	//public async Task<IList<ItemLotViewModel>> GetItemLotsByLocationAsync(string locationId)
-	//{
-	//	return await _queries.GetItemLotsByLocationId(locationId);
-
- //   }
-
 	[HttpPatch]
 	[Route("{itemLotId}")]
 	public async Task<IActionResult> UpdateItemLotStateAsync([FromRoute] string itemLotId, bool isIsolated)
