@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ThaiDuongWarehouse.Api.Applications.Commands.Items;
+﻿using ThaiDuongWarehouse.Api.Applications.Commands.Items;
 using ThaiDuongWarehouse.Api.Applications.Queries.Items;
 
 namespace ThaiDuongWarehouse.Api.Controllers;
@@ -17,9 +16,9 @@ public class ItemsController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<ItemViewModel>> GetAllItems()
+    public async Task<IEnumerable<ItemViewModel>> GetAllItems([FromQuery] string? itemClassId)
     {
-        return await _queries.GetAllItemsAsync();
+        return await _queries.GetAllItemsAsync(itemClassId);
     }
 
     [HttpGet]

@@ -40,10 +40,10 @@ public class UpdateFinishedProductReceiptEntryCommandHandler : IRequestHandler<U
             if (changedQuantity != 0)
             {
                 // ReceivedQuantity = ChangedQuantity = entry mới - entry cũ ứng với trường hợp sửa quantity của entry trong phiếu
-                goodsReceipt.AddLogEntry(item, changedQuantity, changedQuantity, goodsReceipt.Timestamp);
+                goodsReceipt.UpdateLogEntry(entry.OldPurchaseOrderNumber, item.Id, entry.Quantity, entry.Quantity, goodsReceipt.Timestamp);
             }
             goodsReceipt.UpdateFinishedProductInventory(item, entry.OldPurchaseOrderNumber, entry.NewPurchaseOrderNumber, 
-                entry.Quantity, goodsReceipt.Timestamp);
+                changedQuantity, goodsReceipt.Timestamp);
         }
 
         _finishedProductReceiptRepository.Update(goodsReceipt);

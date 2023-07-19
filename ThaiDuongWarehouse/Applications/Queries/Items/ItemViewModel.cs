@@ -7,10 +7,10 @@ public class ItemViewModel
     public string Unit{ get; private set; }                
     public string ItemName { get; private set; }
     public double MinimumStockLevel { get; private set; }
-    public double Price { get; private set; }
+    public decimal? Price { get; private set; }
 
     public ItemViewModel(string itemId, string itemClassId, string unit, string itemName,
-        double minimumStockLevel, double price)
+        double minimumStockLevel, decimal price)
     {
         ItemId = itemId;
         ItemClassId = itemClassId;

@@ -1,5 +1,4 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels.GoodsIssueAggregate;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+﻿using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ThaiDuongWarehouse.Api.Applications.Queries.GoodsIssues;
 
@@ -7,6 +6,19 @@ public class GoodsIssueQueries : IGoodsIssueQueries
 {
     private readonly WarehouseDbContext _context;
     private readonly IMapper _mapper;
+
+    private IQueryable<GoodsIssue> _goodsIssues => _context.GoodsIssues
+        .Include(gi => gi.Employee)
+        .Include(gi => gi.Entries)
+            .ThenInclude(gie => gie.Item)
+        .Include(gi => gi.Entries)
+            .ThenInclude(gie => gie.Lots)
+                .ThenInclude(gil => gil.Sublots)
+        .Include(gi => gi.Entries)
+            .ThenInclude(gie => gie.Lots)
+                .ThenInclude(gil => gil.Employee)
+        .AsNoTracking();
+
     public GoodsIssueQueries(WarehouseDbContext context, IMapper mapper)
     {
         _context = context;
@@ -15,70 +27,41 @@ public class GoodsIssueQueries : IGoodsIssueQueries
 
     public async Task<GoodsIssueViewModel?> GetGoodsIssueById(string id)
     {
-        var goodsIssue = await _context.GoodsIssues
-            .AsNoTracking()
-            .Include(gi => gi.Employee)
-            .Include(gi => gi.Entries)
-                .ThenInclude(gie => gie.Item)
-            .Include(gi => gi.Entries)
-                .ThenInclude(gie => gie.Lots)
-                .ThenInclude(gil => gil.Employee)
+        var goodsIssue = await _goodsIssues
             .FirstOrDefaultAsync(gi => gi.GoodsIssueId == id);
+
         if (goodsIssue is null)
             throw new EntityNotFoundException($"GoodsIssue with Id {id} does not exist.");
 
         return _mapper.Map<GoodsIssue, GoodsIssueViewModel>(goodsIssue);
     }
 
-    //public async Task<IEnumerable<GoodsIssueViewModel>> GetConfirmedGoodsIssuesByTime(TimeRangeQuery query)
-    //{
-    //    var goodsIssues = await _context.GoodsIssues
-    //        .AsNoTracking()
-    //        .Include(gi => gi.Employee)
-    //        .Include(gi => gi.Entries)
-    //            .ThenInclude(gie => gie.Item)
-    //        .Include(gi => gi.Entries)
-    //            .ThenInclude(gie => gie.Lots)
-    //            .ThenInclude(gil => gil.Employee)
-    //        .Where(gi => gi.IsConfirmed == true)
-    //        .Where(gi =>
-    //            gi.Timestamp.CompareTo(query.StartTime) >= 0 &&
-    //            gi.Timestamp.CompareTo(query.EndTime) <= 0)
-    //        .OrderByDescending(gi => gi.Timestamp)
-    //        .ToListAsync();
+    public async Task<IEnumerable<GoodsIssueViewModel>> GetGoodsIssuesByTime(TimeRangeQuery query, bool isExported)
+    {
+        List<GoodsIssue> goodsIssues;
+        if (isExported)
+        {
+            goodsIssues = await _goodsIssues
+                .Where(gi => gi.Entries.All(gie => gie.Lots.Count != 0))
+                .Where(g => g.Timestamp >= query.StartTime &&
+                            g.Timestamp <= query.EndTime)
+                .ToListAsync();
+        }
+        else
+        {
+            goodsIssues = await _goodsIssues
+                .Where(gi => gi.Entries.Any(gie => gie.Lots.Count == 0))
+                .Where(g => g.Timestamp >= query.StartTime &&
+                            g.Timestamp <= query.EndTime)
+                .ToListAsync();
+        }
 
-    //    return _mapper.Map<IEnumerable<GoodsIssue>, IEnumerable<GoodsIssueViewModel>>(goodsIssues);
-    //}
-
-    //public async Task<IEnumerable<GoodsIssueViewModel>> GetUnconfirmedGoodsIssues()
-    //{
-    //    var goodsIssues = await _context.GoodsIssues
-    //        .AsNoTracking()
-    //        .Include(gi => gi.Employee)
-    //        .Include(gi => gi.Entries)
-    //            .ThenInclude(gie => gie.Item)
-    //        .Include(gi => gi.Entries)
-    //            .ThenInclude(gie => gie.Lots)
-    //            .ThenInclude(gil => gil.Employee)
-    //        .Where(gi => gi.IsConfirmed == false)
-    //        .OrderByDescending(gi => gi.Timestamp)
-    //        .ToListAsync();
-
-    //    return _mapper.Map<IEnumerable<GoodsIssue>, IEnumerable<GoodsIssueViewModel>>(goodsIssues);
-    //}
+        return _mapper.Map<IEnumerable<GoodsIssue>, IEnumerable<GoodsIssueViewModel>>(goodsIssues);
+    }
 
     public async Task<IEnumerable<GoodsIssueViewModel>> GetAll()
     {
-        var goodsIssues = await _context.GoodsIssues
-            .AsNoTracking()
-            .Include(gi => gi.Employee)
-            .Include(gi => gi.Entries)
-                .ThenInclude(gie => gie.Item)
-            .Include(gi => gi.Entries)
-                .ThenInclude(gie => gie.Lots)
-                .ThenInclude(gil => gil.Employee)
-            .OrderByDescending(gi => gi.Timestamp)
-            .ToListAsync();
+        var goodsIssues = await _goodsIssues.ToListAsync();
 
         return _mapper.Map<IEnumerable<GoodsIssue>, IEnumerable<GoodsIssueViewModel>>(goodsIssues);
     }
@@ -107,12 +90,23 @@ public class GoodsIssueQueries : IGoodsIssueQueries
         return receivers;
     }
 
-    public async Task<IList<string>> GetAllGoodsIssueIds()
+    public async Task<IList<string>> GetAllGoodsIssueIds(bool isExported)
     {
-        var goodsIssueIds = await _context.GoodsIssues
-            .AsNoTracking()
-            .Select(g => g.GoodsIssueId)
-            .ToListAsync();
+        List<string> goodsIssueIds;
+        if (isExported)
+        {
+            goodsIssueIds = await _goodsIssues
+                .Where(gi => gi.Entries.All(gie => gie.Lots.Count != 0))
+                .Select(gi => gi.GoodsIssueId)
+                .ToListAsync();
+        }
+        else
+        {
+            goodsIssueIds = await _goodsIssues
+                .Where(gi => gi.Entries.Any(gie => gie.Lots.Count == 0))
+                .Select(gi => gi.GoodsIssueId)
+                .ToListAsync();
+        }
 
         return goodsIssueIds;
     }

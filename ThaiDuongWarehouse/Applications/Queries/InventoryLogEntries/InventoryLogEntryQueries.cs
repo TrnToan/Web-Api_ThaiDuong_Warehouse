@@ -1,4 +1,5 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
+﻿using System.Net.WebSockets;
+using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
 
 namespace ThaiDuongWarehouse.Api.Applications.Queries.InventoryLogEntries;
 
@@ -6,6 +7,10 @@ public class InventoryLogEntryQueries : IInventoryLogEntryQueries
 {
     private readonly WarehouseDbContext _context;
     private readonly IMapper _mapper;
+
+    private IQueryable<InventoryLogEntry> _logs => _context.InventoryLogEntries
+                                                           .Include(log => log.Item)
+                                                           .AsNoTracking();
     public InventoryLogEntryQueries(WarehouseDbContext context, IMapper mapper)
     {
         _context = context;
@@ -14,9 +19,7 @@ public class InventoryLogEntryQueries : IInventoryLogEntryQueries
 
     public async Task<IEnumerable<InventoryLogEntryViewModel>> GetEntriesByItem(string itemId, TimeRangeQuery query)
     {
-        var logEntries = await _context.InventoryLogEntries
-            .AsNoTracking()
-            .Include(log => log.Item)
+        var logEntries = await _logs
             .Where(log => log.Item.ItemId == itemId)
             .Where(log =>
             log.TrackingTime.CompareTo(query.StartTime) >= 0 &&
@@ -30,9 +33,7 @@ public class InventoryLogEntryQueries : IInventoryLogEntryQueries
 
     public async Task<IEnumerable<InventoryLogEntryViewModel>> GetEntries(TimeRangeQuery query)
     {
-        var logEntries = await _context.InventoryLogEntries
-            .AsNoTracking()
-            .Include(log => log.Item)
+        var logEntries = await _logs
             .Where(log => 
             log.TrackingTime.CompareTo(query.StartTime) >= 0 &&
             log.TrackingTime.CompareTo(query.EndTime) <= 0)
@@ -53,9 +54,7 @@ public class InventoryLogEntryQueries : IInventoryLogEntryQueries
         }
         var itemViewModel = _mapper.Map<Item, ItemViewModel>(item); 
 
-        var logEntries = await _context.InventoryLogEntries
-            .AsNoTracking()
-            .Include(log => log.Item)
+        var logEntries = await _logs
             .Where(log =>
             log.TrackingTime.CompareTo(query.StartTime) >= 0 &&
             log.TrackingTime.CompareTo(query.EndTime) <= 0)
@@ -139,9 +138,7 @@ public class InventoryLogEntryQueries : IInventoryLogEntryQueries
     public async Task<IEnumerable<ItemLotLogEntryViewModel>> GetItemLotsLogEntry(DateTime trackingTime, string itemId)
     {
 
-        var filteredLogEntries = await _context.InventoryLogEntries
-            .AsNoTracking()
-            .Include(log => log.Item)
+        var filteredLogEntries = await _logs
             .Where(log => log.Item.ItemId == itemId)
             .Where(log => log.TrackingTime.CompareTo(trackingTime) >= 0)
             .ToListAsync();
@@ -152,6 +149,15 @@ public class InventoryLogEntryQueries : IInventoryLogEntryQueries
         {
             string? itemLotId = groupEntry.Key;
             double totalQuantity = groupEntry.Sum(entry => entry.ChangedQuantity);
+            while (totalQuantity < 0)
+            {
+                var previousLogEntry = await _context.InventoryLogEntries
+                    .Where(log => log.TrackingTime < groupEntry.First().TrackingTime)
+                    .OrderBy(log => log.TrackingTime)
+                    .LastOrDefaultAsync(log => log.ItemLotId == itemLotId);
+
+                totalQuantity += previousLogEntry.ChangedQuantity;
+            }
 
             ItemViewModel item = _mapper.Map<ItemViewModel>(groupEntry.First().Item);
             var lotLogEntryVM = new ItemLotLogEntryViewModel(itemLotId, totalQuantity, item);

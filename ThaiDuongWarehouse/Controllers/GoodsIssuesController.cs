@@ -1,5 +1,4 @@
 ﻿using ThaiDuongWarehouse.Api.Applications.Commands.GoodsIssues;
-using ThaiDuongWarehouse.Api.Applications.Queries;
 
 namespace ThaiDuongWarehouse.Api.Controllers;
 
@@ -17,9 +16,9 @@ public class GoodsIssuesController : ControllerBase
 
     [HttpGet]
     [Route("Ids")]
-    public async Task<IList<string>> GetGoodsIssueIdsAsync()
+    public async Task<IList<string>> GetGoodsIssueIdsAsync(bool isExported)
     {
-        return await _queries.GetAllGoodsIssueIds();
+        return await _queries.GetAllGoodsIssueIds(isExported);
     }
 
     [HttpGet]
@@ -29,18 +28,11 @@ public class GoodsIssuesController : ControllerBase
         return await _queries.GetGoodsIssueById(goodsIssueId);
     }
 
-    //[HttpGet]
-    //public async Task<IEnumerable<GoodsIssueViewModel>> GetGoodsIssuesAsync([FromQuery] TimeRangeQuery query)
-    //{
-    //    return await _queries.GetConfirmedGoodsIssuesByTime(query);
-    //}
-
-    //[HttpGet]
-    //[Route("Unconfirmed")]
-    //public async Task<IEnumerable<GoodsIssueViewModel>> GetUnconfirmedGoodsIssuesAsync()
-    //{
-    //    return await _queries.GetUnconfirmedGoodsIssues();
-    //}
+    [HttpGet]
+    public async Task<IEnumerable<GoodsIssueViewModel>> GetGoodsIssuesAsync([FromQuery] TimeRangeQuery query, bool isExported)
+    {
+        return await _queries.GetGoodsIssuesByTime(query, isExported);
+    }
 
     [HttpGet]
     [Route("Receivers")]
@@ -70,9 +62,10 @@ public class GoodsIssuesController : ControllerBase
     }
 
     [HttpPatch]
-    [Route("GoodsIssueEntry")]
-    public async Task<IActionResult> UpdateEntryAsync([FromBody] UpdateGoodsIssueEntryCommand command)
+    [Route("{goodsIssueId}/goodsIssueEntries")]
+    public async Task<IActionResult> UpdateEntryAsync(string goodsIssueId, [FromBody] List<UpdateGoodsIssueEntryViewModel> entries)
     {
+        UpdateGoodsIssueEntryCommand command = new (goodsIssueId, entries);
         try
         {
             var result = await _mediator.Send(command);

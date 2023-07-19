@@ -1,6 +1,5 @@
 ﻿using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductInventoryAggregate;
 using ThaiDuongWarehouse.Domain.AggregateModels.ProductInventoryAggregate;
-using ThaiDuongWarehouse.Domain.DomainEvents;
 
 namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 
@@ -15,9 +14,22 @@ public class UpdateInventoryOnCreateProductReceiptDomainEventHandler : INotifica
 
     public async Task Handle(UpdateInventoryOnCreateProductReceiptDomainEvent notification, CancellationToken cancellationToken)
     {
-        var productInventory = new FinishedProductInventory(notification.PurchaseOrderNumber, notification.Quantity,
+        var existedProductInventory = await _finisedProductInventoryRepository.GetFinishedProductInventory(
+            notification.Item.ItemId, notification.Item.Unit, notification.PurchaseOrderNumber, notification.Timestamp);
+
+        if (existedProductInventory is null)
+        {
+            var productInventory = new FinishedProductInventory (notification.PurchaseOrderNumber, notification.Quantity,
             notification.Timestamp, notification.Item);
 
-        await _finisedProductInventoryRepository.Add(productInventory);
+            await _finisedProductInventoryRepository.Add(productInventory);
+        }
+        else
+        {
+            existedProductInventory.UpdateQuantity(notification.Quantity);
+
+            _finisedProductInventoryRepository.Update(existedProductInventory);
+        }
+
     }
 }

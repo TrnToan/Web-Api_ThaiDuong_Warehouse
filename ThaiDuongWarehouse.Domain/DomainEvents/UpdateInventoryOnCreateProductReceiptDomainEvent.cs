@@ -6,7 +6,8 @@ public class UpdateInventoryOnCreateProductReceiptDomainEvent : INotification
     public DateTime Timestamp { get; private set; }
     public Item Item { get; private set; }
 
-    public UpdateInventoryOnCreateProductReceiptDomainEvent(string purchaseOrderNumber, double quantity, DateTime timestamp, Item item)
+    public UpdateInventoryOnCreateProductReceiptDomainEvent(string purchaseOrderNumber, double quantity, DateTime timestamp, 
+        Item item)
     {
         PurchaseOrderNumber = purchaseOrderNumber;
         Quantity = quantity;

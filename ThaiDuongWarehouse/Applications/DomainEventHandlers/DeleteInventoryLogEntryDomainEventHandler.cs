@@ -1,6 +1,4 @@
-﻿using System.Net.WebSockets;
-using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
-using ThaiDuongWarehouse.Domain.DomainEvents;
+﻿using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
 
 namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 
@@ -19,7 +17,7 @@ public class DeleteInventoryLogEntryDomainEventHandler : INotificationHandler<De
     public async Task Handle(DeleteInventoryLogEntryDomainEvent notification, CancellationToken cancellationToken)
     {
         InventoryLogEntry removedLogEntry;
-        List<InventoryLogEntry> fixedLogEntries = new List<InventoryLogEntry>();
+        List<InventoryLogEntry> fixedLogEntries = new ();
 
         var serviceLogEntry = _service.GetLogEntry(notification.ItemLotId, notification.Timestamp);
         if (serviceLogEntry is null)

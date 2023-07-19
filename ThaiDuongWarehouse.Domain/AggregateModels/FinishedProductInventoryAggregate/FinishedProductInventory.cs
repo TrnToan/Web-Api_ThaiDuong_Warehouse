@@ -21,6 +21,11 @@ public class FinishedProductInventory : Entity, IAggregateRoot
     public void UpdateProductInventory(string purchaseOrderNumber, double quantity)
     {
         PurchaseOrderNumber = purchaseOrderNumber;
-        Quantity = quantity;
+        Quantity += quantity;
+    }
+
+    public void UpdateQuantity(double quantity)
+    {
+        Quantity += quantity;
     }
 }

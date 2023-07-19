@@ -6,17 +6,11 @@ public class UpdateGoodsIssueEntryCommand : IRequest<bool>
     [DataMember]
     public string GoodsIssueId { get; private set; }
     [DataMember]
-    public string ItemId { get; private set; }
-    [DataMember]
-    public string Unit { get; private set; }
-    [DataMember]
-    public double RequestedQuantity { get; private set; }
+    public List<UpdateGoodsIssueEntryViewModel> Entries { get; private set; }
 
-    public UpdateGoodsIssueEntryCommand(string goodsIssueId, string itemId, string unit, double requestedQuantity)
+    public UpdateGoodsIssueEntryCommand(string goodsIssueId, List<UpdateGoodsIssueEntryViewModel> entries)
     {
         GoodsIssueId = goodsIssueId;
-        ItemId = itemId;
-        Unit = unit;
-        RequestedQuantity = requestedQuantity;
+        Entries = entries;
     }
 }

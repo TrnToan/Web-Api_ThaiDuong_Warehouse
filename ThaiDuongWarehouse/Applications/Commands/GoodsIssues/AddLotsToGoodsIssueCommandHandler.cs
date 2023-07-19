@@ -1,6 +1,4 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels;
-
-namespace ThaiDuongWarehouse.Api.Applications.Commands.GoodsIssues;
+﻿namespace ThaiDuongWarehouse.Api.Applications.Commands.GoodsIssues;
 
 public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsIssueCommand, bool>
 {
@@ -65,7 +63,7 @@ public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsI
     private async Task<GoodsIssueLot> CreateGoodsIssueLotAsync(CreateGoodsIssueLotViewModel lotVM, double quantity, 
         int employeeId)
     {
-        List<GoodsIssueSublot> goodsIssueSublots = new List<GoodsIssueSublot>();
+        List<GoodsIssueSublot> goodsIssueSublots = new ();
         foreach (var sub in lotVM.ItemLotLocations)
         {
             var location = await _storageRepository.GetLocationById(sub.LocationId);

@@ -34,8 +34,10 @@ public class AddEntryToFinishedProductReceiptCommandHandler : IRequestHandler<Ad
             goodsReceipt.AddReceiptEntry(finishedProductEntry);
 
             // ReceivedQuantity = ChangedQuantity = ChangedQuantity của entry mới thêm vào trong trường hợp bổ sung entry
-            goodsReceipt.AddLogEntry(item, addedEntry.Quantity, addedEntry.Quantity, goodsReceipt.Timestamp);
-            goodsReceipt.AddFinishedProductInventory(item, addedEntry.PurchaseOrderNumber, addedEntry.Quantity, goodsReceipt.Timestamp);
+            goodsReceipt.AddLogEntry(addedEntry.PurchaseOrderNumber, item.Id, addedEntry.Quantity, addedEntry.Quantity, 
+                goodsReceipt.Timestamp);
+            goodsReceipt.AddFinishedProductInventory(item, addedEntry.PurchaseOrderNumber, addedEntry.Quantity, 
+                goodsReceipt.Timestamp);
         }
 
         _finishedProductReceiptRepository.Update(goodsReceipt);

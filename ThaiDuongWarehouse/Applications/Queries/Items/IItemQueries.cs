@@ -2,6 +2,6 @@
 
 public interface IItemQueries
 {
-    Task<IEnumerable<ItemViewModel>> GetAllItemsAsync();
-    Task<ItemViewModel?> GetItemByIdAsync(string ItemId, string unit);
+    Task<IEnumerable<ItemViewModel>> GetAllItemsAsync(string? itemClassId);
+    Task<ItemViewModel?> GetItemByIdAsync(string itemId, string unit);
 }

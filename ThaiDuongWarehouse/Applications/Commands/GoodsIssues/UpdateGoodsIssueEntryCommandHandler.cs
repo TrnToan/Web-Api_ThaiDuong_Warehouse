@@ -18,7 +18,10 @@ public class UpdateGoodsIssueEntryCommandHandler : IRequestHandler<UpdateGoodsIs
             throw new EntityNotFoundException($"GoodsIssue with Id {request.GoodsIssueId} doesn't exist.");
         }
 
-        goodsIssue.UpdateEntry(request.ItemId, request.Unit, request.RequestedQuantity);
+        foreach (var entry in request.Entries)
+        {
+            goodsIssue.UpdateEntry(entry.ItemId, entry.Unit, entry.RequestedQuantity);
+        }      
 
         _goodsIssueRepository.Update(goodsIssue);
         return await _goodsIssueRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);

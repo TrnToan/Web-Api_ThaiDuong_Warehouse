@@ -2,17 +2,30 @@
 
 public class ItemQueries : IItemQueries
 {
-    private readonly IItemRepository _itemRepository;
+    private readonly WarehouseDbContext _context;
     private readonly IMapper _mapper;
-    public ItemQueries(IItemRepository itemRepository, IMapper mapper)
+
+    private IQueryable<Item> _items => _context.Items.AsNoTracking();
+    public ItemQueries(WarehouseDbContext context, IMapper mapper)
     {
-        _itemRepository = itemRepository;
+        _context = context;
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<ItemViewModel>> GetAllItemsAsync()
+    public async Task<IEnumerable<ItemViewModel>> GetAllItemsAsync(string? itemClassId)
     {
-        var items = await _itemRepository.GetAllAsync();
+        List<Item> items;
+        if (itemClassId != null)
+        {
+            items = await _items
+                .Where(i => i.ItemClassId == itemClassId)
+                .ToListAsync();
+        }
+        else
+        {
+            items = await _items
+                .ToListAsync();
+        }
         var viewModels = _mapper.Map<IEnumerable<Item>, IEnumerable<ItemViewModel>>(items);
 
         return viewModels;
@@ -20,7 +33,7 @@ public class ItemQueries : IItemQueries
 
     public async Task<ItemViewModel?> GetItemByIdAsync(string itemId, string unit)
     {
-        var item = await _itemRepository.GetItemById(itemId, unit);
+        var item = await _items.SingleOrDefaultAsync(i => i.ItemId == itemId && i.Unit == unit);
         return _mapper.Map<Item?, ItemViewModel>(item);
     }
 }

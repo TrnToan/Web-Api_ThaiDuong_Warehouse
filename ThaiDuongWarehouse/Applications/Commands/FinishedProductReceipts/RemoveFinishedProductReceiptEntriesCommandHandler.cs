@@ -32,7 +32,7 @@ public class RemoveFinishedProductReceiptEntriesCommandHandler : IRequestHandler
             goodsReceipt.RemoveReceiptEntry(item, entry.PurchaseOrderNumber);
             
             // ChangedQuantity = - ChangedQuantity của entry đó khi xoá entry trong trường hợp nhập liệu sai 
-            goodsReceipt.AddLogEntry(item, -removedEntry.Quantity, 0, goodsReceipt.Timestamp);
+            goodsReceipt.AddLogEntry(entry.PurchaseOrderNumber, item.Id, -removedEntry.Quantity, 0, goodsReceipt.Timestamp);
             goodsReceipt.RemoveFinishedProductInventory(item, entry.PurchaseOrderNumber, goodsReceipt.Timestamp);
         }
 

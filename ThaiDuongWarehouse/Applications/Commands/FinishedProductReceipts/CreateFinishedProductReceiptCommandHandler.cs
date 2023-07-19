@@ -35,9 +35,8 @@ public class CreateFinishedProductReceiptCommandHandler : IRequestHandler<Create
                 entry.Note, finishedProductReceipt.Id, item);
             finishedProductReceipt.AddReceiptEntry(finishedProductReceiptEntry);
 
-            finishedProductReceipt.AddFinishedProductInventory(item, entry.PurchaseOrderNumber, entry.Quantity, finishedProductReceipt.Timestamp);
-            // ReceivedQuantity = ChangedQuantity = ChangedQuantity 1 entry với trường hợp tạo mới phiếu 
-            finishedProductReceipt.AddLogEntry(item, entry.Quantity, entry.Quantity, finishedProductReceipt.Timestamp);
+            finishedProductReceipt.AddFinishedProductInventory(item, entry.PurchaseOrderNumber, entry.Quantity, finishedProductReceipt.Timestamp);            
+            finishedProductReceipt.AddLogEntry(entry.PurchaseOrderNumber, item.Id, entry.Quantity, entry.Quantity, finishedProductReceipt.Timestamp);
         }
 
         await _finishedProductReceiptRepository.Add(finishedProductReceipt);

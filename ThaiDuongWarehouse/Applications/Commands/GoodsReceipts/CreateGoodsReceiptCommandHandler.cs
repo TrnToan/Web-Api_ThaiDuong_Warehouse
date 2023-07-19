@@ -20,8 +20,14 @@ public class CreateGoodsReceiptCommandHandler : IRequestHandler<CreateGoodsRecei
         {
             throw new EntityNotFoundException($"Employee in the GoodsReceipt {request.GoodsReceiptId} doesn't exist in the context.");
         }
+
+        var existedGoodsReceipt = await _goodsReceiptRepository.GetGoodsReceiptById(request.GoodsReceiptId);
+        if (existedGoodsReceipt is not null)
+        {
+            throw new DuplicateRecordException($"GoodsReceipt with Id {existedGoodsReceipt.GoodsReceiptId} already existed.");
+        }
    
-        var goodsReceipt = new GoodsReceipt(request.GoodsReceiptId, request.Supplier, DateTime.Now, goodsReceiptEmployee);
+        var goodsReceipt = new GoodsReceipt(request.GoodsReceiptId, request.Supplier, DateTime.UtcNow.AddHours(7), goodsReceiptEmployee);
         var itemLots = new List<ItemLot>();
         
         foreach (var receiptLotViewModel in request.GoodsReceiptLots)

@@ -27,7 +27,7 @@ public class InventoryLogEntryAddedDomainEventHandler : INotificationHandler<Inv
         }
 
         InventoryLogEntry? latestEntry1 = await _inventoryLogEntryRepository.GetLatestLogEntry(notification.ItemId);
-        InventoryLogEntry? latestEntry2 = _service.FindEntry(notification.ItemId);
+        InventoryLogEntry? latestEntry2 = _service.FindLatestServiceEntry(notification.ItemId);
 
         double beforeQuantity = 0;
         if (latestEntry1 is null && latestEntry2 is null)

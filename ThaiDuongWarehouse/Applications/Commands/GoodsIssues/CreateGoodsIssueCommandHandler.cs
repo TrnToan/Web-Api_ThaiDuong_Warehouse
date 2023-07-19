@@ -15,12 +15,18 @@ public class CreateGoodsIssueCommandHandler : IRequestHandler<CreateGoodsIssueCo
 
     public async Task<bool> Handle(CreateGoodsIssueCommand request, CancellationToken cancellationToken)
     {
+        var existedGoodsIssue = await _goodsIssueRepository.GetGoodsIssueById(request.GoodsIssueId);
+        if (existedGoodsIssue is not null)
+        {
+            throw new DuplicateRecordException($"GoodsIssue with Id {existedGoodsIssue.GoodsIssueId} already existed.");
+        }
+
         var employee = await _employeeRepository.GetEmployeeById(request.EmployeeId);
         if (employee is null)
         {
             throw new EntityNotFoundException($"Employee with Id {request.EmployeeId} doesn't exist.");
         }
-        var goodsIssue = new GoodsIssue(request.GoodsIssueId, request.Timestamp, request.Receiver, employee.Id);
+        var goodsIssue = new GoodsIssue(request.GoodsIssueId, DateTime.UtcNow.AddHours(7), request.Receiver, employee.Id);
 
         foreach (var entry in request.Entries)
         {

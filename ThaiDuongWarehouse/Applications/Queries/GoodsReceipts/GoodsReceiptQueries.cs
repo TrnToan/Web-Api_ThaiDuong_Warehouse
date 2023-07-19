@@ -1,6 +1,4 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate;
-
-namespace ThaiDuongWarehouse.Api.Applications.Queries.GoodsReceipt;
+﻿namespace ThaiDuongWarehouse.Api.Applications.Queries.GoodsReceipt;
 
 public class GoodsReceiptQueries : IGoodsReceiptQueries
 {

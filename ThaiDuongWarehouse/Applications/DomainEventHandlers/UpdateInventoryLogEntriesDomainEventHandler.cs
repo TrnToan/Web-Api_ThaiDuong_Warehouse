@@ -1,5 +1,4 @@
 ﻿using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
-using ThaiDuongWarehouse.Domain.DomainEvents;
 
 namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 

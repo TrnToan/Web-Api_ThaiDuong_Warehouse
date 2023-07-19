@@ -21,14 +21,14 @@ public class InventoryLogEntryService
 		Entries.AddRange(entries);
 	}
 
-	public InventoryLogEntry? FindEntry(int itemId)
+	public InventoryLogEntry? FindLatestServiceEntry(int itemId)
 	{
 		return Entries.LastOrDefault(e => e.ItemId == itemId);
 	}
 	
 	public InventoryLogEntry? GetLogEntry(string lotId, DateTime timestamp)
 	{
-		return Entries.FirstOrDefault(log => log.ItemLotId == lotId && log.Timestamp == timestamp);
+		return Entries.Find(log => log.ItemLotId == lotId && log.Timestamp == timestamp);
 	}
 
 	public List<InventoryLogEntry> GetLogEntries(int itemId, DateTime timestamp) 
