@@ -1,5 +1,4 @@
 ﻿using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
-using ThaiDuongWarehouse.Domain.DomainEvents;
 
 namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 
@@ -25,12 +24,15 @@ public class LotAdjustedDomainEventHandler : INotificationHandler<LotAdjustedDom
         double beforeQuantity = itemLots.Sum(x => x.Quantity);
 
         var item = await _itemRepository.GetItemById(notification.ItemId, notification.Unit);
+        if (item is null)
+        {
+            throw new EntityNotFoundException($"Item, {notification.ItemId} & {notification.Unit}");
+        }
         double changedQuantity = notification.AfterQuantity - notification.BeforeQuantity;
 
-#pragma warning disable CS8604 // Possible null reference argument.
-        var inventoryLogEntry = new InventoryLogEntry(notification.Timestamp, notification.LotId, beforeQuantity,
-            changedQuantity, item);
-#pragma warning restore CS8604 // Possible null reference argument.
+        var inventoryLogEntry = new InventoryLogEntry(item.Id, notification.LotId, notification.Timestamp, beforeQuantity, 
+            changedQuantity, 0, -changedQuantity);
+
         itemLot.Update(notification.AfterQuantity);
 
         _itemLotRepository.UpdateLot(itemLot);

@@ -2,14 +2,12 @@
 
 public class ItemLotLogEntryViewModel
 {
-    public string ItemLotId { get; private set; }
+    public string LotId { get; private set; }
     public double Quantity { get; private set; }
-    public ItemViewModel Item { get; private set; }
 
-    public ItemLotLogEntryViewModel(string itemLotId, double quantity, ItemViewModel item)
+    public ItemLotLogEntryViewModel(string lotId, double quantity)
     {
-        ItemLotId = itemLotId;
+        LotId = lotId;
         Quantity = quantity;
-        Item = item;
     }
 }

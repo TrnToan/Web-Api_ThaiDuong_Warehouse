@@ -68,14 +68,14 @@ public class GoodsReceipt : Entity, IAggregateRoot
         AddDomainEvent(new UpdateInventoryLogEntriesDomainEvent(lotId, changedQuantity, receivedQuantity, shippedQuantity, itemId, timestamp));
     }
 
-    public void DeletedGoodsReceiptLotLogEntry(string lotId, DateTime timestamp)
+    public void DeletedGoodsReceiptLotLogEntry(int itemId, string lotId, DateTime timestamp)
     {
-        AddDomainEvent(new DeleteInventoryLogEntryDomainEvent(lotId, timestamp));
+        AddDomainEvent(new DeleteInventoryLogEntryDomainEvent(itemId, lotId, timestamp));
     }
 
-    public void UpdateLogEntry(string newLotId, string oldLotId, int ItemId, DateTime timestamp)
+    public void UpdateLogEntry(string newLotId, string oldLotId, int itemId, DateTime timestamp)
     {
-        AddDomainEvent(new InventoryLogEntryChangedDomainEvent(oldLotId, newLotId, ItemId, timestamp));
+        AddDomainEvent(new InventoryLogEntryChangedDomainEvent(oldLotId, newLotId, itemId, timestamp));
     }
 
     public void Confirm(List<ItemLot> itemLots)

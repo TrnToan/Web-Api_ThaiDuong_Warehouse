@@ -20,11 +20,11 @@ public class FinishedProductInventoryRepository : BaseRepository, IFinishedProdu
             throw new DbUpdateException("Unable to add finishedProductInventory to Database.");
     }
 
-    public async Task<FinishedProductInventory?> GetFinishedProductInventory(string itemId, string unit, string PO, DateTime timestamp)
+    public async Task<FinishedProductInventory?> GetFinishedProductInventory(string itemId, string unit, string PO)
     {
         return await _context.FinishedProductInventories
             .FirstOrDefaultAsync(f => f.Item.ItemId == itemId && f.Item.Unit == unit
-                                    && f.PurchaseOrderNumber == PO && f.Timestamp == timestamp);
+                                    && f.PurchaseOrderNumber == PO);
     }
 
     public void Remove(FinishedProductInventory finishedProductInventory)

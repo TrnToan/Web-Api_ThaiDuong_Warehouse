@@ -14,8 +14,9 @@ public class ModelToViewModelProfile : Profile
 		CreateMap<Warehouse, WarehouseViewModel>();
 		CreateMap<Location, LocationViewModel>();
 		CreateMap<ItemLot, ItemLotViewModel>();
+		CreateMap<ItemLot, ItemLotLogEntryViewModel>();
 		CreateMap<ItemLotLocation, ItemSublotViewModel>()
-			.ForMember(dest => dest.LocationId, opt => opt.MapFrom(src => src.Location.LocationId));
+			.ConvertUsing<ItemLotLocationToItemSublotViewModelConverter>();
 		CreateMap<LotAdjustment, LotAdjustmentViewModel>();
         CreateMap<GoodsReceiptLot, GoodsReceiptLotViewModel>();
 		CreateMap<GoodsReceiptSublot, GoodsReceiptSublotViewModel>();

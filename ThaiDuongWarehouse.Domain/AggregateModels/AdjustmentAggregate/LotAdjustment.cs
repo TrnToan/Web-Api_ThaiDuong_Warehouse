@@ -44,7 +44,7 @@ public class LotAdjustment : Entity, IAggregateRoot
     public void Confirm(string lotId, string itemId, double beforeQuantity , double afterQuanity, string unit)
     {
         IsConfirmed = true;
-        Timestamp = DateTime.Now;
+        Timestamp = DateTime.UtcNow.AddHours(7);
         AddDomainEvent(new LotAdjustedDomainEvent(lotId, itemId, beforeQuantity, afterQuanity, Timestamp, unit));
     }
 }

@@ -28,4 +28,9 @@ public class FinishedProductInventory : Entity, IAggregateRoot
     {
         Quantity += quantity;
     }
+
+    public void SetQuantity(double quantity)
+    {
+        Quantity = quantity;
+    }
 }

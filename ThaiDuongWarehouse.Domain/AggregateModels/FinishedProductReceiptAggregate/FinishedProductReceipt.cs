@@ -50,9 +50,21 @@ public class FinishedProductReceipt : Entity, IAggregateRoot
             itemId, timestamp));
     }
 
-    public void UpdateLogEntry(string purchaseOrderNumber, int itemId, double changedQuantity, double receivedQuantity, DateTime timestamp)
+    public void UpdateQuantityLogEntry(string purchaseOrderNumber, int itemId, double changedQuantity, double receivedQuantity, DateTime timestamp)
     {
+        double shippedQuantity = 0;
+        AddDomainEvent(new UpdateInventoryLogEntriesDomainEvent(purchaseOrderNumber, changedQuantity, receivedQuantity, 
+            shippedQuantity, itemId, timestamp));
+    }
 
+    public void ModifyLogEntry(string oldPO, string newPO, int itemId, DateTime timestamp)
+    {
+        AddDomainEvent(new InventoryLogEntryChangedDomainEvent(oldPO, newPO, itemId, timestamp));
+    }
+
+    public void RemoveLogEntry(int itemId, string purchaseOrderNumber, DateTime timestamp)
+    {
+        AddDomainEvent(new DeleteInventoryLogEntryDomainEvent(itemId, purchaseOrderNumber, timestamp)); 
     }
 
     public void AddFinishedProductInventory(Item item, string purchaseOrderNumber, double quantity, DateTime timestamp)
@@ -63,12 +75,19 @@ public class FinishedProductReceipt : Entity, IAggregateRoot
     public void UpdateFinishedProductInventory(Item item, string oldPurchaseOrderNumber, string newPurchaseOrderNumber,
         double quantity, DateTime timestamp)
     {
+        // Sửa số PO và số lượng của 1 entry --> Cập nhật tồn kho TP
         AddDomainEvent(new UpdateInventoryOnModifyProductReceiptEntryDomainEvent(oldPurchaseOrderNumber, newPurchaseOrderNumber, 
             quantity, timestamp, item));
     }
 
-    public void RemoveFinishedProductInventory(Item item, string purchaseOrderNumber, DateTime timestamp)
+    public void RemoveFinishedProductInventory(Item item, string purchaseOrderNumber)
     {
-        AddDomainEvent(new RemoveInventoryOnRemoveProductReceiptEntryDomainEvent(item, purchaseOrderNumber, timestamp));
+        var entry = Entries.Find(e => e.Item.Id == item.Id && e.PurchaseOrderNumber == purchaseOrderNumber);
+        if (entry == null)
+        {
+            throw new WarehouseDomainException($"Entry with item {item.ItemName} & {purchaseOrderNumber} not found.");
+        }
+
+        AddDomainEvent(new UpdateInventoryOnRemoveProductReceiptEntryDomainEvent(item, purchaseOrderNumber, entry.Quantity));
     }
 }

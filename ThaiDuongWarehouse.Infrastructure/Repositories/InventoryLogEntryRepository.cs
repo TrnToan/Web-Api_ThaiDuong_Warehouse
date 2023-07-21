@@ -49,11 +49,11 @@ public class InventoryLogEntryRepository : BaseRepository, IInventoryLogEntryRep
             .FirstOrDefaultAsync(log => log.Item.Id == itemId);
     }
 
-    public async Task<InventoryLogEntry?> GetLogEntry(string lotId, DateTime timestamp)
+    public async Task<InventoryLogEntry?> GetLogEntry(int itemId, string lotId, DateTime timestamp)
     {
         return await _context.InventoryLogEntries
             .Where(log => log.Timestamp == timestamp)
-            .SingleOrDefaultAsync(log => log.ItemLotId == lotId);
+            .SingleOrDefaultAsync(log => log.ItemId == itemId && log.ItemLotId == lotId);
     }
 
     public async Task<InventoryLogEntry?> GetPreviousLogEntry(int itemId, DateTime trackingTime)
@@ -62,6 +62,13 @@ public class InventoryLogEntryRepository : BaseRepository, IInventoryLogEntryRep
             .Where(log => log.TrackingTime < trackingTime)
             .OrderBy(log => log.TrackingTime)
             .LastOrDefaultAsync(log => log.ItemId == itemId);
+    }
+
+    public async Task<InventoryLogEntry?> GetFinishedProductLogEntry(int itemId, string PO, DateTime timestamp)
+    {
+        return await _context.InventoryLogEntries
+            .Where(log => log.Timestamp == timestamp)
+            .SingleOrDefaultAsync(log => log.ItemId == itemId && log.ItemLotId == PO);
     }
 
     public void Delete(InventoryLogEntry logEntry)

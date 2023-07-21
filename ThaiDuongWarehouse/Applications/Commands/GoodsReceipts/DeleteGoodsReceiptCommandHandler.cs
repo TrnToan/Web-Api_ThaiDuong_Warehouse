@@ -19,7 +19,7 @@ public class DeleteGoodsReceiptCommandHandler : IRequestHandler<DeleteGoodsRecei
 
         foreach (var lot in removedGoodsReceipt.Lots)
         {
-            removedGoodsReceipt.DeletedGoodsReceiptLotLogEntry(lot.GoodsReceiptLotId, removedGoodsReceipt.Timestamp);
+            removedGoodsReceipt.DeletedGoodsReceiptLotLogEntry(lot.ItemId, lot.GoodsReceiptLotId, removedGoodsReceipt.Timestamp);
         }
         removedGoodsReceipt.RemoveItemLotEntities(removedGoodsReceipt.Lots);
 

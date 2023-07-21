@@ -19,10 +19,11 @@ public class DeleteInventoryLogEntryDomainEventHandler : INotificationHandler<De
         InventoryLogEntry removedLogEntry;
         List<InventoryLogEntry> fixedLogEntries = new ();
 
-        var serviceLogEntry = _service.GetLogEntry(notification.ItemLotId, notification.Timestamp);
+        var serviceLogEntry = _service.GetLogEntry(notification.ItemId, notification.ItemLotId, notification.Timestamp);
         if (serviceLogEntry is null)
         {
-            var logEntry = await _inventoryLogEntryRepository.GetLogEntry(notification.ItemLotId, notification.Timestamp);
+            var logEntry = await _inventoryLogEntryRepository.GetLogEntry(notification.ItemId, notification.ItemLotId, 
+                notification.Timestamp);
             if (logEntry is null)
             {
                 throw new EntityNotFoundException($"InventoryLogEntry of {notification} with {notification.Timestamp} not found.");
@@ -64,7 +65,7 @@ public class DeleteInventoryLogEntryDomainEventHandler : INotificationHandler<De
 
         else
         {
-            var logEntry = _service.GetLogEntry(notification.ItemLotId, notification.Timestamp);
+            var logEntry = _service.GetLogEntry(notification.ItemId, notification.ItemLotId, notification.Timestamp);
             if (logEntry is null)
             {
                 throw new EntityNotFoundException($"InventoryLogEntry of {notification} with {notification.Timestamp} not found.");

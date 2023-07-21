@@ -36,7 +36,7 @@ public class InventoryLogEntriesController : ControllerBase
 
 	[HttpGet]
 	[Route("itemLots")]
-	public async Task<IEnumerable<ItemLotLogEntryViewModel>> GetItemLotsAsync(DateTime trackingTime, string itemId)
+	public async Task<ItemLogEntryViewModel> GetItemLotsAsync(DateTime trackingTime, string itemId)
 	{
 		return await _queries.GetItemLotsLogEntry(trackingTime, itemId);
 	}

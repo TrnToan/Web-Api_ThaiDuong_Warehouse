@@ -135,35 +135,33 @@ public class InventoryLogEntryQueries : IInventoryLogEntryQueries
         return extendedLogEntries;
     }
 
-    public async Task<IEnumerable<ItemLotLogEntryViewModel>> GetItemLotsLogEntry(DateTime trackingTime, string itemId)
+    public async Task<ItemLogEntryViewModel> GetItemLotsLogEntry(DateTime trackingTime, string itemId)
     {
 
         var filteredLogEntries = await _logs
             .Where(log => log.Item.ItemId == itemId)
-            .Where(log => log.TrackingTime.CompareTo(trackingTime) >= 0)
+            .Where(log => log.TrackingTime.CompareTo(trackingTime) <= 0)
             .ToListAsync();
 
-        List<ItemLotLogEntryViewModel> viewModels = new ();
+        List<ItemLotLogEntryViewModel> lotViewModels = new ();
+        ItemViewModel item;
+
         var groupEntries = filteredLogEntries.GroupBy(log => log.ItemLotId);
         foreach (var groupEntry in groupEntries)
         {
             string? itemLotId = groupEntry.Key;
-            double totalQuantity = groupEntry.Sum(entry => entry.ChangedQuantity);
-            while (totalQuantity < 0)
-            {
-                var previousLogEntry = await _context.InventoryLogEntries
-                    .Where(log => log.TrackingTime < groupEntry.First().TrackingTime)
-                    .OrderBy(log => log.TrackingTime)
-                    .LastOrDefaultAsync(log => log.ItemLotId == itemLotId);
+            if (itemLotId == null)
+                continue;
 
-                totalQuantity += previousLogEntry.ChangedQuantity;
-            }
+            double totalLotQuantity = groupEntry.Sum(entry => entry.ChangedQuantity);
 
-            ItemViewModel item = _mapper.Map<ItemViewModel>(groupEntry.First().Item);
-            var lotLogEntryVM = new ItemLotLogEntryViewModel(itemLotId, totalQuantity, item);
-            viewModels.Add(lotLogEntryVM);
+            var lotLogEntryVM = new ItemLotLogEntryViewModel(itemLotId, totalLotQuantity);
+            lotViewModels.Add(lotLogEntryVM);
         }
+        item = _mapper.Map<ItemViewModel>(groupEntries.First().First().Item);
+        double totalQuantity = lotViewModels.Sum(i => i.Quantity);
+        ItemLogEntryViewModel logEntryViewModel = new (item, totalQuantity, lotViewModels);
 
-        return viewModels;
+        return logEntryViewModel;
     }
 }

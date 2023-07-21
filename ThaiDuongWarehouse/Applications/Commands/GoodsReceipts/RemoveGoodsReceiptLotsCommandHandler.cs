@@ -30,7 +30,7 @@ public class RemoveGoodsReceiptLotsCommandHandler : IRequestHandler<RemoveGoodsR
 
             goodsReceipt.RemoveLot(lot);    // Xoá lô khỏi lịch sử nhập
             // Ghi nhận lại số lượng sản phẩm trừ đi trước khi xoá khỏi tồn kho - InventoryLogEntry - DomainEvent
-            goodsReceipt.DeletedGoodsReceiptLotLogEntry(lotId, goodsReceipt.Timestamp);
+            goodsReceipt.DeletedGoodsReceiptLotLogEntry(lot.ItemId, lotId, goodsReceipt.Timestamp);
         }
 
         // Cập nhật lại phần tồn kho sau khi xoá lô - DomainEvent

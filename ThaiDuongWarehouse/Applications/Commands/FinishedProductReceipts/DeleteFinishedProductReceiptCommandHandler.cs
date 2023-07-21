@@ -19,8 +19,8 @@ public class DeleteFinishedProductReceiptCommandHandler : IRequestHandler<Delete
 
         foreach (var entry in goodsReceipt.Entries)
         {
-            goodsReceipt.AddLogEntry(entry.PurchaseOrderNumber, entry.Item.Id, -entry.Quantity, 0, goodsReceipt.Timestamp);
-            goodsReceipt.RemoveFinishedProductInventory(entry.Item, entry.PurchaseOrderNumber, goodsReceipt.Timestamp);
+            //goodsReceipt.RemoveLogEntry(entry.Item.Id, entry.PurchaseOrderNumber, goodsReceipt.Timestamp);
+            goodsReceipt.RemoveFinishedProductInventory(entry.Item, entry.PurchaseOrderNumber);
         }
 
         _finishedProductReceiptRepository.Remove(goodsReceipt);

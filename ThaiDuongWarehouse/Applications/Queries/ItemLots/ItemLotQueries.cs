@@ -32,11 +32,12 @@ public class ItemLotQueries : IItemLotQueries
                 .ThenInclude(ill => ill.Location)
             .Include(il => il.Item)
             .FirstOrDefaultAsync(il => il.LotId == lotId);
+
         var viewModel = _mapper.Map<ItemLot?, ItemLotViewModel>(itemLot);
         return viewModel;
     }
 
-    public async Task<IEnumerable<ItemLotViewModel>> GetItemLotsByItemId(string itemId)
+    public async Task<IEnumerable<ItemLotViewModel>> GetItemLotsByItemId(DateTime timestamp, string itemId)
     {
         var itemLots = await _context.ItemLots
             .AsNoTracking()
@@ -44,8 +45,10 @@ public class ItemLotQueries : IItemLotQueries
                 .ThenInclude(ill => ill.Location)
             .Include(il => il.Item)
             .Where(il => il.Item.ItemId == itemId)
+            .Where(il => il.Timestamp <= timestamp)
             .Where(il => !il.IsIsolated)
             .ToListAsync();
+
         var viewModels = _mapper.Map<IEnumerable<ItemLot>, IEnumerable<ItemLotViewModel>>(itemLots);
         return viewModels;
     }

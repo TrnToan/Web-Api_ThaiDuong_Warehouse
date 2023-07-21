@@ -39,10 +39,10 @@ public class InventoryLogEntry : Entity, IAggregateRoot
         ItemLotId = newLotId;
     }
 
-    public void UpdateQuantity(double changedQuantity)
+    public void UpdateQuantity(double changedQuantity, double receivedQuantity)
     {
         ChangedQuantity = changedQuantity;
-        ReceivedQuantity = changedQuantity;
+        ReceivedQuantity = receivedQuantity;
     }
 
     public void UpdateEntry(double beforeQuantity, double changedQuantity)

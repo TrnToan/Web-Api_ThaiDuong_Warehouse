@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
+﻿using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
 
 namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 
@@ -26,12 +25,18 @@ public class InventoryLogEntryService
 		return Entries.LastOrDefault(e => e.ItemId == itemId);
 	}
 	
-	public InventoryLogEntry? GetLogEntry(string lotId, DateTime timestamp)
+	public InventoryLogEntry? GetLogEntry(int itemId, string lotId, DateTime timestamp)
 	{
-		return Entries.Find(log => log.ItemLotId == lotId && log.Timestamp == timestamp);
+		return Entries.Find(log => log.ItemId == itemId && log.ItemLotId == lotId && log.Timestamp == timestamp);
 	}
 
-	public List<InventoryLogEntry> GetLogEntries(int itemId, DateTime timestamp) 
+	public InventoryLogEntry? GetFinishedProductLogEntry(int itemId, string PO, DateTime timestamp)
+	{
+		return Entries.Find(log => log.ItemId == itemId && log.ItemLotId == PO && log.Timestamp == timestamp);
+	}
+
+
+    public List<InventoryLogEntry> GetLogEntries(int itemId, DateTime timestamp) 
 	{
 		return Entries
 			.Where(log => log.ItemId == itemId)

@@ -22,7 +22,7 @@ public class CreateFinishedProductReceiptCommandHandler : IRequestHandler<Create
             throw new EntityNotFoundException($"Employee with Id {request.EmployeeId} does not exist.");
         }
         
-        var finishedProductReceipt = new FinishedProductReceipt(request.FinishedProductReceiptId, request.Timestamp, employee.Id);
+        var finishedProductReceipt = new FinishedProductReceipt(request.FinishedProductReceiptId, DateTime.UtcNow.AddHours(7), employee.Id);
         foreach (var entry in request.Entries)
         {
             var item = await _itemRepository.GetItemById(entry.ItemId, entry.Unit);
@@ -36,7 +36,7 @@ public class CreateFinishedProductReceiptCommandHandler : IRequestHandler<Create
             finishedProductReceipt.AddReceiptEntry(finishedProductReceiptEntry);
 
             finishedProductReceipt.AddFinishedProductInventory(item, entry.PurchaseOrderNumber, entry.Quantity, finishedProductReceipt.Timestamp);            
-            finishedProductReceipt.AddLogEntry(entry.PurchaseOrderNumber, item.Id, entry.Quantity, entry.Quantity, finishedProductReceipt.Timestamp);
+            //finishedProductReceipt.AddLogEntry(entry.PurchaseOrderNumber, item.Id, entry.Quantity, entry.Quantity, finishedProductReceipt.Timestamp);
         }
 
         await _finishedProductReceiptRepository.Add(finishedProductReceipt);

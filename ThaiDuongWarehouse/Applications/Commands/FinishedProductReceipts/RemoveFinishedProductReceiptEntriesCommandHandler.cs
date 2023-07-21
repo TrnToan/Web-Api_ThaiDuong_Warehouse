@@ -27,13 +27,10 @@ public class RemoveFinishedProductReceiptEntriesCommandHandler : IRequestHandler
                 throw new EntityNotFoundException($"Item, {entry.ItemId}");
             }
 
-            var removedEntry = goodsReceipt.Entries.FirstOrDefault(e => e.Item == item && e.PurchaseOrderNumber == entry.PurchaseOrderNumber);
+            //goodsReceipt.RemoveLogEntry(item.Id, entry.PurchaseOrderNumber, goodsReceipt.Timestamp);
+            goodsReceipt.RemoveFinishedProductInventory(item, entry.PurchaseOrderNumber);
 
-            goodsReceipt.RemoveReceiptEntry(item, entry.PurchaseOrderNumber);
-            
-            // ChangedQuantity = - ChangedQuantity của entry đó khi xoá entry trong trường hợp nhập liệu sai 
-            goodsReceipt.AddLogEntry(entry.PurchaseOrderNumber, item.Id, -removedEntry.Quantity, 0, goodsReceipt.Timestamp);
-            goodsReceipt.RemoveFinishedProductInventory(item, entry.PurchaseOrderNumber, goodsReceipt.Timestamp);
+            goodsReceipt.RemoveReceiptEntry(item, entry.PurchaseOrderNumber);                    
         }
 
         _finishedProductReceiptRepository.Update(goodsReceipt);

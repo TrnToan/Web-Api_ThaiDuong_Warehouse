@@ -15,7 +15,7 @@ public class UpdateInventoryOnCreateProductIssueDomainEventHandler : INotificati
     public async Task Handle(UpdateInventoryOnCreateProductIssueDomainEvent notification, CancellationToken cancellationToken)
     {
         var productInventory = await _finishedProductInventoryRepository.GetFinishedProductInventory(
-            notification.Item.ItemId, notification.Item.Unit, notification.PurchaseOrderNumber, notification.Timestamp);
+            notification.Item.ItemId, notification.Item.Unit, notification.PurchaseOrderNumber);
 
         if (productInventory is null)
         {

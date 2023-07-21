@@ -1,5 +1,5 @@
 ﻿using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductInventoryAggregate;
-using ThaiDuongWarehouse.Domain.DomainEvents;
+using ThaiDuongWarehouse.Domain.AggregateModels.ProductInventoryAggregate;
 
 namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 
@@ -14,15 +14,33 @@ public class UpdateInventoryOnModifyProductReceiptEntryDomainEventHandler : INot
 
     public async Task Handle(UpdateInventoryOnModifyProductReceiptEntryDomainEvent notification, CancellationToken cancellationToken)
     {
-        var productInventory = await _finishedProductInventoryRepository
-            .GetFinishedProductInventory(notification.Item.ItemId, notification.Item.Unit, notification.OldPurchaseOrderNumber, notification.Timestamp);
+        var oldProducEntrytInventory = await _finishedProductInventoryRepository
+            .GetFinishedProductInventory(notification.Item.ItemId, notification.Item.Unit, notification.OldPurchaseOrderNumber);
 
-        if (productInventory is null)
+        var newProductEntryInventory = await _finishedProductInventoryRepository
+            .GetFinishedProductInventory(notification.Item.ItemId, notification.Item.Unit, notification.NewPurchaseOrderNumber);
+
+        if (oldProducEntrytInventory is null)
         {
             throw new EntityNotFoundException($"FinishedProductInventory, {notification.Item.ItemId} & {notification.OldPurchaseOrderNumber}");
         }
-        productInventory.UpdateProductInventory(notification.NewPurchaseOrderNumber, notification.Quantity);
+        
+        else
+        {
+            if (newProductEntryInventory is null || oldProducEntrytInventory == newProductEntryInventory)
+            {
+                oldProducEntrytInventory.SetQuantity(notification.Quantity);
 
-        _finishedProductInventoryRepository.Update(productInventory);
+                _finishedProductInventoryRepository.Update(oldProducEntrytInventory);
+            }
+            else
+            {
+                oldProducEntrytInventory.UpdateQuantity(-notification.Quantity);
+                newProductEntryInventory.UpdateQuantity(notification.Quantity);
+
+                _finishedProductInventoryRepository.Update(oldProducEntrytInventory);
+                _finishedProductInventoryRepository.Update(newProductEntryInventory);
+            }            
+        }
     }
 }

@@ -8,7 +8,7 @@ public class ItemLot : Entity, IAggregateRoot
     public DateTime? ExpirationDate { get; private set; }
     public bool IsIsolated { get; private set; } = false;
     public int ItemId { get; private set; }                 // ForeignKey
-    public List<ItemLotLocation>? ItemLotLocations { get; private set; }
+    public List<ItemLotLocation> ItemLotLocations { get; private set; }
     public Item Item { get; private set; }
 
     public ItemLot(string lotId, int itemId, double quantity, DateTime timestamp,
@@ -76,6 +76,6 @@ public class ItemLot : Entity, IAggregateRoot
     }
     public static void Reject(ItemLot lot)
     {
-        //lot.AddDomainEvent(new InventoryLogEntryChangedDomainEvent(lot.LotId, -lot.ChangedQuantity, lot.ItemId, DateTime.Now));
+        // Method intentionally left empty.
     }
 }

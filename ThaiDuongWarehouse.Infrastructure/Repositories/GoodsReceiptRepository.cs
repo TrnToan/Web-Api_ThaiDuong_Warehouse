@@ -17,6 +17,7 @@ public class GoodsReceiptRepository : BaseRepository, IGoodsReceiptRepository
     public async Task<GoodsReceipt?> GetGoodsReceiptById(string goodsReceiptId)
     {
         return await _context.GoodsReceipts
+            .Include(gr => gr.Lots)
             .FirstOrDefaultAsync(gr => gr.GoodsReceiptId == goodsReceiptId);
     }
 

@@ -8,16 +8,13 @@ public class CreateFinishedProductReceiptCommand : IRequest<bool>
     [DataMember]
     public string EmployeeId { get; private set; }
     [DataMember]
-    public DateTime Timestamp { get; private set; }
-    [DataMember]
     public List<CreateFinishedProductReceiptEntryViewModel> Entries { get; private set; }
 
-    public CreateFinishedProductReceiptCommand(string finishedProductReceiptId, string employeeId, DateTime timestamp, 
+    public CreateFinishedProductReceiptCommand(string finishedProductReceiptId, string employeeId, 
         List<CreateFinishedProductReceiptEntryViewModel> entries)
     {
         FinishedProductReceiptId = finishedProductReceiptId;
         EmployeeId = employeeId;
-        Timestamp = timestamp;
         Entries = entries;
     }
 }

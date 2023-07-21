@@ -1,6 +1,4 @@
-﻿using ThaiDuongWarehouse.Domain.DomainEvents;
-
-namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
+﻿namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 
 public class InventoryLogEntryChangedDomainEventHandler : INotificationHandler<InventoryLogEntryChangedDomainEvent>
 {
@@ -13,7 +11,9 @@ public class InventoryLogEntryChangedDomainEventHandler : INotificationHandler<I
 
     public async Task Handle(InventoryLogEntryChangedDomainEvent notification, CancellationToken cancellationToken)
     {
-        var modifiedLogEntry = await _inventoryLogEntryRepository.GetLogEntry(notification.OldItemLotId, notification.Timestamp);
+        var modifiedLogEntry = await _inventoryLogEntryRepository.GetLogEntry(notification.ItemId, notification.OldItemLotId, 
+            notification.Timestamp);
+        
         if (modifiedLogEntry is null)
         {
             throw new EntityNotFoundException($"InventoryLogEntry of Itemlot {notification.OldItemLotId} cannot be found.");
