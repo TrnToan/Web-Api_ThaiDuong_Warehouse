@@ -58,6 +58,7 @@ builder.Services.AddScoped<IGoodsIssueQueries, GoodsIssueQueries>();
 builder.Services.AddScoped<IImportHistoryQueries, ImportHistoryQueries>();
 builder.Services.AddScoped<IExportHistoryQueries, ExportHistoryQueries>();
 builder.Services.AddScoped<IFinishedProductReceiptQueries, FinishedProductReceiptQueries>();
+builder.Services.AddScoped<IFinishedProductIssueQueries, FinishedProductIssueQueries>();
 
 builder.Services.AddScoped<ItemLotLocationRepository>();
 builder.Services.AddScoped<InventoryLogEntryService>();

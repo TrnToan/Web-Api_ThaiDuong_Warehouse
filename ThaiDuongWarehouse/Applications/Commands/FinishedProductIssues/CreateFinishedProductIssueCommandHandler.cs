@@ -1,4 +1,4 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductIssueAggregate;
+﻿using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductInventoryAggregate;
 
 namespace ThaiDuongWarehouse.Api.Applications.Commands.FinishedProductIssues;
 
@@ -18,13 +18,20 @@ public class CreateFinishedProductIssueCommandHandler : IRequestHandler<CreateFi
 
     public async Task<bool> Handle(CreateFinishedProductIssueCommand request, CancellationToken cancellationToken)
     {
+        var existedGoodsIssue = await _finisedProductIssueRepository.GetIssueById(request.FinishedProductIssueId);
+        if (existedGoodsIssue is not null)
+        {
+            throw new DuplicateRecordException($"FinishedProductIssue with Id {existedGoodsIssue.FinishedProductIssueId}" +
+                $"already existed.");
+        }
         var employee = await _employeeRepository.GetEmployeeById(request.EmployeeId);
         if (employee is null)
         {
             throw new EntityNotFoundException($"Employee with Id {request.EmployeeId} does not exist.");
         }
 
-        var productIssue = new FinishedProductIssue(request.FinishedProductIssueId, request.Receiver, request.Timestamp, employee.Id);
+        var productIssue = new FinishedProductIssue(request.FinishedProductIssueId, request.Receiver, DateTime.UtcNow.AddHours(7), 
+            employee.Id);
         foreach (var entry in request.Entries)
         {
             var item = await _itemRepository.GetItemById(entry.ItemId, entry.Unit);
@@ -37,8 +44,9 @@ public class CreateFinishedProductIssueCommandHandler : IRequestHandler<CreateFi
                 entry.Note, productIssue.Id, item);
             productIssue.AddIssueEntry(finishedProductIssueEntry);
 
-            productIssue.UpdateFinishedProductInventory(item, entry.PurchaseOrderNumber, entry.Quantity, productIssue.Timestamp);
+            productIssue.UpdateFinishedProductInventory(item, entry.PurchaseOrderNumber, entry.Quantity);
         }
+        await _finisedProductIssueRepository.AddAsync(productIssue);
         return await _finisedProductIssueRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
     }
 }

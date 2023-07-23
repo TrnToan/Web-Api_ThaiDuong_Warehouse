@@ -29,6 +29,7 @@ public class ItemsController : ControllerBase
     }
 
     [HttpPost]
+    [Route("item")]
     public async Task<IActionResult> PostAsync([FromBody] CreateItemCommand command)
     {
         var result = await _mediator.Send(command);
@@ -47,7 +48,6 @@ public class ItemsController : ControllerBase
     }
 
     [HttpPost]
-    [Route("items")]
     public async Task<IActionResult> PostItemsAsync([FromBody] CreateItemsCommand command)
     {
         bool result = await _mediator.Send(command);

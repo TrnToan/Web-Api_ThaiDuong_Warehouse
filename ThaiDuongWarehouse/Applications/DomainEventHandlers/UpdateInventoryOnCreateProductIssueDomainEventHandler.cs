@@ -1,5 +1,4 @@
 ﻿using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductInventoryAggregate;
-using ThaiDuongWarehouse.Domain.DomainEvents;
 
 namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 
@@ -21,5 +20,16 @@ public class UpdateInventoryOnCreateProductIssueDomainEventHandler : INotificati
         {
             throw new EntityNotFoundException($"Product with item {notification.Item.ItemId} & {notification.PurchaseOrderNumber} does not exist.");
         }
+
+        productInventory.UpdateQuantity(-notification.Quantity);
+        if (productInventory.Quantity == 0)
+        {
+            _finishedProductInventoryRepository.Remove(productInventory);
+        }
+        else if (productInventory.Quantity < 0)
+            throw new InvalidQuantityException($"Invalid Quantity of ProductInventory.");
+
+        else
+            _finishedProductInventoryRepository.Update(productInventory);
     }
 }

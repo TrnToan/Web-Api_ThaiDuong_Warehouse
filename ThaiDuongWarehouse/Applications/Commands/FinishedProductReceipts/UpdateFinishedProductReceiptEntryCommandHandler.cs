@@ -28,29 +28,24 @@ public class UpdateFinishedProductReceiptEntryCommandHandler : IRequestHandler<U
                 throw new EntityNotFoundException($"Item, {entry.ItemId}");
             }
 
-            var oldEntry = goodsReceipt.Entries.FirstOrDefault(e => e.PurchaseOrderNumber == entry.OldPurchaseOrderNumber
+            var oldEntry = goodsReceipt.Entries.Find(e => e.PurchaseOrderNumber == entry.OldPurchaseOrderNumber
                                                                 && e.Item == item);
             if (oldEntry is null)
             {
                 throw new EntityNotFoundException($"Entry, {entry.ItemId} & {entry.OldPurchaseOrderNumber}");
             }
-
-            //double changedQuantity = entry.Quantity - oldEntry.Quantity;
-            goodsReceipt.UpdateReceiptEntry(oldEntry, entry.NewPurchaseOrderNumber, entry.Quantity);
+            
             //if (changedQuantity != 0)
             //{
             //    // Ghi đè quantity của entry mới lên quantity của entry cũ 
             //    goodsReceipt.UpdateQuantityLogEntry(entry.OldPurchaseOrderNumber, item.Id, entry.Quantity, entry.Quantity, 
             //        goodsReceipt.Timestamp);
             //}
-             
-            //if (entry.NewPurchaseOrderNumber != entry.OldPurchaseOrderNumber)
-            //{
-            //    goodsReceipt.ModifyLogEntry(entry.OldPurchaseOrderNumber, entry.NewPurchaseOrderNumber, item.Id, 
-            //        goodsReceipt.Timestamp);
-            //}
+                         
             goodsReceipt.UpdateFinishedProductInventory(item, entry.OldPurchaseOrderNumber, entry.NewPurchaseOrderNumber, 
                 entry.Quantity, goodsReceipt.Timestamp);
+
+            goodsReceipt.UpdateReceiptEntry(oldEntry, entry.NewPurchaseOrderNumber ?? entry.OldPurchaseOrderNumber, entry.Quantity);
         }
 
         _finishedProductReceiptRepository.Update(goodsReceipt);

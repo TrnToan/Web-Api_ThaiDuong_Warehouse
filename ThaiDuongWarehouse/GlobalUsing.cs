@@ -33,3 +33,7 @@ global using ThaiDuongWarehouse.Api.Applications.Queries.FinishedProductReceipts
 global using ThaiDuongWarehouse.Api.Applications.Queries;
 global using ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 global using ThaiDuongWarehouse.Domain.DomainEvents;
+global using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductIssueAggregate;
+global using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
+global using ThaiDuongWarehouse.Api.Applications.Queries.GoodsReceipts;
+global using ThaiDuongWarehouse.Api.Applications.Queries.FinishedProductIssues;

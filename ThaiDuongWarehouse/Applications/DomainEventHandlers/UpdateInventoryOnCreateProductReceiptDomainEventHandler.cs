@@ -20,7 +20,7 @@ public class UpdateInventoryOnCreateProductReceiptDomainEventHandler : INotifica
         if (existedProductInventory is null)
         {
             var productInventory = new FinishedProductInventory (notification.PurchaseOrderNumber, notification.Quantity,
-            notification.Timestamp, notification.Item);
+            notification.Item);
 
             await _finisedProductInventoryRepository.Add(productInventory);
         }

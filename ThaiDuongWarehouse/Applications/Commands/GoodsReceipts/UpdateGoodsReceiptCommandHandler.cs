@@ -27,7 +27,7 @@ public class UpdateGoodsReceiptCommandHandler : IRequestHandler<UpdateGoodsRecei
         foreach (var updatedLot in request.GoodsReceiptLots)
         {
             // Truy xuất lô với mã phiếu cũ
-            var goodsReceiptLot = goodsReceipt.Lots.FirstOrDefault(l => l.GoodsReceiptLotId == updatedLot.OldGoodsReceiptLotId);
+            var goodsReceiptLot = goodsReceipt.Lots.Find(l => l.GoodsReceiptLotId == updatedLot.OldGoodsReceiptLotId);
             if (goodsReceiptLot is null)
             {
                 throw new EntityNotFoundException($"GoodsReceiptLot with Id {updatedLot.OldGoodsReceiptLotId} does not exist.");

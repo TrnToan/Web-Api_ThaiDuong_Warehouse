@@ -35,10 +35,17 @@ public class ItemLotsController : ControllerBase
 	}
 
 	[HttpGet]
-	[Route("ByItemId")]
+	[Route("{itemId}/TimeRange")]
 	public async Task<IEnumerable<ItemLotViewModel>> GetItemLotByItemIdAsync(DateTime timestamp, string itemId)
 	{
 		return await _queries.GetItemLotsByItemId(timestamp, itemId);
+	}
+
+	[HttpGet]
+	[Route("{itemId}")]
+	public async Task<IEnumerable<ItemLotViewModel>> GetItemLots(string itemId)
+	{
+		return await _queries.GetItemLots(itemId);
 	}
 
 	[HttpPatch]

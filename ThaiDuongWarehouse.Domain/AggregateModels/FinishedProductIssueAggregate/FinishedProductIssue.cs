@@ -1,4 +1,5 @@
 ﻿using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductReceiptAggregate;
+using ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate;
 
 namespace ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductIssueAggregate;
 public class FinishedProductIssue : Entity, IAggregateRoot
@@ -32,8 +33,29 @@ public class FinishedProductIssue : Entity, IAggregateRoot
         Entries.Add(entry);
     }
 
-    public void UpdateFinishedProductInventory(Item item, string purchaseOrderNumber, double quantity, DateTime timestamp)
+    public void RemoveIssueEntry(string itemId, string purchaseOrderNumber)
     {
-        AddDomainEvent(new UpdateInventoryOnCreateProductIssueDomainEvent(item, purchaseOrderNumber, quantity, timestamp));
+        var existedEntry = Entries.Find(entry => entry.Item.ItemId == itemId && entry.PurchaseOrderNumber == purchaseOrderNumber);
+        if (existedEntry is null)
+        {
+            throw new WarehouseDomainException($"ProductIssueEntry with Item {itemId} and {purchaseOrderNumber} not found.");
+        }
+        Entries.Remove(existedEntry);
+    }
+
+    public void UpdateFinishedProductInventory(Item item, string purchaseOrderNumber, double quantity)
+    {
+        AddDomainEvent(new UpdateInventoryOnCreateProductIssueDomainEvent(item, purchaseOrderNumber, quantity));
+    }
+
+    public void RestoreProductInventory(Item item, string purchaseOrderNumber)
+    {
+        var existedEntry = Entries.Find(entry => entry.Item.ItemId == item.ItemId && entry.PurchaseOrderNumber == purchaseOrderNumber);
+        if (existedEntry is null)
+        {
+            throw new WarehouseDomainException($"ProductIssueEntry with Item {item.ItemId} and {purchaseOrderNumber} not found.");
+        }
+
+        AddDomainEvent(new UpdateInventoryOnRemoveProductIssueEntryDomainEvent(item, purchaseOrderNumber, existedEntry.Quantity));
     }
 }

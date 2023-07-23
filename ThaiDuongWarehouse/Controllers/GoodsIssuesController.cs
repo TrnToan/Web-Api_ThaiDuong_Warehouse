@@ -15,6 +15,13 @@ public class GoodsIssuesController : ControllerBase
     }
 
     [HttpGet]
+    [Route("all")]
+    public async Task<IEnumerable<GoodsIssueViewModel>> GetAllAsync()
+    {
+        return await _queries.GetAll();
+    }
+
+    [HttpGet]
     [Route("Ids")]
     public async Task<IList<string>> GetGoodsIssueIdsAsync(bool isExported)
     {

@@ -15,6 +15,7 @@ public class WarningQueries : IWarningQueries
         List<ItemLot> lots = await _context.ItemLots
             .AsNoTracking()
             .Include(il => il.ItemLotLocations)
+                .ThenInclude(il => il.Location)
             .Include(il => il.Item)
             .ToListAsync();
 
@@ -24,7 +25,7 @@ public class WarningQueries : IWarningQueries
             if (lot.ExpirationDate == null)
                 continue;
             DateTime warningDate = lot.ExpirationDate.Value.AddMonths(-months);
-            if (DateTime.Now - warningDate > TimeSpan.Zero)
+            if (DateTime.UtcNow.AddHours(7) - warningDate > TimeSpan.Zero)
             {
                 warningLots.Add(lot);
             }
@@ -46,15 +47,12 @@ public class WarningQueries : IWarningQueries
             List<ItemLot> lots = await _context.ItemLots
                 .AsNoTracking()
                 .Include(il => il.ItemLotLocations)
+                    .ThenInclude(il => il.Location)
                 .Include(il => il.Item)
                 .Where(il => il.Item.ItemId == item.ItemId)
                 .ToListAsync();
 
-            double totalQuantity = 0;
-            foreach (ItemLot lot in lots)
-            {
-                totalQuantity += lot.Quantity;
-            }
+            double totalQuantity = lots.Sum(l => l.Quantity);           
             if (totalQuantity <= item.MinimumStockLevel)
             {
                 itemLots.AddRange(lots);

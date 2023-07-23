@@ -1,5 +1,4 @@
 ﻿using ThaiDuongWarehouse.Api.Applications.Commands.FinishedProductReceipts;
-using ThaiDuongWarehouse.Api.Applications.Queries;
 
 namespace ThaiDuongWarehouse.Api.Controllers;
 
@@ -17,15 +16,15 @@ public class FinishedProductReceiptsController : ControllerBase
     }
 
     [HttpGet]
-    [Route("{finishedProductReceiptId}")]
-    public async Task<FinishedProductReceiptViewModel?> GetAsync(string finishedProductReceiptId)
+    [Route("{productReceiptId}")]
+    public async Task<FinishedProductReceiptViewModel?> GetAsync(string productReceiptId)
     {
-        return await _queries.GetReceiptById(finishedProductReceiptId);
+        return await _queries.GetReceiptById(productReceiptId);
     }
 
     [HttpGet]
     [Route("TimeRange")]
-    public async Task<IEnumerable<FinishedProductReceiptViewModel>> GetReceiptsAsync(TimeRangeQuery query)
+    public async Task<IEnumerable<FinishedProductReceiptViewModel>> GetReceiptsAsync([FromQuery]TimeRangeQuery query)
     {
         return await _queries.GetReceiptsAsync(query);
     }
@@ -50,10 +49,10 @@ public class FinishedProductReceiptsController : ControllerBase
     }
 
     [HttpPatch]
-    [Route("{finishedProductReceiptId}/updatedEntry")]
-    public async Task<IActionResult> PatchAsync(string finishedProductReceiptId, List<UpdateFinishedProductReceiptEntryViewModel> entries)
+    [Route("{productReceiptId}/updatedEntry")]
+    public async Task<IActionResult> PatchAsync(string productReceiptId, List<UpdateFinishedProductReceiptEntryViewModel> entries)
     {
-        UpdateFinishedProductReceiptEntryCommand cmd = new UpdateFinishedProductReceiptEntryCommand(finishedProductReceiptId, entries);
+        UpdateFinishedProductReceiptEntryCommand cmd = new (productReceiptId, entries);
         try
         {
             var result = await _mediator.Send(cmd);
@@ -71,10 +70,10 @@ public class FinishedProductReceiptsController : ControllerBase
     }
 
     [HttpPatch]
-    [Route("{finishedProductReceiptId}/addedEntry")]
-    public async Task<IActionResult> AddEntryAsync(string finishedProductReceiptId, List<CreateFinishedProductReceiptEntryViewModel> entries)
+    [Route("{productReceiptId}/addedEntry")]
+    public async Task<IActionResult> AddEntryAsync(string productReceiptId, List<CreateFinishedProductReceiptEntryViewModel> entries)
     {
-        AddEntryToFinishedProductReceiptCommand command = new (finishedProductReceiptId, entries);
+        AddEntryToFinishedProductReceiptCommand command = new (productReceiptId, entries);
         try
         {
             var result = await _mediator.Send(command);
@@ -92,10 +91,10 @@ public class FinishedProductReceiptsController : ControllerBase
     }
 
     [HttpPatch]
-    [Route("{finishedProductReceiptId}/removedEntry")]
-    public async Task<IActionResult> RemoveEntryAsync(string finishedProductReceiptId, List<RemoveFinishedProductEntryViewModel> entries)
+    [Route("{productReceiptId}/removedEntry")]
+    public async Task<IActionResult> RemoveEntryAsync(string productReceiptId, List<RemoveFinishedProductEntryViewModel> entries)
     {
-        RemoveFinishedProductReceiptEntriesCommand command = new (finishedProductReceiptId, entries);
+        RemoveFinishedProductReceiptEntriesCommand command = new (productReceiptId, entries);
         try
         {
             var result = await _mediator.Send(command);
@@ -113,9 +112,9 @@ public class FinishedProductReceiptsController : ControllerBase
     }
 
     [HttpDelete]
-    public async Task<IActionResult> RemoveAsync(string finishedProductReceiptId)
+    public async Task<IActionResult> RemoveAsync(string productReceiptId)
     {
-        DeleteFinishedProductReceiptCommand command = new DeleteFinishedProductReceiptCommand(finishedProductReceiptId);
+        DeleteFinishedProductReceiptCommand command = new DeleteFinishedProductReceiptCommand(productReceiptId);
         try
         {
             var result = await _mediator.Send(command);

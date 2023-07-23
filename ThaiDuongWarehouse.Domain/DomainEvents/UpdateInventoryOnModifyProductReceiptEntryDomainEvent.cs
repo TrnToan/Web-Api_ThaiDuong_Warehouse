@@ -3,17 +3,19 @@ public class UpdateInventoryOnModifyProductReceiptEntryDomainEvent : INotificati
 {
     public string OldPurchaseOrderNumber { get; private set; }
     public string NewPurchaseOrderNumber { get; private set; }
-    public double Quantity { get; private set; }
+    public double OldQuantity { get; private set; }
+    public double NewQuantity { get; private set; }
     public DateTime Timestamp { get; private set; }
     public Item Item { get; private set; }
 
-    public UpdateInventoryOnModifyProductReceiptEntryDomainEvent(string oldPurchaseOrderNumber, string newPurchaseOrderNumber, 
-        double quantity, DateTime timestamp, Item item)
+    public UpdateInventoryOnModifyProductReceiptEntryDomainEvent(string oldPurchaseOrderNumber, string newPurchaseOrderNumber,
+         double oldQuantity, double newQuantity, DateTime timestamp, Item item)
     {
         OldPurchaseOrderNumber = oldPurchaseOrderNumber;
         NewPurchaseOrderNumber = newPurchaseOrderNumber;
-        Quantity = quantity;
+        NewQuantity = newQuantity;
         Timestamp = timestamp;
         Item = item;
+        OldQuantity = oldQuantity;
     }
 }

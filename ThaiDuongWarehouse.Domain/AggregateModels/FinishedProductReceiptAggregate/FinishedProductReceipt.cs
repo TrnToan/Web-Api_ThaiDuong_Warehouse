@@ -73,11 +73,17 @@ public class FinishedProductReceipt : Entity, IAggregateRoot
     }
 
     public void UpdateFinishedProductInventory(Item item, string oldPurchaseOrderNumber, string newPurchaseOrderNumber,
-        double quantity, DateTime timestamp)
+        double newQuantity, DateTime timestamp)
     {
+        var entry = Entries.Find(e => e.Item == item && e.PurchaseOrderNumber == oldPurchaseOrderNumber);
+        if (entry == null)
+        {
+            throw new WarehouseDomainException($"Entry with item {item.ItemName} & {oldPurchaseOrderNumber} not found.");
+        }
+        double oldQuantity = entry.Quantity;
         // Sửa số PO và số lượng của 1 entry --> Cập nhật tồn kho TP
         AddDomainEvent(new UpdateInventoryOnModifyProductReceiptEntryDomainEvent(oldPurchaseOrderNumber, newPurchaseOrderNumber, 
-            quantity, timestamp, item));
+            oldQuantity, newQuantity, timestamp, item));
     }
 
     public void RemoveFinishedProductInventory(Item item, string purchaseOrderNumber)

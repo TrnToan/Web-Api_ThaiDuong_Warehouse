@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace ThaiDuongWarehouse.Api.Applications.Commands.Items;
+﻿namespace ThaiDuongWarehouse.Api.Applications.Commands.Items;
 
 [DataContract]
 public class UpdateItemCommand : IRequest<bool>

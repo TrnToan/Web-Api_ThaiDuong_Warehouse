@@ -7,7 +7,6 @@ public class FinishedProductInventoryEntityTypeConfiguration : IEntityTypeConfig
         builder.Property(fpi => fpi.Id).ValueGeneratedOnAdd().IsRequired();
         builder.Property(fpi => fpi.PurchaseOrderNumber).IsRequired();
         builder.Property(fpi => fpi.Quantity).IsRequired();
-        builder.Property(fpi => fpi.Timestamp).IsRequired();
 
         builder.HasOne(fpi => fpi.Item).WithMany().IsRequired();
     }
