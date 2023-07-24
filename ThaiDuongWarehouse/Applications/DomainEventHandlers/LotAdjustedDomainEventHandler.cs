@@ -1,18 +1,18 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
-
-namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
+﻿namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 
 public class LotAdjustedDomainEventHandler : INotificationHandler<LotAdjustedDomainEvent>
 {
     private readonly IItemLotRepository _itemLotRepository;
     private readonly IItemRepository _itemRepository;
     private readonly IInventoryLogEntryRepository _inventoryLogEntryRepository;
+    private readonly IStorageRepository _storageRepository;
     public LotAdjustedDomainEventHandler(IItemLotRepository itemLotRepository, IItemRepository itemRepository, 
-        IInventoryLogEntryRepository inventoryLogEntryRepository)
+        IInventoryLogEntryRepository inventoryLogEntryRepository, IStorageRepository storageRepository)
     {
         _itemLotRepository = itemLotRepository;
         _itemRepository = itemRepository;
         _inventoryLogEntryRepository = inventoryLogEntryRepository;
+        _storageRepository = storageRepository;
     }
     public async Task Handle(LotAdjustedDomainEvent notification, CancellationToken cancellationToken)
     {
@@ -32,6 +32,16 @@ public class LotAdjustedDomainEventHandler : INotificationHandler<LotAdjustedDom
 
         var inventoryLogEntry = new InventoryLogEntry(item.Id, notification.LotId, notification.Timestamp, beforeQuantity, 
             changedQuantity, 0, -changedQuantity);
+        
+        foreach (var sublot in notification.SublotAdjustments)
+        {
+            var location = await _storageRepository.GetLocationById(sublot.LocationId);
+            if (location is null)
+            {
+                throw new EntityNotFoundException($"Location with Id {sublot.LocationId} not found.");
+            }
+            itemLot.UpdateItemLotLocation(itemLot.Id, location.Id, sublot.AfterQuantityPerLocation);
+        }
 
         itemLot.Update(notification.AfterQuantity);
 

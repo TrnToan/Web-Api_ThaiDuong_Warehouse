@@ -4,7 +4,7 @@ public class LotAdjustmentEntityTypeConfiguration : IEntityTypeConfiguration<Lot
     public void Configure(EntityTypeBuilder<LotAdjustment> builder)
     {
         builder.HasKey(l => l.Id);
-        builder.HasIndex(l => l.LotId);
+        builder.Property(l => l.LotId).IsRequired();
         builder.Property(l => l.BeforeQuantity).IsRequired();
         builder.Property(l => l.AfterQuantity).IsRequired();
         builder.Property(l => l.IsConfirmed).IsRequired();
@@ -14,5 +14,13 @@ public class LotAdjustmentEntityTypeConfiguration : IEntityTypeConfiguration<Lot
 
         builder.HasOne(e => e.Employee).WithMany().HasForeignKey(la => la.EmployeeId).IsRequired();
         builder.HasOne(i => i.Item).WithMany().HasForeignKey(la => la.ItemId).IsRequired();
+        builder.OwnsMany(la => la.SublotAdjustments, sub =>
+        {
+            sub.WithOwner();
+
+            sub.Property(lot => lot.LocationId).IsRequired();
+            sub.Property(lot => lot.BeforeQuantityPerLocation);
+            sub.Property(lot => lot.AfterQuantityPerLocation);
+        });
     }
 }

@@ -48,7 +48,14 @@ public class ItemLotsController : ControllerBase
 		return await _queries.GetItemLots(itemId);
 	}
 
-	[HttpPatch]
+    [HttpGet]
+    [Route("{locationId}/lots")]
+    public async Task<IEnumerable<ItemLotViewModel>> GetItemLotsByLocationAsync(string locationId)
+    {
+        return await _queries.GetItemLotsByLocation(locationId);
+    }
+
+    [HttpPatch]
 	[Route("{itemLotId}")]
 	public async Task<IActionResult> UpdateItemLotStateAsync([FromRoute] string itemLotId, bool isIsolated)
 	{

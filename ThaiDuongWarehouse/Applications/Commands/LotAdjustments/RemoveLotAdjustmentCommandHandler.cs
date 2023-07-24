@@ -1,4 +1,6 @@
-﻿namespace ThaiDuongWarehouse.Api.Applications.Commands.LotAdjustments;
+﻿using ThaiDuongWarehouse.Domain.Exceptions;
+
+namespace ThaiDuongWarehouse.Api.Applications.Commands.LotAdjustments;
 
 public class RemoveLotAdjustmentCommandHandler : IRequestHandler<RemoveLotAdjustmentCommand, bool>
 {
@@ -15,6 +17,11 @@ public class RemoveLotAdjustmentCommandHandler : IRequestHandler<RemoveLotAdjust
         if (lotAdjustment is null)
         {
             throw new EntityNotFoundException($"LotAdjustment with itemlot {request.LotId} doesn't exist.");
+        }
+
+        if (lotAdjustment.IsConfirmed)
+        {
+            throw new WarehouseDomainException("LotAdjustment not found.");
         }
 
         _lotAdjustmentRepository.RemoveAdjustment(lotAdjustment);

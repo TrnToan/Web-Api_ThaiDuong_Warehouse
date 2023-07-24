@@ -1,5 +1,4 @@
-﻿using System.Runtime.Serialization;
-namespace ThaiDuongWarehouse.Api.Applications.Commands.LotAdjustments;
+﻿namespace ThaiDuongWarehouse.Api.Applications.Commands.LotAdjustments;
 
 [DataContract]
 public class CreateLotAdjustmentCommand : IRequest<bool>
@@ -18,9 +17,11 @@ public class CreateLotAdjustmentCommand : IRequest<bool>
     public string EmployeeName { get; private set; }
     [DataMember]
     public string? Note { get; private set; }
+    [DataMember]
+    public List<SublotAdjustmentViewModel> SublotAdjustments { get; private set; }
 
     public CreateLotAdjustmentCommand(string lotId, string itemId, double beforeQuantity, 
-        double afterQuantity, string unit, string employeeName, string? note)
+        double afterQuantity, string unit, string employeeName, string? note, List<SublotAdjustmentViewModel> sublotAdjustments)
     {
         LotId = lotId;
         ItemId = itemId;
@@ -29,5 +30,6 @@ public class CreateLotAdjustmentCommand : IRequest<bool>
         Unit = unit;
         EmployeeName = employeeName;
         Note = note;
+        SublotAdjustments = sublotAdjustments;
     }
 }

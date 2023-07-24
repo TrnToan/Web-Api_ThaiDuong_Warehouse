@@ -3,12 +3,9 @@
 public class ConfirmLotAdjustmentCommandHandler : IRequestHandler<ConfirmLotAdjustmentCommand, bool>
 {
     private readonly ILotAdjustmentRepository _lotAdjustmentRepository;
-    private readonly IItemRepository _itemRepository;
-    public ConfirmLotAdjustmentCommandHandler(ILotAdjustmentRepository lotAdjustmentRepository, 
-        IItemRepository itemRepository)
+    public ConfirmLotAdjustmentCommandHandler(ILotAdjustmentRepository lotAdjustmentRepository)
     {
         _lotAdjustmentRepository = lotAdjustmentRepository;
-        _itemRepository = itemRepository;
     }
 
     public async Task<bool> Handle(ConfirmLotAdjustmentCommand request, CancellationToken cancellationToken)
@@ -17,10 +14,8 @@ public class ConfirmLotAdjustmentCommandHandler : IRequestHandler<ConfirmLotAdju
         if (lotAdjustment is null)
             throw new EntityNotFoundException($"LotAdjustment with itemlot {request.LotId} doesn't exist.");
 
-        var item = await _itemRepository.GetItemByEntityId(lotAdjustment.ItemId);
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-        lotAdjustment.Confirm(lotAdjustment.LotId, item.ItemId, lotAdjustment.BeforeQuantity, lotAdjustment.AfterQuantity, item.Unit);
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+        lotAdjustment.Confirm(lotAdjustment.LotId, lotAdjustment.Item.ItemId, lotAdjustment.BeforeQuantity, lotAdjustment.AfterQuantity, 
+            lotAdjustment.Item.Unit, lotAdjustment.SublotAdjustments);
 
         _lotAdjustmentRepository.Update(lotAdjustment);
         return await _lotAdjustmentRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);

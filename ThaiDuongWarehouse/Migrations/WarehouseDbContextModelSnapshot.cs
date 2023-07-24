@@ -47,7 +47,7 @@ namespace ThaiDuongWarehouse.Api.Migrations
 
                     b.Property<string>("LotId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
@@ -60,8 +60,6 @@ namespace ThaiDuongWarehouse.Api.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.HasIndex("ItemId");
-
-                    b.HasIndex("LotId");
 
                     b.ToTable("LotAdjustments");
                 });
@@ -473,9 +471,40 @@ namespace ThaiDuongWarehouse.Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsMany("ThaiDuongWarehouse.Domain.AggregateModels.AdjustmentAggregate.SublotAdjustment", "SublotAdjustments", b1 =>
+                        {
+                            b1.Property<int>("LotAdjustmentId")
+                                .HasColumnType("int");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<double>("AfterQuantityPerLocation")
+                                .HasColumnType("float");
+
+                            b1.Property<double>("BeforeQuantityPerLocation")
+                                .HasColumnType("float");
+
+                            b1.Property<string>("LocationId")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("LotAdjustmentId", "Id");
+
+                            b1.ToTable("SublotAdjustment");
+
+                            b1.WithOwner()
+                                .HasForeignKey("LotAdjustmentId");
+                        });
+
                     b.Navigation("Employee");
 
                     b.Navigation("Item");
+
+                    b.Navigation("SublotAdjustments");
                 });
 
             modelBuilder.Entity("ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductIssueAggregate.FinishedProductIssue", b =>

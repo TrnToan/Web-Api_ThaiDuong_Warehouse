@@ -45,7 +45,7 @@ public class InventoryLogEntryRepository : BaseRepository, IInventoryLogEntryRep
     {
         return await _context.InventoryLogEntries
             .Include(log => log.Item)
-            .OrderByDescending(log => log.Id)
+            .OrderByDescending(log => log.TrackingTime)
             .FirstOrDefaultAsync(log => log.Item.Id == itemId);
     }
 

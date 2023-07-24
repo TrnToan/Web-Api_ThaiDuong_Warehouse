@@ -13,6 +13,7 @@ public class LotAdjustment : Entity, IAggregateRoot
 
     public Employee Employee { get; private set; }
     public Item Item { get; private set; }
+    public List<SublotAdjustment> SublotAdjustments { get; private set; }
 
     public LotAdjustment(string lotId, double beforeQuantity, double afterQuantity, bool isConfirmed, DateTime timestamp, 
         string? note, int itemId, int employeeId)
@@ -35,16 +36,25 @@ public class LotAdjustment : Entity, IAggregateRoot
         Timestamp = timestamp;  
         ItemId = itemId;
         EmployeeId = employeeId;
+        SublotAdjustments = new List<SublotAdjustment>();
     }
 
     public void Update(double quantity)
     {
         AfterQuantity = quantity;
     }
-    public void Confirm(string lotId, string itemId, double beforeQuantity , double afterQuanity, string unit)
+
+    public void AddSublot(string locationId, double beforeQuantity, double afterQuantity)
+    {
+        var sublot = new SublotAdjustment(locationId, beforeQuantity, afterQuantity);
+        SublotAdjustments.Add(sublot);
+    }
+
+    public void Confirm(string lotId, string itemId, double beforeQuantity , double afterQuanity, string unit,
+        List<SublotAdjustment> sublotAdjustments)
     {
         IsConfirmed = true;
         Timestamp = DateTime.UtcNow.AddHours(7);
-        AddDomainEvent(new LotAdjustedDomainEvent(lotId, itemId, beforeQuantity, afterQuanity, Timestamp, unit));
+        AddDomainEvent(new LotAdjustedDomainEvent(lotId, itemId, beforeQuantity, afterQuanity, Timestamp, unit, sublotAdjustments));
     }
 }

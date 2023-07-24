@@ -21,9 +21,8 @@ public class CreateLotAdjustmentCommandHandler : IRequestHandler<CreateLotAdjust
         var lotAdjustment = await _lotAdjustmentRepository.GetAdjustmentByLotId(request.LotId);
         if (lotAdjustment is not null)
         {
-            throw new DuplicateRecordException($"LotAdjustment with itemlot {request.LotId} has already existed.");
+            throw new DuplicateRecordException($"Previous lotAdjustment with LotId {request.LotId} hasn't been confirmed yet.");
         }
-
         Item? item = await _itemRepository.GetItemById(request.ItemId, request.Unit);
         if (item is null)
         {
@@ -42,11 +41,16 @@ public class CreateLotAdjustmentCommandHandler : IRequestHandler<CreateLotAdjust
             throw new EntityNotFoundException($"Employee {request.EmployeeName} does not exist");
         }
         
-        var newLotAdjustment = new LotAdjustment(request.LotId, request.BeforeQuantity, request.Note, DateTime.Now, 
+        var newLotAdjustment = new LotAdjustment(request.LotId, request.BeforeQuantity, request.Note, DateTime.UtcNow.AddHours(7), 
             item.Id, employee.Id);
         newLotAdjustment.Update(request.AfterQuantity);
-        _lotAdjustmentRepository.Add(newLotAdjustment);
 
+        foreach (var sublot in request.SublotAdjustments)
+        {
+            newLotAdjustment.AddSublot(sublot.LocationId, sublot.BeforeQuantityPerLocation, sublot.AfterQuantityPerLocation);
+        }
+
+        _lotAdjustmentRepository.Add(newLotAdjustment);
         return await _lotAdjustmentRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
     }
 }

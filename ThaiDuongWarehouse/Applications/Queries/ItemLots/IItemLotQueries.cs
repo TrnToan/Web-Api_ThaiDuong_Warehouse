@@ -7,4 +7,5 @@ public interface IItemLotQueries
     Task<IEnumerable<ItemLotViewModel>> GetItemLotsByItemId(DateTime timestamp, string itemId);
     Task<ItemLotViewModel> GetItemLotByLotId(string lotId);
     Task<IEnumerable<ItemLotViewModel>> GetIsolatedItemLots();
+    Task<IEnumerable<ItemLotViewModel>> GetItemLotsByLocation(string locationId);
 }
