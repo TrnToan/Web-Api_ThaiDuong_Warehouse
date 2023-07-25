@@ -44,7 +44,7 @@ public class FinishedProductIssuesController : ControllerBase
 
     [HttpGet]
     [Route("ExportHistory")]
-    public async Task<IEnumerable<FinishedProductIssueViewModel>> GetHistoryRecordsAsync(string? itemClassId, string? itemId, 
+    public async Task<IEnumerable<FinishedProductIssueEntryViewModel>> GetHistoryRecordsAsync(string? itemClassId, string? itemId, 
         string? purchaseOrderNumber, [FromQuery] TimeRangeQuery query)
     {
         query.EndTime = query.EndTime.AddHours(23).AddMinutes(59).AddSeconds(59);

@@ -1,7 +1,4 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductReceiptAggregate;
-using ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate;
-
-namespace ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductIssueAggregate;
+﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductIssueAggregate;
 public class FinishedProductIssue : Entity, IAggregateRoot
 {
     public string FinishedProductIssueId { get; private set; }

@@ -34,13 +34,6 @@ public class UpdateFinishedProductReceiptEntryCommandHandler : IRequestHandler<U
             {
                 throw new EntityNotFoundException($"Entry, {entry.ItemId} & {entry.OldPurchaseOrderNumber}");
             }
-            
-            //if (changedQuantity != 0)
-            //{
-            //    // Ghi đè quantity của entry mới lên quantity của entry cũ 
-            //    goodsReceipt.UpdateQuantityLogEntry(entry.OldPurchaseOrderNumber, item.Id, entry.Quantity, entry.Quantity, 
-            //        goodsReceipt.Timestamp);
-            //}
                          
             goodsReceipt.UpdateFinishedProductInventory(item, entry.OldPurchaseOrderNumber, entry.NewPurchaseOrderNumber, 
                 entry.Quantity, goodsReceipt.Timestamp);

@@ -49,36 +49,34 @@ public class FinishedProductIssueQueries : IFinishedProductIssueQueries
         return viewModels;
     }
 
-    public async Task<IEnumerable<FinishedProductIssueViewModel>> GetHistoryRecords(string? itemClassId, string? itemId, 
+    public async Task<IEnumerable<FinishedProductIssueEntryViewModel>> GetHistoryRecords(string? itemClassId, string? itemId, 
         string? purchaseOrderNumber, TimeRangeQuery query)
     {
-        IQueryable<FinishedProductIssue> productIssues;
-        productIssues = _productIssues
+        IQueryable<FinishedProductIssueEntry> productIssueEntries = _productIssues
             .Where(p => p.Timestamp >= query.StartTime &&
-                        p.Timestamp <= query.EndTime);
+                        p.Timestamp <= query.EndTime)
+            .SelectMany(p => p.Entries)
+            .Include(e => e.Item);
 
         if (itemClassId is not null)
         {
-            productIssues = productIssues
-                .Where(p => p.Entries.Any(e => e.Item.ItemClassId == itemClassId))
-                .Include(p => p.Entries.Where(e => e.Item.ItemClassId == itemClassId));
+            productIssueEntries = productIssueEntries
+                .Where(entry => entry.Item.ItemClassId == itemClassId);
         }
         if (itemId is not null)
         {
-            productIssues = productIssues
-                .Where(p => p.Entries.Any(e => e.Item.ItemId == itemId))
-                .Include(p => p.Entries.Where(p => p.Item.ItemId == itemId));
+            productIssueEntries = productIssueEntries
+                .Where(entry => entry.Item.ItemId == itemId);
         }
         if (purchaseOrderNumber is not null)
         {
-            productIssues = productIssues
-                .Where(p => p.Entries.Any(e => e.PurchaseOrderNumber == purchaseOrderNumber))
-                .Include(p => p.Entries.Where(p => p.PurchaseOrderNumber == purchaseOrderNumber));
+            productIssueEntries = productIssueEntries
+                .Where(entry => entry.PurchaseOrderNumber == purchaseOrderNumber);
         }
 
-        IEnumerable<FinishedProductIssue> finishedProductIssues = await productIssues.ToListAsync();
+        IEnumerable<FinishedProductIssueEntry> filteredEntries = await productIssueEntries.ToListAsync();
 
-        var viewModels = _mapper.Map<IEnumerable<FinishedProductIssue>, IEnumerable<FinishedProductIssueViewModel>>(finishedProductIssues);
+        var viewModels = _mapper.Map<IEnumerable<FinishedProductIssueEntry>, IEnumerable<FinishedProductIssueEntryViewModel>>(filteredEntries);
         return viewModels;
     }
 }
