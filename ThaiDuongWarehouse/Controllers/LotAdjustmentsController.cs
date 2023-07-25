@@ -17,6 +17,7 @@ public class LotAdjustmentsController : ControllerBase
     [HttpGet]
     public async Task<IEnumerable<LotAdjustmentViewModel>> GetLotAdjustmentsByTimeAsync([FromQuery] TimeRangeQuery query)
     {
+        query.EndTime = query.EndTime.AddHours(23).AddMinutes(59).AddSeconds(59);
         return await _queries.GetAdjustmentsByTime(query);
     }
 
@@ -33,7 +34,7 @@ public class LotAdjustmentsController : ControllerBase
         var result = await _mediator.Send(command);
         try
         {
-            if (result != true)
+            if (!result)
             {
                 return BadRequest(result);
             }
@@ -52,7 +53,7 @@ public class LotAdjustmentsController : ControllerBase
         bool result = await _mediator.Send(command);
         try
         {
-            if (result != true)
+            if (!result)
             {
                 return BadRequest(result);
             }
@@ -71,7 +72,7 @@ public class LotAdjustmentsController : ControllerBase
         bool result = await _mediator.Send(command);
         try
         {
-            if (result != true)
+            if (!result)
             {
                 return BadRequest();
             }

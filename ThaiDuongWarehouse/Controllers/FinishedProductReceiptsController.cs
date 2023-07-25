@@ -33,7 +33,17 @@ public class FinishedProductReceiptsController : ControllerBase
     [Route("TimeRange")]
     public async Task<IEnumerable<FinishedProductReceiptViewModel>> GetByTimeAsync([FromQuery] TimeRangeQuery query)
     {
+        query.EndTime = query.EndTime.AddHours(23).AddMinutes(59).AddSeconds(59);
         return await _queries.GetByTime(query);
+    }
+
+    [HttpGet]
+    [Route("ImportHistory")]
+    public async Task<IEnumerable<FinishedProductReceiptViewModel>> GetHistoryRecordsAsync(string? itemClassId, string? itemId, 
+        string? purchaseOrderNumber, [FromQuery] TimeRangeQuery query)
+    {
+        query.EndTime = query.EndTime.AddHours(23).AddMinutes(59).AddSeconds(59);
+        return await _queries.GetHistoryRecords(itemClassId, itemId, purchaseOrderNumber, query);
     }
 
     [HttpPost]

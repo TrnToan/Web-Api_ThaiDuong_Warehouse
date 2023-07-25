@@ -25,11 +25,11 @@ public class ModelToViewModelProfile : Profile
 		CreateMap<GoodsIssueLot, GoodsIssueLotViewModel>();
 		CreateMap<GoodsIssueSublot, GoodsIssueSublotViewModel>();
 		CreateMap<InventoryLogEntry, InventoryLogEntryViewModel>();
-		CreateMap<GoodsReceipt, GoodsReceiptsHistoryViewModel>();
-		CreateMap<GoodsReceiptLot, GoodsReceiptLotsHistoryViewModel>();
-		CreateMap<GoodsIssue, GoodsIssuesHistoryViewModel>();
+		CreateMap<GoodsReceipt, GoodsReceiptHistoryViewModel>();
+		CreateMap<GoodsReceiptLot, GoodsReceiptLotHistoryViewModel>();
+		CreateMap<GoodsIssue, GoodsIssueHistoryViewModel>();
 		CreateMap<GoodsIssueEntry, GoodsIssueEntryHistoryViewModel>();
-		CreateMap<GoodsIssueLot, GoodsIssueLotsHistoryViewModel>();
+		CreateMap<GoodsIssueLot, GoodsIssueLotHistoryViewModel>();
 		CreateMap<FinishedProductReceipt, FinishedProductReceiptViewModel>();
 		CreateMap<FinishedProductReceiptEntry, FinishedProductReceiptEntryViewModel>();
 		CreateMap<FinishedProductIssue, FinishedProductIssueViewModel>();

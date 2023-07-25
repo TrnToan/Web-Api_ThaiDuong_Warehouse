@@ -3,12 +3,10 @@
 public class GoodsIssueEntryHistoryViewModel
 {
     public ItemViewModel Item { get; private set; }
-    public string Unit { get; private set; }
-    public List<GoodsIssueLotsHistoryViewModel> Lots { get; private set; }
-    public GoodsIssueEntryHistoryViewModel(ItemViewModel item, string unit, List<GoodsIssueLotsHistoryViewModel> lots)
+    public List<GoodsIssueLotHistoryViewModel> Lots { get; private set; }
+    public GoodsIssueEntryHistoryViewModel(ItemViewModel item, List<GoodsIssueLotHistoryViewModel> lots)
     {
         Item = item;
-        Unit = unit;
         Lots = lots;
     }
 } 

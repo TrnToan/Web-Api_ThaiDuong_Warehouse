@@ -3,7 +3,7 @@
 public interface IImportHistoryQueries
 {
     //Task<IEnumerable<GoodsReceiptsHistoryViewModel>> GetByPO(string purchaseOrderNumber);
-    Task<IEnumerable<GoodsReceiptsHistoryViewModel>> GetBySupplier(TimeRangeQuery query, string supplier);
-    Task<IEnumerable<GoodsReceiptsHistoryViewModel>> GetByClassOrItem(TimeRangeQuery query, string? itemClassId, string? itemId);
+    Task<IEnumerable<GoodsReceiptHistoryViewModel>> GetBySupplier(TimeRangeQuery query, string supplier);
+    Task<IEnumerable<GoodsReceiptHistoryViewModel>> GetByClassOrItem(TimeRangeQuery query, string? itemClassId, string? itemId);
 }
 

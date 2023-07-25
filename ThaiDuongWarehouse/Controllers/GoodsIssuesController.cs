@@ -38,6 +38,7 @@ public class GoodsIssuesController : ControllerBase
     [HttpGet]
     public async Task<IEnumerable<GoodsIssueViewModel>> GetGoodsIssuesAsync([FromQuery] TimeRangeQuery query, bool isExported)
     {
+        query.EndTime = query.EndTime.AddHours(23).AddMinutes(59).AddSeconds(59);
         return await _queries.GetGoodsIssuesByTime(query, isExported);
     }
 

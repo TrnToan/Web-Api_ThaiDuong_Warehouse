@@ -38,7 +38,17 @@ public class FinishedProductIssuesController : ControllerBase
     [Route("TimeRange")]
     public async Task<IEnumerable<FinishedProductIssueViewModel>> GetByTimeAsync([FromQuery]TimeRangeQuery query)
     {
+        query.EndTime = query.EndTime.AddHours(23).AddMinutes(59).AddSeconds(59);
         return await _queries.GetByTime(query);
+    }
+
+    [HttpGet]
+    [Route("ExportHistory")]
+    public async Task<IEnumerable<FinishedProductIssueViewModel>> GetHistoryRecordsAsync(string? itemClassId, string? itemId, 
+        string? purchaseOrderNumber, [FromQuery] TimeRangeQuery query)
+    {
+        query.EndTime = query.EndTime.AddHours(23).AddMinutes(59).AddSeconds(59);
+        return await _queries.GetHistoryRecords(itemClassId, itemId, purchaseOrderNumber, query);
     }
 
     [HttpPost]

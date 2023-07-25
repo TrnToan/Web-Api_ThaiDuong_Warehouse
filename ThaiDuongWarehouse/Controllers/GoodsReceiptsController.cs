@@ -46,6 +46,7 @@ public class GoodsReceiptsController : ControllerBase
     [Route("TimeRange/{isCompleted}")]
     public async Task<IEnumerable<GoodsReceiptViewModel>> GetGoodsReceiptsAsync(bool isCompleted, [FromQuery] TimeRangeQuery query)
     {
+        query.EndTime = query.EndTime.AddHours(23).AddMinutes(59).AddSeconds(59);
         return await _queries.GetGoodsReceiptsByTime(query, isCompleted);
     }
 

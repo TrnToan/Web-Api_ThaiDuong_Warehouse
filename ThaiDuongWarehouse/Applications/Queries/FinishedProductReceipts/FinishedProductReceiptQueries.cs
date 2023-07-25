@@ -43,4 +43,37 @@ public class FinishedProductReceiptQueries : IFinishedProductReceiptQueries
         var viewModels = _mapper.Map<IEnumerable<FinishedProductReceipt>, IEnumerable<FinishedProductReceiptViewModel>>(productReceipts);
         return viewModels;
     }
+
+    public async Task<IEnumerable<FinishedProductReceiptViewModel>> GetHistoryRecords(string? itemClassId, string? itemId, 
+        string? purchaseOrderNumber, TimeRangeQuery query)
+    {
+        IQueryable<FinishedProductReceipt> productReceipts;
+        productReceipts = _productReceipts
+            .Where(p => p.Timestamp >= query.StartTime &&
+                        p.Timestamp <= query.EndTime);
+
+        if (itemClassId is not null)
+        {
+            productReceipts = productReceipts
+                .Where(p => p.Entries.Any(e => e.Item.ItemClassId == itemClassId))
+                .Include(p => p.Entries.Where(e => e.Item.ItemClassId == itemClassId));
+        }
+        if (itemId is not null)
+        {
+            productReceipts = productReceipts
+                .Where(p => p.Entries.Any(e => e.Item.ItemId == itemId))
+                .Include(p => p.Entries.Where(p => p.Item.ItemId == itemId));                
+        }
+        if (purchaseOrderNumber is not null)
+        {
+            productReceipts = productReceipts
+                .Where(p => p.Entries.Any(e => e.PurchaseOrderNumber == purchaseOrderNumber))
+                .Include(p => p.Entries.Where(p => p.PurchaseOrderNumber == purchaseOrderNumber));
+        }
+
+        IEnumerable<FinishedProductReceipt> finishedProductReceipts = await productReceipts.ToListAsync();
+
+        var viewModels = _mapper.Map<IEnumerable<FinishedProductReceipt>, IEnumerable<FinishedProductReceiptViewModel>>(finishedProductReceipts);
+        return viewModels;
+    }
 }

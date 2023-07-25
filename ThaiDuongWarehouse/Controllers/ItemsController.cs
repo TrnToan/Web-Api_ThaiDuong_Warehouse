@@ -1,5 +1,4 @@
 ﻿using ThaiDuongWarehouse.Api.Applications.Commands.Items;
-using ThaiDuongWarehouse.Api.Applications.Queries.Items;
 
 namespace ThaiDuongWarehouse.Api.Controllers;
 

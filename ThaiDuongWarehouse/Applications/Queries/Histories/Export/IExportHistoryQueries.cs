@@ -3,6 +3,6 @@
 public interface IExportHistoryQueries
 {
     //Task<IEnumerable<GoodsIssuesHistoryViewModel>> GetByPO(string purchaseOrderNumber);
-    Task<IEnumerable<GoodsIssuesHistoryViewModel>> GetByReceiver(TimeRangeQuery query, string receiver);
-    Task<IEnumerable<GoodsIssuesHistoryViewModel>> GetByClassOrItem(TimeRangeQuery query, string? itemClassId, string? itemId);
+    Task<IEnumerable<GoodsIssueHistoryViewModel>> GetByReceiver(TimeRangeQuery query, string receiver);
+    Task<IEnumerable<GoodsIssueHistoryViewModel>> GetByClassOrItem(TimeRangeQuery query, string? itemClassId, string? itemId);
 }

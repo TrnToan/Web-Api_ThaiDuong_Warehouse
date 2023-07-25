@@ -10,13 +10,15 @@ public class ImportHistoryQueries : IImportHistoryQueries
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<GoodsReceiptsHistoryViewModel>> GetByClassOrItem(TimeRangeQuery query, string? itemClassId, string? itemId)
+    public async Task<IEnumerable<GoodsReceiptHistoryViewModel>> GetByClassOrItem(TimeRangeQuery query, string? itemClassId, string? itemId)
     {
         var goodsReceipts = new List<Domain.AggregateModels.GoodsReceiptAggregate.GoodsReceipt>();
         if (itemClassId == null && itemId != null)
         {
             goodsReceipts = await _context.GoodsReceipts
                 .AsNoTracking()
+                .Where(gr => gr.Timestamp >= query.StartTime &&
+                             gr.Timestamp <= query.EndTime)
                 .Where(g => g.Lots.Any(lot => lot.Item.ItemId == itemId))
                 .Include(g => g.Lots.Where(lot => lot.Item.ItemId == itemId))
                 .ThenInclude(lot => lot.Item)
@@ -26,6 +28,8 @@ public class ImportHistoryQueries : IImportHistoryQueries
         {
             goodsReceipts = await _context.GoodsReceipts
                 .AsNoTracking()
+                .Where(gr => gr.Timestamp >= query.StartTime &&
+                             gr.Timestamp <= query.EndTime)
                 .Where(g => g.Lots.Any(lot => lot.Item.ItemClassId == itemClassId))
                 .Include(g => g.Lots.Where(lot => lot.Item.ItemClassId == itemClassId))
                 .ThenInclude(lot => lot.Item)
@@ -34,23 +38,10 @@ public class ImportHistoryQueries : IImportHistoryQueries
         else
             throw new NotImplementedException();
 
-        return _mapper.Map<IEnumerable<GoodsReceiptsHistoryViewModel>>(goodsReceipts);
+        return _mapper.Map<IEnumerable<GoodsReceiptHistoryViewModel>>(goodsReceipts);
     }
 
-    //public async Task<IEnumerable<GoodsReceiptsHistoryViewModel>> GetByPO(string purchaseOrderNumber)
-    //{
-    //    var goodsReceipts = await _context.GoodsReceipts
-    //        .AsNoTracking()
-    //        .Include(g => g.Lots)
-    //        .Where(g => g.Lots.Any(lot => lot.PurchaseOrderNumber == purchaseOrderNumber))
-    //        .Include(g => g.Lots.Where(lot => lot.PurchaseOrderNumber == purchaseOrderNumber))
-    //        .ThenInclude(lot => lot.Item)
-    //        .ToListAsync();
-
-    //    return _mapper.Map<IEnumerable<GoodsReceiptsHistoryViewModel>>(goodsReceipts);
-    //}
-
-    public async Task<IEnumerable<GoodsReceiptsHistoryViewModel>> GetBySupplier(TimeRangeQuery query, string supplier)
+    public async Task<IEnumerable<GoodsReceiptHistoryViewModel>> GetBySupplier(TimeRangeQuery query, string supplier)
     {
         var goodsReceipts = await _context.GoodsReceipts
             .AsNoTracking()
@@ -60,8 +51,10 @@ public class ImportHistoryQueries : IImportHistoryQueries
             g.Timestamp.CompareTo(query.EndTime) <= 0)
             .Include(g => g.Lots)
             .ThenInclude(lot => lot.Item)
+            .Include(g => g.Lots)
+            .ThenInclude(lot => lot.Sublots)
             .ToListAsync();
 
-        return _mapper.Map<IEnumerable<GoodsReceiptsHistoryViewModel>>(goodsReceipts);
+        return _mapper.Map<IEnumerable<GoodsReceiptHistoryViewModel>>(goodsReceipts);
     }
 }

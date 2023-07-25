@@ -10,7 +10,7 @@ public class ExportHistoryQueries : IExportHistoryQueries
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<GoodsIssuesHistoryViewModel>> GetByClassOrItem(TimeRangeQuery query, string? itemClassId, string? itemId)
+    public async Task<IEnumerable<GoodsIssueHistoryViewModel>> GetByClassOrItem(TimeRangeQuery query, string? itemClassId, string? itemId)
     {
         List<GoodsIssue> goodsIssues = new();
         if (itemClassId == null && itemId != null)
@@ -46,7 +46,7 @@ public class ExportHistoryQueries : IExportHistoryQueries
         else
             throw new NotImplementedException();
 
-        return _mapper.Map<IEnumerable<GoodsIssuesHistoryViewModel>>(goodsIssues);
+        return _mapper.Map<IEnumerable<GoodsIssueHistoryViewModel>>(goodsIssues);
     }
 
     //public async Task<IEnumerable<GoodsIssuesHistoryViewModel>> GetByPO(string purchaseOrderNumber)
@@ -63,7 +63,7 @@ public class ExportHistoryQueries : IExportHistoryQueries
     //    return _mapper.Map<IEnumerable<GoodsIssuesHistoryViewModel>>(goodsIssues);
     //}
 
-    public async Task<IEnumerable<GoodsIssuesHistoryViewModel>> GetByReceiver(TimeRangeQuery query, string receiver)
+    public async Task<IEnumerable<GoodsIssueHistoryViewModel>> GetByReceiver(TimeRangeQuery query, string receiver)
     {
         var goodsIssues = await _context.GoodsIssues
             .AsNoTracking()
@@ -77,6 +77,6 @@ public class ExportHistoryQueries : IExportHistoryQueries
             .ThenInclude(e => e.Item)
             .ToListAsync();
 
-        return _mapper.Map<IEnumerable<GoodsIssuesHistoryViewModel>>(goodsIssues);
+        return _mapper.Map<IEnumerable<GoodsIssueHistoryViewModel>>(goodsIssues);
     }
 }
