@@ -28,9 +28,17 @@ public class FinishedProductIssuesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IEnumerable<FinishedProductIssueViewModel>> GetAll()
+    [Route("Ids")]
+    public async Task<IEnumerable<string>> GetAll()
     {
-        return await _queries.GetAll();
+        return await _queries.GetAllIds();
+    }
+
+    [HttpGet]
+    [Route("TimeRange")]
+    public async Task<IEnumerable<FinishedProductIssueViewModel>> GetByTimeAsync([FromQuery]TimeRangeQuery query)
+    {
+        return await _queries.GetByTime(query);
     }
 
     [HttpPost]

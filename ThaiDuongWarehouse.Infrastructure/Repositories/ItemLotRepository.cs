@@ -33,6 +33,7 @@ public class ItemLotRepository : BaseRepository, IItemLotRepository
     {
         return await _context.ItemLots
             .Include(il => il.ItemLotLocations)
+                .ThenInclude(ill => ill.Location)
             .FirstOrDefaultAsync(il => il.LotId == lotId);
     }
 

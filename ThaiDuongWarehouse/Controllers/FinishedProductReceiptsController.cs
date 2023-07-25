@@ -23,10 +23,17 @@ public class FinishedProductReceiptsController : ControllerBase
     }
 
     [HttpGet]
-    [Route("TimeRange")]
-    public async Task<IEnumerable<FinishedProductReceiptViewModel>> GetReceiptsAsync([FromQuery]TimeRangeQuery query)
+    [Route("Ids")]
+    public async Task<IEnumerable<string>> GetReceiptIds()
     {
-        return await _queries.GetReceiptsAsync(query);
+        return await _queries.GetReceiptIds();
+    }
+
+    [HttpGet]
+    [Route("TimeRange")]
+    public async Task<IEnumerable<FinishedProductReceiptViewModel>> GetByTimeAsync([FromQuery] TimeRangeQuery query)
+    {
+        return await _queries.GetByTime(query);
     }
 
     [HttpPost]

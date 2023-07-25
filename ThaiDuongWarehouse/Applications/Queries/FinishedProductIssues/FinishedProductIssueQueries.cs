@@ -17,12 +17,13 @@ public class FinishedProductIssueQueries : IFinishedProductIssueQueries
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<FinishedProductIssueViewModel>> GetAll()
+    public async Task<IEnumerable<string>> GetAllIds()
     {
-        var productIssues = await _productIssues.ToArrayAsync();
-        var viewModels = _mapper.Map<IEnumerable<FinishedProductIssue>, IEnumerable<FinishedProductIssueViewModel>>(productIssues);
+        var productIssueIds = await _productIssues
+            .Select(p => p.FinishedProductIssueId)
+            .ToArrayAsync();
 
-        return viewModels;
+        return productIssueIds;
     }
 
     public async Task<FinishedProductIssueViewModel?> GetProductIssueById(string id)
@@ -35,5 +36,16 @@ public class FinishedProductIssueQueries : IFinishedProductIssueQueries
         var viewModel = _mapper.Map<FinishedProductIssue, FinishedProductIssueViewModel>(productIssue);
 
         return viewModel;
+    }
+
+    public async Task<IEnumerable<FinishedProductIssueViewModel>> GetByTime(TimeRangeQuery query)
+    {
+        var productIssues = await _productIssues
+            .Where(p => p.Timestamp >= query.StartTime &&
+                        p.Timestamp <= query.EndTime)
+            .ToArrayAsync();
+
+        var viewModels = _mapper.Map<IEnumerable<FinishedProductIssue>, IEnumerable<FinishedProductIssueViewModel>>(productIssues);
+        return viewModels;
     }
 }

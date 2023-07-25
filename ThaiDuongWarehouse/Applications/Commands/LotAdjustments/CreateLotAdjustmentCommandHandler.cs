@@ -23,6 +23,7 @@ public class CreateLotAdjustmentCommandHandler : IRequestHandler<CreateLotAdjust
         {
             throw new DuplicateRecordException($"Previous lotAdjustment with LotId {request.LotId} hasn't been confirmed yet.");
         }
+
         Item? item = await _itemRepository.GetItemById(request.ItemId, request.Unit);
         if (item is null)
         {
@@ -41,13 +42,26 @@ public class CreateLotAdjustmentCommandHandler : IRequestHandler<CreateLotAdjust
             throw new EntityNotFoundException($"Employee {request.EmployeeName} does not exist");
         }
         
-        var newLotAdjustment = new LotAdjustment(request.LotId, request.BeforeQuantity, request.Note, DateTime.UtcNow.AddHours(7), 
+        var newLotAdjustment = new LotAdjustment(request.LotId, itemLot.Quantity, request.Note, DateTime.UtcNow.AddHours(7), 
             item.Id, employee.Id);
+
+        double totalQuantity = request.SublotAdjustments.Sum(sub => sub.NewQuantityPerLocation);
+        if (totalQuantity != request.AfterQuantity)
+        {
+            throw new InvalidItemLotException($"Total itemlot quantity {request.AfterQuantity} is not equal to sum of " +
+                $"quantityPerLocation {totalQuantity}");
+        }
+
         newLotAdjustment.Update(request.AfterQuantity);
 
         foreach (var sublot in request.SublotAdjustments)
         {
-            newLotAdjustment.AddSublot(sublot.LocationId, sublot.BeforeQuantityPerLocation, sublot.AfterQuantityPerLocation);
+            var existedSublot = itemLot.ItemLotLocations.Find(lot => lot.Location.LocationId == sublot.LocationId);
+            if (existedSublot is null)
+            {
+                throw new EntityNotFoundException($"Itemlot with locationId {sublot.LocationId} not found.");
+            }
+            newLotAdjustment.AddSublot(sublot.LocationId, existedSublot.QuantityPerLocation, sublot.NewQuantityPerLocation);
         }
 
         _lotAdjustmentRepository.Add(newLotAdjustment);

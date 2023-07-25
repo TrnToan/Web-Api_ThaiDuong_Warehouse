@@ -1,11 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace ThaiDuongWarehouse.Api.Applications.Queries.FinishedProductReceipts;
+﻿namespace ThaiDuongWarehouse.Api.Applications.Queries.FinishedProductReceipts;
 
 public class FinishedProductReceiptQueries : IFinishedProductReceiptQueries
 {
     private readonly WarehouseDbContext _context;
     private readonly IMapper _mapper;
+    private IQueryable<FinishedProductReceipt> _productReceipts => _context.FinishedProductReceipts
+        .AsNoTracking()
+        .Include(gr => gr.Employee)
+        .Include(gr => gr.Entries)
+            .ThenInclude(gr => gr.Item);
 
     public FinishedProductReceiptQueries(WarehouseDbContext context, IMapper mapper)
     {
@@ -15,26 +18,29 @@ public class FinishedProductReceiptQueries : IFinishedProductReceiptQueries
 
     public async Task<FinishedProductReceiptViewModel?> GetReceiptById(string id)
     {
-        var goodsReceipt = await _context.FinishedProductReceipts
-            .Include(gr => gr.Employee)
-            .Include(gr => gr.Entries)
-                .ThenInclude(gr => gr.Item)
+        var goodsReceipt = await _productReceipts
             .FirstOrDefaultAsync(gr => gr.FinishedProductReceiptId == id);
 
         return _mapper.Map<FinishedProductReceiptViewModel>(goodsReceipt);
     }
 
-    public async Task<IEnumerable<FinishedProductReceiptViewModel>> GetReceiptsAsync(TimeRangeQuery query)
+    public async Task<IEnumerable<string>> GetReceiptIds()
     {
-        var goodsReceipts = await _context.FinishedProductReceipts
-            .Include(gr => gr.Employee)
-            .Include(gr => gr.Entries)
-                .ThenInclude(gr => gr.Item)
-            .Where(gr => gr.Timestamp >= query.StartTime && gr.Timestamp <= query.EndTime)
-            .Skip((query.Page - 1) * query.ItemsPerPage)
-            .Take(query.ItemsPerPage)
+        var goodsReceiptIds = await _productReceipts
+            .Select(p => p.FinishedProductReceiptId)
             .ToListAsync();
 
-        return _mapper.Map<IEnumerable<FinishedProductReceipt>, IEnumerable<FinishedProductReceiptViewModel>>(goodsReceipts);
+        return goodsReceiptIds;
+    }
+
+    public async Task<IEnumerable<FinishedProductReceiptViewModel>> GetByTime(TimeRangeQuery query)
+    {
+        var productReceipts = await _productReceipts
+            .Where(p => p.Timestamp >= query.StartTime &&
+                        p.Timestamp <= query.EndTime)
+            .ToListAsync();
+
+        var viewModels = _mapper.Map<IEnumerable<FinishedProductReceipt>, IEnumerable<FinishedProductReceiptViewModel>>(productReceipts);
+        return viewModels;
     }
 }

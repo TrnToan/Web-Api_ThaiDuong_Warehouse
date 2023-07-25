@@ -1,5 +1,4 @@
 ﻿using ThaiDuongWarehouse.Api.Applications.Commands.LotAdjustments;
-using ThaiDuongWarehouse.Api.Applications.Queries;
 
 namespace ThaiDuongWarehouse.Api.Controllers;
 
@@ -22,10 +21,10 @@ public class LotAdjustmentsController : ControllerBase
     }
 
     [HttpGet]
-    [Route("Unconfirmed")]
-    public async Task<IEnumerable<LotAdjustmentViewModel>> GetAdjustmentsAsync()
+    [Route("{isConfirmed}")]
+    public async Task<IEnumerable<LotAdjustmentViewModel>> GetAdjustmentsAsync(bool isConfirmed)
     {
-        return await _queries.GetUnconfirmedAdjustments();
+        return await _queries.GetIsConfirmedAdjustments(isConfirmed);
     }
 
     [HttpPost]

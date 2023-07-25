@@ -3,5 +3,6 @@
 public interface IFinishedProductIssueQueries
 {
     Task<FinishedProductIssueViewModel?> GetProductIssueById(string id);
-    Task<IEnumerable<FinishedProductIssueViewModel>> GetAll();
+    Task<IEnumerable<string>> GetAllIds();
+    Task<IEnumerable<FinishedProductIssueViewModel>> GetByTime(TimeRangeQuery query);
 }
