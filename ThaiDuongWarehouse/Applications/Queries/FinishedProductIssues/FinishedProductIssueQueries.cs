@@ -49,20 +49,23 @@ public class FinishedProductIssueQueries : IFinishedProductIssueQueries
         return viewModels;
     }
 
-    public async Task<IEnumerable<FinishedProductIssueEntryViewModel>> GetHistoryRecords(string? itemClassId, string? itemId, 
-        string? purchaseOrderNumber, TimeRangeQuery query)
+    public async Task<IEnumerable<FinishedProductIssueEntryViewModel>> GetHistoryRecords(string? receiver,  
+        string? itemId, string? purchaseOrderNumber, TimeRangeQuery query)
     {
-        IQueryable<FinishedProductIssueEntry> productIssueEntries = _productIssues
+        IQueryable<FinishedProductIssue> productIssues = _productIssues
             .Where(p => p.Timestamp >= query.StartTime &&
-                        p.Timestamp <= query.EndTime)
+                        p.Timestamp <= query.EndTime);
+
+        if (receiver is not null)
+        {
+            productIssues = productIssues
+                .Where(p => p.Receiver == receiver);
+        }
+
+        IQueryable<FinishedProductIssueEntry> productIssueEntries = productIssues
             .SelectMany(p => p.Entries)
             .Include(e => e.Item);
 
-        if (itemClassId is not null)
-        {
-            productIssueEntries = productIssueEntries
-                .Where(entry => entry.Item.ItemClassId == itemClassId);
-        }
         if (itemId is not null)
         {
             productIssueEntries = productIssueEntries
@@ -78,5 +81,15 @@ public class FinishedProductIssueQueries : IFinishedProductIssueQueries
 
         var viewModels = _mapper.Map<IEnumerable<FinishedProductIssueEntry>, IEnumerable<FinishedProductIssueEntryViewModel>>(filteredEntries);
         return viewModels;
+    }
+
+    public async Task<IEnumerable<string?>> GetAllReceivers()
+    {
+        var recevers = await _context.FinisedProductIssues
+            .AsNoTracking()
+            .Select(p => p.Receiver)
+            .ToArrayAsync();
+
+        return recevers;
     }
 }

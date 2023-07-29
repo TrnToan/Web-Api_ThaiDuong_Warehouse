@@ -64,7 +64,7 @@ public class ItemLotsController : ControllerBase
 		try
 		{
 			var result = await _mediator.Send(command);
-			if (result != true)
+			if (!result)
 			{
 				return BadRequest();
 			}
@@ -79,11 +79,11 @@ public class ItemLotsController : ControllerBase
 	[HttpDelete]
 	public async Task<IActionResult> RemoveLotsAsync([FromQuery] string itemLotId)
 	{
-		var command = new RemoveItemLotsCommand(itemLotId);
+		var command = new RemoveItemLotCommand(itemLotId);
         try
         {
             var result = await _mediator.Send(command);
-            if (result != true)
+            if (!result)
             {
                 return BadRequest();
             }

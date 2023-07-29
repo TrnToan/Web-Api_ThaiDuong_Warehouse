@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThaiDuongWarehouse.Api", "ThaiDuongWarehouse\ThaiDuongWarehouse.Api.csproj", "{7E2A6409-40A4-467F-A898-65EFF02BABC0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThaiDuongWarehouse.Api", "ThaiDuongWarehouse\ThaiDuongWarehouse.Api.csproj", "{7E2A6409-40A4-467F-A898-65EFF02BABC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThaiDuongWarehouse.Domain", "ThaiDuongWarehouse.Domain\ThaiDuongWarehouse.Domain.csproj", "{D9325AE1-A975-476C-BDDC-EA6ACA3E0E49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThaiDuongWarehouse.Domain", "ThaiDuongWarehouse.Domain\ThaiDuongWarehouse.Domain.csproj", "{D9325AE1-A975-476C-BDDC-EA6ACA3E0E49}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThaiDuongWarehouse.Infrastructure", "ThaiDuongWarehouse.Infrastructure\ThaiDuongWarehouse.Infrastructure.csproj", "{0E908BD2-8E97-4F6A-8990-B141022AD2E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThaiDuongWarehouse.Infrastructure", "ThaiDuongWarehouse.Infrastructure\ThaiDuongWarehouse.Infrastructure.csproj", "{0E908BD2-8E97-4F6A-8990-B141022AD2E0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BB2FA1E4-268E-4DBB-910E-83F564165158}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -44,11 +44,18 @@ public class FinishedProductIssuesController : ControllerBase
 
     [HttpGet]
     [Route("ExportHistory")]
-    public async Task<IEnumerable<FinishedProductIssueEntryViewModel>> GetHistoryRecordsAsync(string? itemClassId, string? itemId, 
+    public async Task<IEnumerable<FinishedProductIssueEntryViewModel>> GetHistoryRecordsAsync(string? receiver, string? itemId, 
         string? purchaseOrderNumber, [FromQuery] TimeRangeQuery query)
     {
         query.EndTime = query.EndTime.AddHours(23).AddMinutes(59).AddSeconds(59);
-        return await _queries.GetHistoryRecords(itemClassId, itemId, purchaseOrderNumber, query);
+        return await _queries.GetHistoryRecords(receiver, itemId, purchaseOrderNumber, query);
+    }
+
+    [HttpGet]
+    [Route("Receivers")]
+    public async Task<IEnumerable<string?>> GetAllReceiversAsync()
+    {
+        return await _queries.GetAllReceivers();
     }
 
     [HttpPost]
@@ -71,9 +78,10 @@ public class FinishedProductIssuesController : ControllerBase
     }
 
     [HttpPatch]
-    [Route("addedEntry")]
-    public async Task<IActionResult> AddEntriesAsync(AddFinishedProductIssueEntriesCommand command)
+    [Route("{finishedProductIssueId}/addedEntry")]
+    public async Task<IActionResult> AddEntriesAsync(string finishedProductIssueId, List<CreateFinishedProductIssueEntryViewModel> entries)
     {
+        AddFinishedProductIssueEntriesCommand command = new(finishedProductIssueId, entries);
         try
         {
             var result = await _mediator.Send(command);

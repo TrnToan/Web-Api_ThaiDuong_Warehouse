@@ -3,12 +3,12 @@
 namespace ThaiDuongWarehouse.Api.Applications.Commands.ItemLots;
 
 [DataContract]
-public class RemoveItemLotsCommand : IRequest<bool>
+public class RemoveItemLotCommand : IRequest<bool>
 {
     [DataMember]
     public string ItemLotId { get; set; }
 
-    public RemoveItemLotsCommand(string itemLotId)
+    public RemoveItemLotCommand(string itemLotId)
     {
         ItemLotId = itemLotId;
     }

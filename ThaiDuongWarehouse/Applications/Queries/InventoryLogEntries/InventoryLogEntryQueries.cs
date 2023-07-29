@@ -77,7 +77,7 @@ public class InventoryLogEntryQueries : IInventoryLogEntryQueries
                 .Where(log => log.Item.ItemId == itemId)
                 .Where(log => log.Item.Unit == unit)
                 .OrderByDescending(log => log.TrackingTime)               
-                .FirstOrDefaultAsync(log => log.TrackingTime <= query.StartTime);
+                .FirstOrDefaultAsync(log => log.TrackingTime < query.StartTime);
             if (latestEntry is null)
             {
                 beforeQuantity = 0;
@@ -130,6 +130,8 @@ public class InventoryLogEntryQueries : IInventoryLogEntryQueries
         foreach (var item in items)
         {
             var entry = await GetEntryByItem(query, item.ItemId, item.Unit);
+            if (entry.BeforeQuantity == 0 && entry.ReceivedQuantity == 0 && entry.ShippedQuantity == 0)
+                continue;
             extendedLogEntries.Add(entry);
         }
         return extendedLogEntries;

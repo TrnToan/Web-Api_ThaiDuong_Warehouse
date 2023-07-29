@@ -3,9 +3,11 @@
 public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand, bool>
 {
     private readonly IItemRepository _itemRepository;
-    public UpdateItemCommandHandler(IItemRepository itemRepository)
+    private readonly IItemClassRepository _itemClassRepository;
+    public UpdateItemCommandHandler(IItemRepository itemRepository, IItemClassRepository itemClassRepository)
     {
         _itemRepository = itemRepository;
+        _itemClassRepository = itemClassRepository;
     }
 
     public async Task<bool> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
@@ -17,7 +19,13 @@ public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand, bool>
             throw new EntityNotFoundException("This Item doesn't exist in current context");
         }
 
-        item.Update(request.Unit, request.MinimumStockLevel, request.Price);
+        var itemClass = await _itemClassRepository.GetById(request.ItemClassId);
+        if (itemClass is null)
+        {
+            throw new EntityNotFoundException($"This ItemClass {request.ItemClassId} doesn't exist in current context");
+        }
+
+        item.Update(request.ItemName, request.Unit, request.MinimumStockLevel, request.Price, request.ItemClassId);
         _itemRepository.Update(item);
 
         return await _itemRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);

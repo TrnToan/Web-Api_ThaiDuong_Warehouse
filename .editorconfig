@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# S6603: The collection-specific "TrueForAll" method should be used instead of the "All" extension
+dotnet_diagnostic.S6603.severity = none

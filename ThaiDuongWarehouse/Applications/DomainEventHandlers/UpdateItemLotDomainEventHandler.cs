@@ -19,8 +19,9 @@ public class UpdateItemLotDomainEventHandler : INotificationHandler<UpdateItemLo
         }
         else
         {
+            double changedQuantity = notification.Quantity - itemLot.Quantity;
             string lotId = notification.NewItemLotId ?? notification.OldItemLotId;
-            itemLot.UpdateExistedLot(lotId, notification.ItemLotLocations, notification.Quantity,
+            itemLot.UpdateExistedLot(lotId, notification.ItemLotLocations, changedQuantity,
                 notification.ProductionDate, notification.ExpirationDate);
 
             _itemLotRepository.UpdateLot(itemLot);

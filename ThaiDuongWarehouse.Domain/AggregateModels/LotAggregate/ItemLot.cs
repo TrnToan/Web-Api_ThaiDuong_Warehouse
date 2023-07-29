@@ -47,7 +47,7 @@ public class ItemLot : Entity, IAggregateRoot
         if (itemLotLocations is not null)
             ItemLotLocations = itemLotLocations;
 
-        Quantity = quantity;
+        Quantity += quantity;
 
         if (productionDate is not null)
             ProductionDate = productionDate;

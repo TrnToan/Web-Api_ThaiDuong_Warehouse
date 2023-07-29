@@ -13,6 +13,7 @@ public class WarehouseDbContext : DbContext, IUnitOfWork
     public DbSet<FinishedProductReceipt> FinishedProductReceipts { get; set; }
     public DbSet<InventoryLogEntry> InventoryLogEntries { get; set; }
     public DbSet<Item> Items { get; set; }
+    public DbSet<ItemClass> ItemClasses { get; set; }
     public DbSet<ItemLot> ItemLots { get; set; }
     public DbSet<FinishedProductInventory> FinishedProductInventories { get; set; }
     public DbSet<Warehouse> Warehouses { get; set; }

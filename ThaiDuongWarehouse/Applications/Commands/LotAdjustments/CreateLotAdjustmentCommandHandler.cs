@@ -1,5 +1,4 @@
-﻿
-namespace ThaiDuongWarehouse.Api.Applications.Commands.LotAdjustments;
+﻿namespace ThaiDuongWarehouse.Api.Applications.Commands.LotAdjustments;
 
 public class CreateLotAdjustmentCommandHandler : IRequestHandler<CreateLotAdjustmentCommand, bool>
 {

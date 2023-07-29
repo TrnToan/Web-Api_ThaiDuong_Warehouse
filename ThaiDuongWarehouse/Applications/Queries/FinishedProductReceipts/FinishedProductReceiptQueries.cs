@@ -44,7 +44,7 @@ public class FinishedProductReceiptQueries : IFinishedProductReceiptQueries
         return viewModels;
     }
 
-    public async Task<IEnumerable<FinishedProductReceiptEntryViewModel>> GetHistoryRecords(string? itemClassId, string? itemId, 
+    public async Task<IEnumerable<FinishedProductReceiptEntryViewModel>> GetHistoryRecords(string? itemId, 
         string? purchaseOrderNumber, TimeRangeQuery query)
     {
         IQueryable<FinishedProductReceiptEntry> productReceiptEntries = _productReceipts
@@ -53,11 +53,6 @@ public class FinishedProductReceiptQueries : IFinishedProductReceiptQueries
             .SelectMany(p => p.Entries)
             .Include(e => e.Item);
 
-        if (itemClassId is not null)
-        {
-            productReceiptEntries = productReceiptEntries
-                .Where(entry => entry.Item.ItemClassId == itemClassId);
-        }
         if (itemId is not null)
         {
             productReceiptEntries = productReceiptEntries

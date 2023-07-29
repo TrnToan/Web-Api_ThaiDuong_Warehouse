@@ -4,6 +4,21 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
 {
     private readonly WarehouseDbContext _context;
     private readonly IMapper _mapper;
+
+    private IQueryable<Domain.AggregateModels.GoodsReceiptAggregate.GoodsReceipt> _goodsReceipts => _context.GoodsReceipts
+            .AsNoTracking()
+            .Include(gr => gr.Employee)
+            .Include(gr => gr.Lots)
+                .ThenInclude(grl => grl.Item)
+            .Include(gr => gr.Lots)
+                .ThenInclude(grl => grl.Employee)
+            .Include(gr => gr.Lots)
+                .ThenInclude(gr => gr.Sublots);
+    private IQueryable<GoodsIssueLot> _goodsIssueLots => _context.GoodsIssues
+            .AsNoTracking()
+            .SelectMany(gi => gi.Entries)
+            .SelectMany(e => e.Lots);
+
     public GoodsReceiptQueries(WarehouseDbContext context, IMapper mapper)
     {
         _context = context;
@@ -12,15 +27,7 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
 
     public async Task<IEnumerable<GoodsReceiptViewModel>> GetAll()
     {
-        var goodsReceipts = await _context.GoodsReceipts
-            .AsNoTracking()
-            .Include(gr => gr.Employee)
-            .Include(gr => gr.Lots)
-                .ThenInclude(grl => grl.Item)
-            .Include(gr => gr.Lots)
-                .ThenInclude(grl => grl.Employee)
-            .Include(gr => gr.Lots)
-                .ThenInclude(gr => gr.Sublots)
+        var goodsReceipts = await _goodsReceipts
             .ToListAsync();
 
         return _mapper.Map<IEnumerable<GoodsReceiptViewModel>>(goodsReceipts);
@@ -28,15 +35,7 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
 
     public async Task<IEnumerable<GoodsReceiptViewModel>> GetCompletedGoodsReceipts()
     {
-        var goodsReceipts = await _context.GoodsReceipts
-            .AsNoTracking()
-            .Include(gr => gr.Employee)
-            .Include(g => g.Lots)
-                .ThenInclude(grl => grl.Item)
-            .Include(gr => gr.Lots)
-                .ThenInclude(gr => gr.Employee)
-            .Include(gr => gr.Lots)
-                .ThenInclude(gr => gr.Sublots)
+        var goodsReceipts = await _goodsReceipts
             .Where(g => g.Lots
                 .All(lot => lot.ProductionDate != null &&
                             lot.ExpirationDate != null &&
@@ -45,30 +44,37 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
             .ToListAsync();
 
         var goodsReceiptViewModels = _mapper.Map<IEnumerable<GoodsReceiptViewModel>>(goodsReceipts);
+        foreach (var goodsReceipt in goodsReceiptViewModels)
+        {
+            foreach (var receiptLot in goodsReceipt.Lots)
+            {
+                var itemLot = await _goodsIssueLots
+                .FirstOrDefaultAsync(il => il.GoodsIssueLotId == receiptLot.GoodsReceiptLotId);
+
+                if (itemLot is not null)
+                    receiptLot.IsExported = true;
+            }
+        }
         return goodsReceiptViewModels;
     }
 
     public async Task<GoodsReceiptViewModel?> GetGoodsReceiptById(string goodsReceiptId)
     {
-        var goodsReceipt = await _context.GoodsReceipts
-            .AsNoTracking()
-            .Include(gr => gr.Employee)
-            .Include(gr => gr.Lots)
-                .ThenInclude(grl => grl.Item)
-            .Include(gr => gr.Lots)
-                .ThenInclude(grl => grl.Employee)
-            .Include(gr => gr.Lots)
-                .ThenInclude(gr => gr.Sublots)
+        var goodsReceipt = await _goodsReceipts
             .FirstOrDefaultAsync(gr => gr.GoodsReceiptId == goodsReceiptId);
 
         var goodsReceiptViewModel = _mapper.Map<GoodsReceiptViewModel?>(goodsReceipt);
+        if (goodsReceiptViewModel is null)
+        {
+            return null;
+        }
+
         foreach (var receiptLot in goodsReceiptViewModel.Lots)
         {
-            var itemLot = await _context.ItemLots
-                .AsNoTracking()
-                .FirstOrDefaultAsync(il => il.LotId == receiptLot.GoodsReceiptLotId);
+            var itemLot = await _goodsIssueLots
+                .FirstOrDefaultAsync(il => il.GoodsIssueLotId == receiptLot.GoodsReceiptLotId);
 
-            if (itemLot is null || receiptLot.Quantity > itemLot.Quantity) 
+            if (itemLot is not null)
                 receiptLot.IsExported = true;
         }
         return goodsReceiptViewModel;
@@ -92,18 +98,6 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
                 .Take(query.ItemsPerPage)
                 .ToList();
 
-        foreach (var goodsReceipt in resultedGoodsReceipts)
-        {
-            foreach (var receiptLot in goodsReceipt.Lots)
-            {
-                var itemLot = await _context.ItemLots
-                .AsNoTracking()
-                .FirstOrDefaultAsync(il => il.LotId == receiptLot.GoodsReceiptLotId);
-
-                if (itemLot is null || receiptLot.Quantity > itemLot.Quantity)
-                    receiptLot.IsExported = true;
-            }
-        }
         return resultedGoodsReceipts;
     }
 
@@ -120,15 +114,7 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
 
     public async Task<IEnumerable<GoodsReceiptViewModel>> GetUnCompletedGoodsReceipts()
     {
-        var goodsReceipts = await _context.GoodsReceipts
-            .AsNoTracking()
-            .Include(g => g.Employee)
-            .Include(g => g.Lots)
-                .ThenInclude(grl => grl.Item)
-            .Include(gr => gr.Lots)
-                .ThenInclude(gr => gr.Employee)
-            .Include(gr => gr.Lots)
-                .ThenInclude(gr => gr.Sublots)
+        var goodsReceipts = await _goodsReceipts
             .Where(g => g.Lots
                 .Any(lot => lot.ProductionDate == null ||
                           lot.ExpirationDate == null ||
@@ -137,8 +123,17 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
             .ToListAsync();
 
         var goodsReceiptViewModels = _mapper.Map<IEnumerable<GoodsReceiptViewModel>>(goodsReceipts);
+        foreach (var goodsReceipt in goodsReceiptViewModels)
+        {
+            foreach (var receiptLot in goodsReceipt.Lots)
+            {
+                var itemLot = await _goodsIssueLots
+                .FirstOrDefaultAsync(il => il.GoodsIssueLotId == receiptLot.GoodsReceiptLotId);
+
+                if (itemLot is not null)
+                    receiptLot.IsExported = true;
+            }
+        }
         return goodsReceiptViewModels;
     }
-
-
 }

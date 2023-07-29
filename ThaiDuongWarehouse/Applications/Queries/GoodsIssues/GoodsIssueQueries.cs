@@ -90,7 +90,7 @@ public class GoodsIssueQueries : IGoodsIssueQueries
         return receivers;
     }
 
-    public async Task<IList<string>> GetAllGoodsIssueIds(bool isExported)
+    public async Task<IEnumerable<string>> GetAllGoodsIssueIds(bool isExported)
     {
         List<string> goodsIssueIds;
         if (isExported)

@@ -23,7 +23,7 @@ public class GoodsIssuesController : ControllerBase
 
     [HttpGet]
     [Route("Ids")]
-    public async Task<IList<string>> GetGoodsIssueIdsAsync(bool isExported)
+    public async Task<IEnumerable<string>> GetGoodsIssueIdsAsync(bool isExported)
     {
         return await _queries.GetAllGoodsIssueIds(isExported);
     }

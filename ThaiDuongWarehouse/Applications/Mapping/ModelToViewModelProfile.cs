@@ -1,4 +1,6 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels;
+﻿using ThaiDuongWarehouse.Api.Applications.Queries.FinishedProductInventories;
+using ThaiDuongWarehouse.Domain.AggregateModels;
+using ThaiDuongWarehouse.Domain.AggregateModels.ProductInventoryAggregate;
 
 namespace ThaiDuongWarehouse.Api.Applications.Mapping;
 
@@ -34,5 +36,6 @@ public class ModelToViewModelProfile : Profile
 		CreateMap<FinishedProductReceiptEntry, FinishedProductReceiptEntryViewModel>();
 		CreateMap<FinishedProductIssue, FinishedProductIssueViewModel>();
 		CreateMap<FinishedProductIssueEntry, FinishedProductIssueEntryViewModel>();
+		CreateMap<FinishedProductInventory, FinishedProductInventoryViewModel>();
 	}
 }

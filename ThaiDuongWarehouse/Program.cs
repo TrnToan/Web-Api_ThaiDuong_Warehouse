@@ -1,7 +1,7 @@
 using System.Reflection;
 using ThaiDuongWarehouse.Api.Applications.Mapping;
+using ThaiDuongWarehouse.Api.Applications.Queries.FinishedProductInventories;
 using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductInventoryAggregate;
-using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductIssueAggregate;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +44,7 @@ builder.Services.AddScoped<IGoodsIssueRepository, GoodsIssueRepository>();
 builder.Services.AddScoped<IFinishedProductReceiptRepository, FinishedProductReceiptRepository>();
 builder.Services.AddScoped<IFinishedProductInventoryRepository, FinishedProductInventoryRepository>();
 builder.Services.AddScoped<IFinishedProductIssueRepository, FinishedProductIssueRepository>();
+builder.Services.AddScoped<IItemClassRepository, ItemClassRepository>();
 
 builder.Services.AddScoped<IEmployeeQueries, EmployeeQueries>();
 builder.Services.AddScoped<IItemQueries, ItemQueries>();
@@ -59,6 +60,7 @@ builder.Services.AddScoped<IImportHistoryQueries, ImportHistoryQueries>();
 builder.Services.AddScoped<IExportHistoryQueries, ExportHistoryQueries>();
 builder.Services.AddScoped<IFinishedProductReceiptQueries, FinishedProductReceiptQueries>();
 builder.Services.AddScoped<IFinishedProductIssueQueries, FinishedProductIssueQueries>();
+builder.Services.AddScoped<IFinishedProductInventoryQueries, FinishedProductInventoryQueries>();
 
 builder.Services.AddScoped<ItemLotLocationRepository>();
 builder.Services.AddScoped<InventoryLogEntryService>();

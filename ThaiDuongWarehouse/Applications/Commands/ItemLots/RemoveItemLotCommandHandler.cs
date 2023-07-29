@@ -2,16 +2,16 @@
 
 namespace ThaiDuongWarehouse.Api.Applications.Commands.ItemLots;
 
-public class RemoveItemLotsCommandHandler : IRequestHandler<RemoveItemLotsCommand, bool>
+public class RemoveItemLotCommandHandler : IRequestHandler<RemoveItemLotCommand, bool>
 {
     private readonly IItemLotRepository _itemLotRepository;
 
-    public RemoveItemLotsCommandHandler(IItemLotRepository itemLotRepository)
+    public RemoveItemLotCommandHandler(IItemLotRepository itemLotRepository)
     {
         _itemLotRepository = itemLotRepository;
     }
 
-    public async Task<bool> Handle(RemoveItemLotsCommand request, CancellationToken cancellationToken)
+    public async Task<bool> Handle(RemoveItemLotCommand request, CancellationToken cancellationToken)
     {      
         var lot = await _itemLotRepository.GetLotByLotId(request.ItemLotId);
         if (lot is null) 
@@ -23,7 +23,6 @@ public class RemoveItemLotsCommandHandler : IRequestHandler<RemoveItemLotsComman
         {
             throw new EntityNotFoundException("It is not allowed to delete unisolated lot.");
         }           
-        //ItemLot.Reject(lot);
         _itemLotRepository.RemoveLot(lot);
         return await _itemLotRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
     }
