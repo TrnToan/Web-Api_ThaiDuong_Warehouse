@@ -99,4 +99,34 @@ public class FinishedProductInventoryQueries : IFinishedProductInventoryQueries
         }
         return logs;
     }
+
+    public async Task<IEnumerable<FinishedProductInventoryViewModel>> GetProductInventoryRecords(DateTime timestamp, string itemId, string unit)
+    {
+        Item? item = await _context.Items.FirstOrDefaultAsync(i => i.ItemId == itemId && i.Unit == unit);
+        if (item is null)
+        {
+            throw new EntityNotFoundException($"Item with Id {itemId} & unit {unit} not found.");
+        }
+        ItemViewModel itemVM = _mapper.Map<ItemViewModel>(item);
+
+        IQueryable<FinishedProductReceiptEntry> productReceiptEntries = _context.FinishedProductReceipts
+            .AsNoTracking()
+            .Where(p => p.Timestamp <= timestamp)
+            .SelectMany(p => p.Entries.Where(entry => entry.Item.Id == item.Id));
+        IQueryable<FinishedProductIssueEntry> productIssueEntries = _context.FinisedProductIssues
+            .AsNoTracking()
+            .Where(p => p.Timestamp <= timestamp)
+            .SelectMany(p => p.Entries.Where(entry => entry.Item.Id == item.Id));
+
+        var groupProductReceiptEntries = productReceiptEntries.GroupBy(p => p.PurchaseOrderNumber);
+        List<FinishedProductInventoryViewModel> viewModels = new ();
+        foreach (var group in groupProductReceiptEntries)
+        {
+            var matchingProductIssueEntries = productIssueEntries.Where(p => p.PurchaseOrderNumber == group.Key);
+            double quantity = group.Sum(gr => gr.Quantity) - matchingProductIssueEntries.Sum(gr => gr.Quantity);
+            FinishedProductInventoryViewModel viewModel = new(group.Key, quantity, itemVM);
+            viewModels.Add(viewModel);
+        }
+        return viewModels;
+    }
 }

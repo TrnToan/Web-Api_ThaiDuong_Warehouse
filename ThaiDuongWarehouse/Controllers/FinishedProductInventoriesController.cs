@@ -15,7 +15,7 @@ public class FinishedProductInventoriesController : ControllerBase
 
     [HttpGet]
     [Route("{itemId}")]
-    public async Task<IEnumerable<FinishedProductInventoryViewModel>> GetProductInventories(string itemId)
+    public async Task<IEnumerable<FinishedProductInventoryViewModel>> GetProductInventoriesAsync(string itemId)
     {
         return await _queries.GetProductInventoriesByItemId(itemId);
     }
@@ -40,5 +40,13 @@ public class FinishedProductInventoriesController : ControllerBase
     public async Task<IEnumerable<ExtendedProductInventoryLogEntryViewModel>> GetLogsAsync([FromQuery] TimeRangeQuery query)
     {
         return await _queries.GetProductInventoryLogs(query);
+    }
+
+    [HttpGet]
+    [Route("{itemId}/Timestamp")]
+    public async Task<IEnumerable<FinishedProductInventoryViewModel>> GetProductInventoryRecordsAsync(string itemId, string unit, DateTime timestamp)
+    {
+        timestamp = timestamp.AddHours(23).AddMinutes(59).AddSeconds(59);
+        return await _queries.GetProductInventoryRecords(timestamp, itemId, unit);
     }
 }

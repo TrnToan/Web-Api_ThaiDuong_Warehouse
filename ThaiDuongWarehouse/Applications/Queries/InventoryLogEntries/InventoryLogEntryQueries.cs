@@ -1,7 +1,4 @@
-﻿using System.Net.WebSockets;
-using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
-
-namespace ThaiDuongWarehouse.Api.Applications.Queries.InventoryLogEntries;
+﻿namespace ThaiDuongWarehouse.Api.Applications.Queries.InventoryLogEntries;
 
 public class InventoryLogEntryQueries : IInventoryLogEntryQueries
 {
@@ -101,7 +98,9 @@ public class InventoryLogEntryQueries : IInventoryLogEntryQueries
     {
         List<Item> items;
         IQueryable<Item> itemsQuery = _context.Items
-            .AsNoTracking();
+            .AsNoTracking()
+            .Skip(query.ItemsPerPage * (query.Page - 1))
+            .Take(query.ItemsPerPage);
 
         if (itemId == null && itemClassId != null)
         {

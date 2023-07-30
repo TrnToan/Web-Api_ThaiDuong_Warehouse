@@ -2,9 +2,9 @@
 
 public class FinishedProductInventoryViewModel
 {
-    public string PurchaseOrderNumber { get; private set; }
-    public double Quantity { get; private set; }
-    public ItemViewModel Item { get; private set; }
+    public string PurchaseOrderNumber { get; set; }
+    public double Quantity { get; set; }
+    public ItemViewModel Item { get; set; }
 
     public FinishedProductInventoryViewModel(string purchaseOrderNumber, double quantity, ItemViewModel item)
     {

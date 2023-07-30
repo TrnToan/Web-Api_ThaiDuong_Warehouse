@@ -15,7 +15,12 @@ public class UpdateItemCommand : IRequest<bool>
     public string Unit { get; private set; }
     [DataMember]
     public string ItemClassId { get; private set; }
-    public UpdateItemCommand(string itemId, string itemName, string unit, double minimumStockLevel, decimal price, string itemClassId)
+    [DataMember]
+    public double? PacketSize { get; private set; }
+    [DataMember]
+    public string? PacketUnit { get; private set; }
+    public UpdateItemCommand(string itemId, string itemName, string unit, double minimumStockLevel, decimal price, 
+        string itemClassId, double? packetSize, string? packetUnit)
     {
         ItemId = itemId;
         ItemName = itemName;
@@ -23,5 +28,7 @@ public class UpdateItemCommand : IRequest<bool>
         MinimumStockLevel = minimumStockLevel;
         Price = price;
         ItemClassId = itemClassId;
+        PacketSize = packetSize;
+        PacketUnit = packetUnit;
     }
 }

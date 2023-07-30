@@ -6,4 +6,5 @@ public interface IFinishedProductInventoryQueries
     Task<IEnumerable<string>> GetPOs();
     Task<ExtendedProductInventoryLogEntryViewModel> GetProductInventoryLog(string itemId, string unit, TimeRangeQuery query);
     Task<IEnumerable<ExtendedProductInventoryLogEntryViewModel>> GetProductInventoryLogs(TimeRangeQuery query);
+    Task<IEnumerable<FinishedProductInventoryViewModel>> GetProductInventoryRecords(DateTime timestamp, string itemId, string unit);
 }

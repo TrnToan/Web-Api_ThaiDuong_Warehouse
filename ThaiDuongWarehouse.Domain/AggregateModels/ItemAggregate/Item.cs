@@ -28,12 +28,15 @@ public class Item : Entity, IAggregateRoot
         Price = price;
     }
 
-    public void Update(string itemName, string unit, double minimumStockLevel, decimal price, string itemClassId)
+    public void Update(string itemName, string unit, double minimumStockLevel, decimal price, string itemClassId, 
+        double? packetSize, string? packetUnit)
     {
         ItemName = itemName;
         Unit = unit;
         MinimumStockLevel = minimumStockLevel;
         Price = price;
         ItemClassId = itemClassId;
+        PacketSize = packetSize;
+        PacketUnit = packetUnit;
     }
 }

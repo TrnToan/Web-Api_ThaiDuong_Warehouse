@@ -25,7 +25,8 @@ public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand, bool>
             throw new EntityNotFoundException($"This ItemClass {request.ItemClassId} doesn't exist in current context");
         }
 
-        item.Update(request.ItemName, request.Unit, request.MinimumStockLevel, request.Price, request.ItemClassId);
+        item.Update(request.ItemName, request.Unit, request.MinimumStockLevel, request.Price, request.ItemClassId, request.PacketSize,
+            request.PacketUnit);
         _itemRepository.Update(item);
 
         return await _itemRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
