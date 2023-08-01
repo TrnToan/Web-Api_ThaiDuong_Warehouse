@@ -21,7 +21,7 @@ public class RemoveItemLotsDomainEventHandler : INotificationHandler<RemoveItemL
             }
 
             lots.Add(itemLot);
-            _itemLotRepository.RemoveLots(lots);
         }
+        _itemLotRepository.RemoveLots(lots);
     }
 }

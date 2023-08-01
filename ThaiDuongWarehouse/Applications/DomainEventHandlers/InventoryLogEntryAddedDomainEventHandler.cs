@@ -1,7 +1,4 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
-using ThaiDuongWarehouse.Domain.DomainEvents;
-
-namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
+﻿namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 
 public class InventoryLogEntryAddedDomainEventHandler : INotificationHandler<InventoryLogEntryAddedDomainEvent>
 {
@@ -49,6 +46,6 @@ public class InventoryLogEntryAddedDomainEventHandler : INotificationHandler<Inv
             beforeQuantity, notification.Quantity, notification.ReceivedQuantity, notification.ShippedQuantity);
 
         _service.AddEntry(newEntry);
-        _inventoryLogEntryRepository.Add(newEntry);
+        await _inventoryLogEntryRepository.AddAsync(newEntry);
     }
 }

@@ -5,9 +5,9 @@ public class InventoryLogEntryRepository : BaseRepository, IInventoryLogEntryRep
     {
     }
 
-    public void Add(InventoryLogEntry logEntry)
+    public async Task AddAsync(InventoryLogEntry logEntry)
     {
-        _context.InventoryLogEntries.AddAsync(logEntry);
+        await _context.InventoryLogEntries.AddAsync(logEntry);
     }
 
     public void Update(InventoryLogEntry logEntry)

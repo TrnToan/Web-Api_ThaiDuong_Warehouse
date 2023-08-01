@@ -35,7 +35,7 @@ public class FinishedProductReceipt : Entity, IAggregateRoot
 
     public void RemoveReceiptEntry(Item item, string purchaseOrderNumber)
     {
-        var entry = Entries.FirstOrDefault(e => e.Item == item && e.PurchaseOrderNumber == purchaseOrderNumber);
+        var entry = Entries.Find(e => e.Item == item && e.PurchaseOrderNumber == purchaseOrderNumber);
         if (entry == null)
         {
             throw new WarehouseDomainException($"Entry with item {item.ItemName} & {purchaseOrderNumber} not found.");

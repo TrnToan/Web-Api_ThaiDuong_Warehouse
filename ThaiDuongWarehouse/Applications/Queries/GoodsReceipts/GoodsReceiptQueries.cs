@@ -30,7 +30,19 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
         var goodsReceipts = await _goodsReceipts
             .ToListAsync();
 
-        return _mapper.Map<IEnumerable<GoodsReceiptViewModel>>(goodsReceipts);
+        var goodsReceiptViewModels = _mapper.Map<IEnumerable<GoodsReceiptViewModel>>(goodsReceipts);
+        foreach (var goodsReceipt in goodsReceiptViewModels)
+        {
+            foreach (var receiptLot in goodsReceipt.Lots)
+            {
+                var itemLot = await _goodsIssueLots
+                .FirstOrDefaultAsync(il => il.GoodsIssueLotId == receiptLot.GoodsReceiptLotId);
+
+                if (itemLot is not null)
+                    receiptLot.IsExported = true;
+            }
+        }
+        return goodsReceiptViewModels;
     }
 
     public async Task<IEnumerable<GoodsReceiptViewModel>> GetCompletedGoodsReceipts()

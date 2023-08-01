@@ -43,7 +43,7 @@ public class FinishedProductInventoriesController : ControllerBase
     }
 
     [HttpGet]
-    [Route("{itemId}/Timestamp")]
+    [Route("{itemId}/{unit}")]
     public async Task<IEnumerable<FinishedProductInventoryViewModel>> GetProductInventoryRecordsAsync(string itemId, string unit, DateTime timestamp)
     {
         timestamp = timestamp.AddHours(23).AddMinutes(59).AddSeconds(59);

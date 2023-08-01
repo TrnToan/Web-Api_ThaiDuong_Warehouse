@@ -16,25 +16,24 @@ public class DeleteInventoryLogEntryDomainEventHandler : INotificationHandler<De
 
     public async Task Handle(DeleteInventoryLogEntryDomainEvent notification, CancellationToken cancellationToken)
     {
-        InventoryLogEntry removedLogEntry;
+        InventoryLogEntry? removedLogEntry;
         List<InventoryLogEntry> fixedLogEntries = new ();
 
         var serviceLogEntry = _service.GetLogEntry(notification.ItemId, notification.ItemLotId, notification.Timestamp);
         if (serviceLogEntry is null)
         {
-            var logEntry = await _inventoryLogEntryRepository.GetLogEntry(notification.ItemId, notification.ItemLotId, 
+            removedLogEntry = await _inventoryLogEntryRepository.GetLogEntry(notification.ItemId, notification.ItemLotId, 
                 notification.Timestamp);
-            if (logEntry is null)
+            if (removedLogEntry is null)
             {
                 throw new EntityNotFoundException($"InventoryLogEntry of {notification} with {notification.Timestamp} not found.");
             }
-            removedLogEntry = logEntry;
-            var previousLogEntry = await _inventoryLogEntryRepository.GetPreviousLogEntry(logEntry.ItemId, logEntry.TrackingTime);
+            var previousLogEntry = await _inventoryLogEntryRepository.GetPreviousLogEntry(removedLogEntry.ItemId, removedLogEntry.TrackingTime);
             
             if (previousLogEntry is not null)
             {
                 var preFixedLogEntries = await _inventoryLogEntryRepository.GetLatestLogEntries(previousLogEntry.ItemId, previousLogEntry.TrackingTime);
-                preFixedLogEntries.Remove(logEntry);
+                preFixedLogEntries.Remove(removedLogEntry);
 
                 fixedLogEntries.AddRange(preFixedLogEntries);
                 if (fixedLogEntries.Count > 1)
@@ -47,8 +46,8 @@ public class DeleteInventoryLogEntryDomainEventHandler : INotificationHandler<De
             }
             else
             {
-                var preFixedLogEntries = await _inventoryLogEntryRepository.GetLatestLogEntries(logEntry.ItemId, logEntry.TrackingTime);
-                preFixedLogEntries.Remove(logEntry);
+                var preFixedLogEntries = await _inventoryLogEntryRepository.GetLatestLogEntries(removedLogEntry.ItemId, removedLogEntry.TrackingTime);
+                preFixedLogEntries.Remove(removedLogEntry);
 
                 fixedLogEntries.AddRange(preFixedLogEntries);
                 fixedLogEntries[0].ResetQuantity();
@@ -65,18 +64,17 @@ public class DeleteInventoryLogEntryDomainEventHandler : INotificationHandler<De
 
         else
         {
-            var logEntry = _service.GetLogEntry(notification.ItemId, notification.ItemLotId, notification.Timestamp);
-            if (logEntry is null)
+            removedLogEntry = _service.GetLogEntry(notification.ItemId, notification.ItemLotId, notification.Timestamp);
+            if (removedLogEntry is null)
             {
                 throw new EntityNotFoundException($"InventoryLogEntry of {notification} with {notification.Timestamp} not found.");
             }
-            removedLogEntry = logEntry;
-            var previousLogEntry = await _service.GetPreviousLogEntry(logEntry.ItemId, logEntry.TrackingTime);
+            var previousLogEntry = await _service.GetPreviousLogEntry(removedLogEntry.ItemId, removedLogEntry.TrackingTime);
 
             if (previousLogEntry is not null)
             {
                 var preFixedLogEntries = await _service.GetLatestLogEntries(previousLogEntry.ItemId, previousLogEntry.TrackingTime);
-                preFixedLogEntries.Remove(logEntry);
+                preFixedLogEntries.Remove(removedLogEntry);
 
                 fixedLogEntries.AddRange(preFixedLogEntries);
                 if (fixedLogEntries.Count > 1)
@@ -89,8 +87,8 @@ public class DeleteInventoryLogEntryDomainEventHandler : INotificationHandler<De
             }
             else
             {
-                var preFixedLogEntries = await _service.GetLatestLogEntries(logEntry.ItemId, logEntry.TrackingTime);
-                preFixedLogEntries.Remove(logEntry);
+                var preFixedLogEntries = await _service.GetLatestLogEntries(removedLogEntry.ItemId, removedLogEntry.TrackingTime);
+                preFixedLogEntries.Remove(removedLogEntry);
 
                 fixedLogEntries = preFixedLogEntries;
                 fixedLogEntries[0].ResetQuantity();

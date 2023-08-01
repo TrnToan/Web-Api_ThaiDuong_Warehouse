@@ -44,6 +44,7 @@ public class InventoryLogEntryService
 			.ToList();
 	}
 
+#pragma warning disable CS1998
 	public async Task<InventoryLogEntry?> GetPreviousLogEntry(int itemId, DateTime trackingTime)
 	{
 		return Entries

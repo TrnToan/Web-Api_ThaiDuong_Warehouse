@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace ThaiDuongWarehouse.Api.Applications.Commands.Items;
+﻿namespace ThaiDuongWarehouse.Api.Applications.Commands.Items;
 
 [DataContract]
 public class CreateItemCommand : IRequest<bool>
@@ -17,9 +15,13 @@ public class CreateItemCommand : IRequest<bool>
     public string ItemClassId { get; private set; }
     [DataMember]
     public string Unit{ get; private set; }
+    [DataMember]
+    public double? PacketSize { get; private set; }
+    [DataMember]
+    public string? PacketUnit { get; private set; }
 
-    public CreateItemCommand(string itemId, string itemClassId, string unit, string itemName, 
-        double minimumStockLevel, decimal? price)
+    public CreateItemCommand(string itemId, string itemClassId, string unit, string itemName, double minimumStockLevel, 
+        decimal? price, double? packetSize, string? packetUnit)
     {
         ItemId = itemId;
         ItemClassId = itemClassId;
@@ -27,5 +29,7 @@ public class CreateItemCommand : IRequest<bool>
         ItemName = itemName;
         MinimumStockLevel = minimumStockLevel;
         Price = price;
+        PacketSize = packetSize;
+        PacketUnit = packetUnit;
     }
 }

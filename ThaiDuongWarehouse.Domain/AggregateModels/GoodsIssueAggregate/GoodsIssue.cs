@@ -20,15 +20,15 @@ public class GoodsIssue : Entity, IAggregateRoot
     }
     public void AddEntry(Item item, double requestedQuantity)
     {
-        var entry = new GoodsIssueEntry(item, requestedQuantity);
+        var newEntry = new GoodsIssueEntry(item, requestedQuantity);
         foreach(var existedEntry in Entries)
         {
-            if(entry.Item == existedEntry.Item)
+            if(newEntry.Item == existedEntry.Item)
             {
-                throw new WarehouseDomainException($"Entry with Item {entry.Item.ItemId} has already existed in the GoodsIssue");
+                throw new WarehouseDomainException($"Entry with Item {newEntry.Item.ItemId} has already existed in the GoodsIssue");
             }
         }
-        Entries.Add(entry);
+        Entries.Add(newEntry);
     }
     public void UpdateEntry(string itemId, string unit, double quantity)
     {
@@ -39,17 +39,37 @@ public class GoodsIssue : Entity, IAggregateRoot
         }
         entry.UpdateEntry(quantity);
     }
-    public void Addlot(string itemId, GoodsIssueLot lot) 
+    public void Addlot(string itemId, string unit, GoodsIssueLot lot) 
     {
-        var entry = Entries.FirstOrDefault(e => e.Item.ItemId == itemId);
+        var entry = Entries.Find(e => e.Item.ItemId == itemId && e.Item.Unit == unit);
         if (entry == null)
         {
-            throw new WarehouseDomainException("Entry doesn't exist");
+            throw new WarehouseDomainException($"Entry with Item {itemId} doesn't exist");
         }
         entry.AddLot(lot);
     }
     public void Confirm(List<ItemLot> itemLots)
     {
+        List<ItemLot> removedLots = new();
+        foreach (var itemLot in itemLots)
+        {
+            var goodsIssueLot = Entries.SelectMany(e => e.Lots).First(l => l.GoodsIssueLotId == itemLot.LotId);
+
+            if (goodsIssueLot.Quantity > itemLot.Quantity)
+            {
+                throw new WarehouseDomainException($"Invalid goodsIssueLot quantity, {goodsIssueLot.Quantity}");
+            }
+            else if (goodsIssueLot.Quantity == itemLot.Quantity)
+            {
+                removedLots.Add(itemLot);
+            }
+            else
+            {
+                AddDomainEvent(new ItemLotInformationChangedDomainEvent(itemLot, goodsIssueLot));
+            }
+        }
+        AddDomainEvent(new ItemLotExportedDomainEvent(removedLots));
+
         foreach (GoodsIssueEntry entry in Entries)
         {
             foreach (GoodsIssueLot lot in entry.Lots)
@@ -57,26 +77,6 @@ public class GoodsIssue : Entity, IAggregateRoot
                 AddDomainEvent(new InventoryLogEntryAddedDomainEvent(lot.GoodsIssueLotId, -lot.Quantity, 0, lot.Quantity,
                     entry.Item.Id, Timestamp));
             }
-        }
-
-        List<ItemLot> removedLots = new();
-        foreach (var lot in itemLots)
-        {
-            var goodsIssueLot = Entries.SelectMany(e => e.Lots).First(l => l.GoodsIssueLotId == lot.LotId);           
-
-            if (goodsIssueLot.Quantity > lot.Quantity)
-            {
-                throw new WarehouseDomainException($"Invalid goodsIssueLot quantity, {goodsIssueLot.Quantity}");
-            }
-            else if (goodsIssueLot.Quantity == lot.Quantity)
-            {
-                removedLots.Add(lot);
-            }
-            else
-            {
-                AddDomainEvent(new ItemLotInformationChangedDomainEvent(lot, goodsIssueLot));   
-            }
-        }
-        AddDomainEvent(new ItemLotExportedDomainEvent(removedLots));
+        }       
     }
 }

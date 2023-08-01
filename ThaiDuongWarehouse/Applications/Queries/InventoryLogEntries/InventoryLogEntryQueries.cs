@@ -144,6 +144,9 @@ public class InventoryLogEntryQueries : IInventoryLogEntryQueries
             .Where(log => log.TrackingTime.CompareTo(trackingTime) <= 0)
             .ToListAsync();
 
+        if (filteredLogEntries.Count == 0)
+            throw new EntityNotFoundException($"Could not found itemlots with itemId {itemId} in this timerange.");
+
         List<ItemLotLogEntryViewModel> lotViewModels = new ();
         ItemViewModel item;
 

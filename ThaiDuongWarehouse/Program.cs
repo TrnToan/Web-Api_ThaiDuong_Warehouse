@@ -5,7 +5,7 @@ using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductInventoryAggregat
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// AddAsync services to the container.
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",

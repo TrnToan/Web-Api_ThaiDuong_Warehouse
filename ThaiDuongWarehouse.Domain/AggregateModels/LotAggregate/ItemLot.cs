@@ -35,9 +35,9 @@ public class ItemLot : Entity, IAggregateRoot
     {
         Quantity = quantity;
     }
-    public void Update(double quantity)
+    public void Update(double changedQuantity)
     {
-        Quantity = quantity;
+        Quantity += changedQuantity;
     }
     public void UpdateExistedLot(string lotId, List<ItemLotLocation>? itemLotLocations, double quantity, DateTime? productionDate, DateTime? expirationDate)
     {

@@ -18,6 +18,14 @@ public class GoodsIssueRepository : BaseRepository, IGoodsIssueRepository
             .FirstOrDefaultAsync(gi => gi.GoodsIssueId == id);
     }
 
+    public async Task<GoodsIssueLot?> GetGoodsIssueLotById(string lotId)
+    {
+        return await _context.GoodsIssues
+            .SelectMany(g => g.Entries
+            .SelectMany(e => e.Lots))
+            .FirstOrDefaultAsync(l => l.GoodsIssueLotId == lotId);
+    }
+
     public Task<IEnumerable<GoodsIssue>> GetListAsync(DateTime startTime, DateTime endTime)
     {
         throw new NotImplementedException();

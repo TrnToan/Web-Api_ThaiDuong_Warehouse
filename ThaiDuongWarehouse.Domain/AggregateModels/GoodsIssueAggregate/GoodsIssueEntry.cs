@@ -22,9 +22,10 @@ public class GoodsIssueEntry
     }
     public void AddLot(GoodsIssueLot lot)
     {
-        if(lot.Quantity <= 0)
+        var existedLot = Lots.Find(l => l.GoodsIssueLotId == lot.GoodsIssueLotId);
+        if (existedLot is not null)
         {
-            throw new WarehouseDomainException("Quantity is not valid.");
+            throw new WarehouseDomainException($"GoodsIssueLot with Id {lot.GoodsIssueLotId} already existed in this goodsIssue.");
         }
         Lots.Add(lot);
     }

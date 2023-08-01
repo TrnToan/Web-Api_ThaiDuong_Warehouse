@@ -37,7 +37,7 @@ public class InventoryLogEntriesController : ControllerBase
 	[Route("itemLots")]
 	public async Task<ItemLogEntryViewModel> GetItemLotsAsync(DateTime trackingTime, string itemId)
 	{
-        trackingTime.AddHours(23).AddMinutes(59).AddSeconds(59);
+        trackingTime = trackingTime.AddHours(23).AddMinutes(59).AddSeconds(59);
         return await _queries.GetItemLotsLogEntry(trackingTime, itemId);
 	}
 }

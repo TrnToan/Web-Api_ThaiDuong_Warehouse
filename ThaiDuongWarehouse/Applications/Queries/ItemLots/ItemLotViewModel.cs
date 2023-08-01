@@ -9,6 +9,7 @@ public class ItemLotViewModel
     public DateTime? ExpirationDate { get; private set; }
     public List<ItemSublotViewModel>? ItemLotLocations { get; private set; }
     public ItemViewModel Item { get; private set; }
+    public double? NumOfPackets { get; private set; }
     public ItemLotViewModel(string lotId, bool isIsolated, double quantity, DateTime? productionDate, DateTime? expirationDate, 
         List<ItemSublotViewModel>? itemLotLocations, ItemViewModel item)
     {
@@ -19,6 +20,12 @@ public class ItemLotViewModel
         ExpirationDate = expirationDate;
         ItemLotLocations = itemLotLocations;
         Item = item;
+        if (item.PacketSize > 0)
+        {
+            NumOfPackets = quantity/item.PacketSize;
+        }
+        else
+            NumOfPackets = null;
     }
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public ItemLotViewModel()

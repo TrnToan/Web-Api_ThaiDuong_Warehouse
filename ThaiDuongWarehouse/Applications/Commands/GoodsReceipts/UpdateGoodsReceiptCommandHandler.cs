@@ -75,18 +75,18 @@ public class UpdateGoodsReceiptCommandHandler : IRequestHandler<UpdateGoodsRecei
             goodsReceipt.UpdateItemLotEntity(updatedLot.OldGoodsReceiptLotId, updatedLot.NewGoodsReceiptLotId, itemLotLocations, updatedLot.Quantity, 
                 updatedLot.ProductionDate, updatedLot.ExpirationDate);
             
-            // Nếu người dùng thay đổi mã lô thì sửa lại InventoryLogEntry tương ứng
-            if (updatedLot.NewGoodsReceiptLotId != null && updatedLot.NewGoodsReceiptLotId != updatedLot.OldGoodsReceiptLotId)
-            {
-                goodsReceipt.UpdateLogEntry(updatedLot.NewGoodsReceiptLotId, updatedLot.OldGoodsReceiptLotId, goodsReceiptLot.ItemId, 
-                    goodsReceipt.Timestamp);
-            }
-
             // Nếu Số lượng hàng trong lô thay đổi thì ghi nhận lại ở InventoryLogEntry
             if (changedQuantity != 0)
             {
                 goodsReceipt.UpdateGoodsReceiptLogEntries(updatedLot.OldGoodsReceiptLotId, goodsReceiptLot.ItemId, 
                     updatedLot.Quantity, goodsReceipt.Timestamp);
+            }
+
+            // Nếu người dùng thay đổi mã lô thì sửa lại InventoryLogEntry tương ứng
+            if (updatedLot.NewGoodsReceiptLotId != null && updatedLot.NewGoodsReceiptLotId != updatedLot.OldGoodsReceiptLotId)
+            {
+                goodsReceipt.ModifyLogEntry(updatedLot.NewGoodsReceiptLotId, updatedLot.OldGoodsReceiptLotId, goodsReceiptLot.ItemId,
+                    goodsReceipt.Timestamp);
             }
         }
 

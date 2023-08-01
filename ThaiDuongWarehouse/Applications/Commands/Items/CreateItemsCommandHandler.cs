@@ -19,7 +19,8 @@ public class CreateItemsCommandHandler : IRequestHandler<CreateItemsCommand, boo
                 continue;
             }
 
-            var newItem = new Item(item.ItemId, item.ItemClassId, item.Unit, item.ItemName, item.MinimumStockLevel, item.Price);
+            var newItem = new Item(item.ItemId, item.ItemClassId, item.Unit, item.ItemName, item.MinimumStockLevel, item.Price,
+                item.PacketSize, item.PacketUnit);
             _itemRepository.Add(newItem);
         }
         return await _itemRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);

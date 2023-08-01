@@ -6,6 +6,7 @@ public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsI
     private readonly IEmployeeRepository _employeeRepository;
     private readonly IItemLotRepository _itemLotRepository;
     private readonly IStorageRepository _storageRepository;
+
     public AddLotsToGoodsIssueCommandHandler(IGoodsIssueRepository goodsIssueRepository, IEmployeeRepository employeeRepository, 
         IItemLotRepository itemLotRepository, IStorageRepository storageRepository)
     {
@@ -24,7 +25,8 @@ public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsI
             throw new EntityNotFoundException($"Goodsissue with Id {request.GoodsIssueId} doesn't exist.");
         }
 
-        List<ItemLot> currentItemLots = new();
+        List<ItemLot> dispatchedItemLots = new();
+
         foreach(var lotViewmodel in request.GoodsIssueLots)
         {
             var employee = await _employeeRepository.GetEmployeeById(lotViewmodel.EmployeeId);
@@ -33,35 +35,31 @@ public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsI
                 throw new EntityNotFoundException($"Employee with Id {lotViewmodel.EmployeeId} doesn't exist.");
             }
 
-            var lot = await _itemLotRepository.GetLotByLotId(lotViewmodel.GoodsIssueLotId);
-            if (lot is null)
+            var itemLot = await _itemLotRepository.GetLotByLotId(lotViewmodel.GoodsIssueLotId);
+            if (itemLot is null)
             {
                 throw new EntityNotFoundException($"Itemlot with id {lotViewmodel.GoodsIssueLotId} doesn't exist.");
             }
-            if (lot.IsIsolated)
+            if (itemLot.IsIsolated)
             {
                 throw new EntityNotFoundException($"Itemlot with id {lotViewmodel.GoodsIssueLotId} is isolated.");
             }
 
             double quantity = lotViewmodel.ItemLotLocations.Sum(sub => sub.QuantityPerLocation);
 
-            GoodsIssueLot goodsIssueLot = await CreateGoodsIssueLotAsync(lotViewmodel, quantity, employee.Id);
-            goodsIssue.Addlot(lotViewmodel.ItemId, goodsIssueLot);
+            GoodsIssueLot goodsIssueLot = await CreateGoodsIssueLotAsync(lotViewmodel, quantity, employee.Id, itemLot);
+            goodsIssue.Addlot(lotViewmodel.ItemId, lotViewmodel.Unit, goodsIssueLot);          
 
-            var itemLot = await _itemLotRepository.GetLotByLotId(lotViewmodel.GoodsIssueLotId);
-            if (itemLot is null)
-                throw new EntityNotFoundException($"Itemlot with Id {lotViewmodel.GoodsIssueLotId} not found.");
-
-            currentItemLots.Add(itemLot);
+            dispatchedItemLots.Add(itemLot);
         }
-        goodsIssue.Confirm(currentItemLots);
+        goodsIssue.Confirm(dispatchedItemLots);
 
         _goodsIssueRepository.Update(goodsIssue);
         return await _goodsIssueRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
     }
 
     private async Task<GoodsIssueLot> CreateGoodsIssueLotAsync(CreateGoodsIssueLotViewModel lotVM, double quantity, 
-        int employeeId)
+        int employeeId, ItemLot itemLot)
     {
         List<GoodsIssueSublot> goodsIssueSublots = new ();
         foreach (var sub in lotVM.ItemLotLocations)
@@ -69,7 +67,13 @@ public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsI
             var location = await _storageRepository.GetLocationById(sub.LocationId);
             if (location is null)
             {
-                throw new EntityNotFoundException($"Location not found, {sub.LocationId}");
+                throw new EntityNotFoundException($"Location does not exist, {sub.LocationId}");
+            }
+
+            var isExistedLocation = itemLot.ItemLotLocations.Find(ill => ill.Location.LocationId == sub.LocationId);
+            if (isExistedLocation == null)
+            {
+                throw new InvalidItemLotException($"Cannot found itemlot {itemLot.LotId} with locationId {sub.LocationId}");
             }
 
             GoodsIssueSublot sublot = new (sub.LocationId, sub.QuantityPerLocation);

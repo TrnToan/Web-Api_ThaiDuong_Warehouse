@@ -22,7 +22,7 @@ public class GoodsReceipt : Entity, IAggregateRoot
         DateTime? productionDate, DateTime? expirationDate, string? note)
     {
         string lotId = newLowId ?? oldLotId;
-        var lot = Lots.FirstOrDefault(gr => gr.GoodsReceiptLotId == oldLotId);
+        var lot = Lots.Find(gr => gr.GoodsReceiptLotId == oldLotId);
         if (lot == null)
             throw new WarehouseDomainException($"GoodsReceiptLot with Id {lotId} does not exist.");
 
@@ -73,7 +73,7 @@ public class GoodsReceipt : Entity, IAggregateRoot
         AddDomainEvent(new DeleteInventoryLogEntryDomainEvent(itemId, lotId, timestamp));
     }
 
-    public void UpdateLogEntry(string newLotId, string oldLotId, int itemId, DateTime timestamp)
+    public void ModifyLogEntry(string newLotId, string oldLotId, int itemId, DateTime timestamp)
     {
         AddDomainEvent(new InventoryLogEntryChangedDomainEvent(oldLotId, newLotId, itemId, timestamp));
     }

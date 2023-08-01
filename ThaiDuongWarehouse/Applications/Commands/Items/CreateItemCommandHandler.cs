@@ -16,8 +16,8 @@ public class CreateItemCommandHandler : IRequestHandler<CreateItemCommand, bool>
             throw new DuplicateRecordException($"Item with Id {request.ItemId} and Unit {request.Unit} already existed in the database.");
         }
 
-        var item = new Item(request.ItemId, request.ItemClassId, request.Unit,
-            request.ItemName, request.MinimumStockLevel, request.Price);
+        var item = new Item(request.ItemId, request.ItemClassId, request.Unit, request.ItemName, request.MinimumStockLevel, 
+            request.Price, request.PacketSize, request.PacketUnit);
 
         _itemRepository.Add(item);
         return await _itemRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);

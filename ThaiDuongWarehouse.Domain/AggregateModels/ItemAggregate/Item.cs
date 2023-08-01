@@ -12,9 +12,9 @@ public class Item : Entity, IAggregateRoot
     public ItemClass ItemClass { get; private set; }
 
     public Item(string itemId, string itemName, string unit, string itemClassId, double minimumStockLevel, decimal? price, 
-        double? sublotSize, string? packetUnit) : this(itemId, itemName, unit, itemClassId, minimumStockLevel, price)
+        double? packetSize, string? packetUnit) : this(itemId, itemName, unit, itemClassId, minimumStockLevel, price)
     {
-        PacketSize = sublotSize;
+        PacketSize = packetSize;
         PacketUnit = packetUnit;
     }
 

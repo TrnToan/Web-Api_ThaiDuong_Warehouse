@@ -43,9 +43,9 @@ public class LotAdjustedDomainEventHandler : INotificationHandler<LotAdjustedDom
             itemLot.UpdateItemLotLocation(itemLot.Id, location.Id, sublot.AfterQuantityPerLocation);
         }
 
-        itemLot.Update(notification.AfterQuantity);
+        itemLot.Update(changedQuantity);
 
         _itemLotRepository.UpdateLot(itemLot);
-        _inventoryLogEntryRepository.Add(inventoryLogEntry);
+        await _inventoryLogEntryRepository.AddAsync(inventoryLogEntry);
     }
 }

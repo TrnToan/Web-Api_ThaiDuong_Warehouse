@@ -5,4 +5,5 @@ public interface IGoodsIssueRepository : IRepository<GoodsIssue>
     GoodsIssue Update(GoodsIssue goodsIssue);
     Task<IEnumerable<GoodsIssue>> GetListAsync(DateTime startTime, DateTime endTime);
     Task<GoodsIssue?> GetGoodsIssueById(string id);
+    Task<GoodsIssueLot?> GetGoodsIssueLotById(string lotId);
 }

@@ -21,7 +21,7 @@ public class RemoveGoodsReceiptLotsCommandHandler : IRequestHandler<RemoveGoodsR
         // Duyệt từng mã lô trong danh sách lô cần xoá
         foreach (string lotId in request.GoodsReceiptLotIds)
         {
-            var lot = goodsReceipt.Lots.FirstOrDefault(l => l.GoodsReceiptLotId == lotId);
+            var lot = goodsReceipt.Lots.Find(l => l.GoodsReceiptLotId == lotId);
             if (lot == null)
             {
                 throw new EntityNotFoundException($"GoodsReceiptLot with Id {lotId} does not exist.");
@@ -29,7 +29,7 @@ public class RemoveGoodsReceiptLotsCommandHandler : IRequestHandler<RemoveGoodsR
             removedLots.Add(lot);
 
             goodsReceipt.RemoveLot(lot);    // Xoá lô khỏi lịch sử nhập
-            // Ghi nhận lại số lượng sản phẩm trừ đi trước khi xoá khỏi tồn kho - InventoryLogEntry - DomainEvent
+            // InventoryLogEntry - DomainEvent
             goodsReceipt.DeletedGoodsReceiptLotLogEntry(lot.ItemId, lotId, goodsReceipt.Timestamp);
         }
 

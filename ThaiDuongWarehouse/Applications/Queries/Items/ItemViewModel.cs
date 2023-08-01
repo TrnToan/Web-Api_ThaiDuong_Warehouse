@@ -8,9 +8,11 @@ public class ItemViewModel
     public string ItemName { get; private set; }
     public double MinimumStockLevel { get; private set; }
     public decimal? Price { get; private set; }
+    public double? PacketSize { get; private set; }
+    public string? PacketUnit { get; private set; }
 
-    public ItemViewModel(string itemId, string itemClassId, string unit, string itemName,
-        double minimumStockLevel, decimal price)
+    public ItemViewModel(string itemId, string itemClassId, string unit, string itemName,double minimumStockLevel, 
+        decimal? price, double? packetSize, string? packetUnit)
     {
         ItemId = itemId;
         ItemClassId = itemClassId;
@@ -18,5 +20,7 @@ public class ItemViewModel
         ItemName = itemName;
         MinimumStockLevel = minimumStockLevel;
         Price = price;
+        PacketSize = packetSize;
+        PacketUnit = packetUnit;
     }
 }
