@@ -25,9 +25,26 @@ public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsI
             throw new EntityNotFoundException($"Goodsissue with Id {request.GoodsIssueId} doesn't exist.");
         }
 
+        List<CreateGoodsIssueLotViewModel> newGoodsIssueLots = new();
+        IEnumerable<GoodsIssueLot> existedGoodsIssueLots = goodsIssue.Entries.SelectMany(entry => entry.Lots);
+        if (existedGoodsIssueLots is not null)
+        {
+            foreach (var lot in request.GoodsIssueLots)
+            {
+                var existedLot = existedGoodsIssueLots.FirstOrDefault(l => l.GoodsIssueLotId == lot.GoodsIssueLotId);
+                if (existedLot is null)
+                    newGoodsIssueLots.Add(lot);
+            }
+        }
+        
+        if (newGoodsIssueLots.Count == 0)
+        {
+            newGoodsIssueLots = request.GoodsIssueLots;
+        }
+
         List<ItemLot> dispatchedItemLots = new();
 
-        foreach(var lotViewmodel in request.GoodsIssueLots)
+        foreach(var lotViewmodel in newGoodsIssueLots)
         {
             var employee = await _employeeRepository.GetEmployeeById(lotViewmodel.EmployeeId);
             if (employee is null)

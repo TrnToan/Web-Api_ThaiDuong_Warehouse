@@ -48,6 +48,7 @@ public class GoodsIssue : Entity, IAggregateRoot
         }
         entry.AddLot(lot);
     }
+
     public void Confirm(List<ItemLot> itemLots)
     {
         List<ItemLot> removedLots = new();
@@ -68,14 +69,22 @@ public class GoodsIssue : Entity, IAggregateRoot
                 AddDomainEvent(new ItemLotInformationChangedDomainEvent(itemLot, goodsIssueLot));
             }
         }
-        AddDomainEvent(new ItemLotExportedDomainEvent(removedLots));
+
+        if (removedLots.Count > 0)
+        {
+            AddDomainEvent(new ItemLotExportedDomainEvent(removedLots));
+        }     
 
         foreach (GoodsIssueEntry entry in Entries)
         {
             foreach (GoodsIssueLot lot in entry.Lots)
             {
-                AddDomainEvent(new InventoryLogEntryAddedDomainEvent(lot.GoodsIssueLotId, -lot.Quantity, 0, lot.Quantity,
+                var newLot = itemLots.Find(l => l.LotId == lot.GoodsIssueLotId);
+                if (newLot is not null)
+                {
+                    AddDomainEvent(new InventoryLogEntryAddedDomainEvent(lot.GoodsIssueLotId, -lot.Quantity, 0, lot.Quantity,
                     entry.Item.Id, Timestamp));
+                }               
             }
         }       
     }

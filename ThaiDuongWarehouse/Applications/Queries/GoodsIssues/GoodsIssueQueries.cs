@@ -1,6 +1,4 @@
-﻿using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-
-namespace ThaiDuongWarehouse.Api.Applications.Queries.GoodsIssues;
+﻿namespace ThaiDuongWarehouse.Api.Applications.Queries.GoodsIssues;
 
 public class GoodsIssueQueries : IGoodsIssueQueries
 {
@@ -42,7 +40,8 @@ public class GoodsIssueQueries : IGoodsIssueQueries
         if (isExported)
         {
             goodsIssues = await _goodsIssues
-                .Where(gi => gi.Entries.All(gie => gie.Lots.Count != 0))
+                .Where(gi => gi.Entries.All(gie => gie.Lots.Count != 0) &&
+                             gi.Entries.All(gie => gie.RequestedQuantity <= gie.Lots.Sum(lot => lot.Quantity)))
                 .Where(g => g.Timestamp >= query.StartTime &&
                             g.Timestamp <= query.EndTime)
                 .ToListAsync();
@@ -50,7 +49,8 @@ public class GoodsIssueQueries : IGoodsIssueQueries
         else
         {
             goodsIssues = await _goodsIssues
-                .Where(gi => gi.Entries.Any(gie => gie.Lots.Count == 0))
+                .Where(gi => gi.Entries.Any(gie => gie.Lots.Count == 0) ||
+                             gi.Entries.Any(gie => gie.RequestedQuantity > gie.Lots.Sum(lot => lot.Quantity)))
                 .Where(g => g.Timestamp >= query.StartTime &&
                             g.Timestamp <= query.EndTime)
                 .ToListAsync();
@@ -96,14 +96,16 @@ public class GoodsIssueQueries : IGoodsIssueQueries
         if (isExported)
         {
             goodsIssueIds = await _goodsIssues
-                .Where(gi => gi.Entries.All(gie => gie.Lots.Count != 0))
+                .Where(gi => gi.Entries.All(gie => gie.Lots.Count != 0) && 
+                             gi.Entries.All(gie => gie.RequestedQuantity <= gie.Lots.Sum(lot => lot.Quantity)))
                 .Select(gi => gi.GoodsIssueId)
                 .ToListAsync();
         }
         else
         {
             goodsIssueIds = await _goodsIssues
-                .Where(gi => gi.Entries.Any(gie => gie.Lots.Count == 0))
+                .Where(gi => gi.Entries.Any(gie => gie.Lots.Count == 0) || 
+                             gi.Entries.Any(gie => gie.RequestedQuantity > gie.Lots.Sum(lot => lot.Quantity)))
                 .Select(gi => gi.GoodsIssueId)
                 .ToListAsync();
         }
