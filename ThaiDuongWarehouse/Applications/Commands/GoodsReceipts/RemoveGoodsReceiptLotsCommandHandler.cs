@@ -4,9 +4,11 @@
 public class RemoveGoodsReceiptLotsCommandHandler : IRequestHandler<RemoveGoodsReceiptLotsCommand, bool>
 {
     private readonly IGoodsReceiptRepository _goodsReceiptRepository;
-    public RemoveGoodsReceiptLotsCommandHandler(IGoodsReceiptRepository goodsReceiptRepository)
+    private readonly IGoodsIssueRepository _goodsIssueRepository;
+    public RemoveGoodsReceiptLotsCommandHandler(IGoodsReceiptRepository goodsReceiptRepository, IGoodsIssueRepository goodsIssueRepository)
     {
         _goodsReceiptRepository = goodsReceiptRepository;
+        _goodsIssueRepository = goodsIssueRepository;
     }
 
     public async Task<bool> Handle(RemoveGoodsReceiptLotsCommand request, CancellationToken cancellationToken)
@@ -26,8 +28,14 @@ public class RemoveGoodsReceiptLotsCommandHandler : IRequestHandler<RemoveGoodsR
             {
                 throw new EntityNotFoundException($"GoodsReceiptLot with Id {lotId} does not exist.");
             }
-            removedLots.Add(lot);
 
+            var isExportedLot = await _goodsIssueRepository.GetGoodsIssueLotById(lotId);
+            if (isExportedLot is not null)
+            {
+                throw new InvalidItemLotException($"Exported itemlot {lotId} is not allowed to be removed.");
+            }
+
+            removedLots.Add(lot);
             goodsReceipt.RemoveLot(lot);    // Xoá lô khỏi lịch sử nhập
             // InventoryLogEntry - DomainEvent
             goodsReceipt.DeletedGoodsReceiptLotLogEntry(lot.ItemId, lotId, goodsReceipt.Timestamp);

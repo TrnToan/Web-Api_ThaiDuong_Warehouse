@@ -1,6 +1,4 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
-
-namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
+﻿namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 
 public class DeleteInventoryLogEntryDomainEventHandler : INotificationHandler<DeleteInventoryLogEntryDomainEvent>
 {

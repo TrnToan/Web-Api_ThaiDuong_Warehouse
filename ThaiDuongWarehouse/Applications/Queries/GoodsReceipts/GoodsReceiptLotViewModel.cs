@@ -1,6 +1,4 @@
-﻿using ThaiDuongWarehouse.Api.Applications.Queries.GoodsReceipts;
-
-namespace ThaiDuongWarehouse.Api.Applications.Queries.GoodsReceipt;
+﻿namespace ThaiDuongWarehouse.Api.Applications.Queries.GoodsReceipt;
 
 public class GoodsReceiptLotViewModel
 {
@@ -10,7 +8,7 @@ public class GoodsReceiptLotViewModel
     public DateTime? ExpirationDate { get; private set; }
     public ItemViewModel Item { get; private set; }
     public EmployeeViewModel Employee { get; private set; }
-    public List<GoodsReceiptSublotViewModel> Sublots { get; private set; }
+    public List<GoodsReceiptSublotViewModel> GoodsReceiptSublots { get; private set; }
     public string? Note { get; private set; }
     public bool IsExported { get; set; } = false;
 
@@ -23,7 +21,7 @@ public class GoodsReceiptLotViewModel
         ExpirationDate = expirationDate;
         Item = item;
         Employee = employee;
-        Sublots = sublots;
+        GoodsReceiptSublots = sublots;
         Note = note;
     }
 }

@@ -148,9 +148,9 @@ public class InventoryLogEntryQueries : IInventoryLogEntryQueries
             throw new EntityNotFoundException($"Could not found itemlots with itemId {itemId} in this timerange.");
 
         List<ItemLotLogEntryViewModel> lotViewModels = new ();
-        ItemViewModel item;
 
         var groupEntries = filteredLogEntries.GroupBy(log => log.ItemLotId);
+        ItemViewModel item = _mapper.Map<ItemViewModel>(groupEntries.First().First().Item);
         foreach (var groupEntry in groupEntries)
         {
             string? itemLotId = groupEntry.Key;
@@ -159,10 +159,17 @@ public class InventoryLogEntryQueries : IInventoryLogEntryQueries
 
             double totalLotQuantity = groupEntry.Sum(entry => entry.ChangedQuantity);
 
-            var lotLogEntryVM = new ItemLotLogEntryViewModel(itemLotId, totalLotQuantity);
+            double? numOfPackets;
+            if (item.PacketSize > 0)
+            {
+                numOfPackets = totalLotQuantity / item.PacketSize;
+            }
+            else
+                numOfPackets = null;
+
+            var lotLogEntryVM = new ItemLotLogEntryViewModel(itemLotId, totalLotQuantity, numOfPackets);
             lotViewModels.Add(lotLogEntryVM);
         }
-        item = _mapper.Map<ItemViewModel>(groupEntries.First().First().Item);
         double totalQuantity = lotViewModels.Sum(i => i.Quantity);
         ItemLogEntryViewModel logEntryViewModel = new (item, totalQuantity, lotViewModels);
 

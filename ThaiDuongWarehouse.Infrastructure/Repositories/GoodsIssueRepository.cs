@@ -21,6 +21,7 @@ public class GoodsIssueRepository : BaseRepository, IGoodsIssueRepository
     public async Task<GoodsIssueLot?> GetGoodsIssueLotById(string lotId)
     {
         return await _context.GoodsIssues
+            .AsNoTracking()
             .SelectMany(g => g.Entries
             .SelectMany(e => e.Lots))
             .FirstOrDefaultAsync(l => l.GoodsIssueLotId == lotId);

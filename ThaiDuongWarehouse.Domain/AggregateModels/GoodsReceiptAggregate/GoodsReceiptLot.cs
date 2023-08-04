@@ -50,7 +50,8 @@ public class GoodsReceiptLot
         if (note != null)
             Note = note;
 
-        Sublots = receiptSublots;
+        if (receiptSublots != null)
+            Sublots = receiptSublots;
     }
 
     public void UpdateConfirmedLot(double quantity, DateTime? productionDate, DateTime? expirationDate)

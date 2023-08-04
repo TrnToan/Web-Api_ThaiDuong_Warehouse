@@ -18,10 +18,10 @@ public class GoodsReceipt : Entity, IAggregateRoot
         Employee = employee;      
     }
 
-    public void UpdateLot(string oldLotId, string? newLowId, double quantity, List<GoodsReceiptSublot> sublots,
+    public void UpdateLot(string oldLotId, string? newLotId, double quantity, List<GoodsReceiptSublot> sublots,
         DateTime? productionDate, DateTime? expirationDate, string? note)
     {
-        string lotId = newLowId ?? oldLotId;
+        string lotId = newLotId ?? oldLotId;
         var lot = Lots.Find(gr => gr.GoodsReceiptLotId == oldLotId);
         if (lot == null)
             throw new WarehouseDomainException($"GoodsReceiptLot with Id {lotId} does not exist.");

@@ -1,4 +1,6 @@
-﻿namespace ThaiDuongWarehouse.Api.Applications.Commands.GoodsIssues;
+﻿using ThaiDuongWarehouse.Domain.Exceptions;
+
+namespace ThaiDuongWarehouse.Api.Applications.Commands.GoodsIssues;
 
 public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsIssueCommand, bool>
 {
@@ -79,6 +81,11 @@ public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsI
         int employeeId, ItemLot itemLot)
     {
         List<GoodsIssueSublot> goodsIssueSublots = new ();
+
+        if (lotVM.ItemLotLocations is null)
+        {
+            throw new WarehouseDomainException($"You must enter location for itemlot.");
+        }
         foreach (var sub in lotVM.ItemLotLocations)
         {
             var location = await _storageRepository.GetLocationById(sub.LocationId);
