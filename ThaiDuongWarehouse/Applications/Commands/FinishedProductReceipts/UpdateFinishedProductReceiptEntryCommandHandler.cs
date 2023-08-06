@@ -17,7 +17,7 @@ public class UpdateFinishedProductReceiptEntryCommandHandler : IRequestHandler<U
         var goodsReceipt = await _finishedProductReceiptRepository.GetReceiptById(request.FinishedProductReceiptId);
         if (goodsReceipt is null)
         {
-            throw new EntityNotFoundException($"FinishedProductReceipt, {request.FinishedProductReceiptId}");
+            throw new EntityNotFoundException(nameof(FinishedProductReceipt), request.FinishedProductReceiptId);
         }
 
         foreach (var entry in request.Entries)
@@ -25,14 +25,14 @@ public class UpdateFinishedProductReceiptEntryCommandHandler : IRequestHandler<U
             var item = await _itemRepository.GetItemById(entry.ItemId, entry.Unit);
             if (item is null)
             {
-                throw new EntityNotFoundException($"Item, {entry.ItemId}");
+                throw new EntityNotFoundException(nameof(Item), entry.ItemId + " with unit: " + entry.Unit);
             }
 
             var oldEntry = goodsReceipt.Entries.Find(e => e.PurchaseOrderNumber == entry.OldPurchaseOrderNumber
                                                                 && e.Item == item);
             if (oldEntry is null)
             {
-                throw new EntityNotFoundException($"Entry, {entry.ItemId} & {entry.OldPurchaseOrderNumber}");
+                throw new EntityNotFoundException(nameof(FinishedProductReceiptEntry), entry.ItemId + " with PO: " + entry.OldPurchaseOrderNumber);
             }
                          
             goodsReceipt.UpdateFinishedProductInventory(item, entry.OldPurchaseOrderNumber, entry.NewPurchaseOrderNumber, 

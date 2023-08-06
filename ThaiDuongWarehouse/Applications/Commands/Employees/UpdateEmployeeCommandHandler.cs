@@ -17,7 +17,7 @@ public class UpdateEmployeeCommandHandler : IRequestHandler<UpdateEmployeeComman
 
         if (employee is null)
         {
-            throw new EntityNotFoundException("Employee doesn't exist in the context");
+            throw new EntityNotFoundException(nameof(Employee), request.EmployeeName);
         }
 
         employee.Update(request.EmployeeName);

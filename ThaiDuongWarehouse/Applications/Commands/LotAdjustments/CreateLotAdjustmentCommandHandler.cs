@@ -20,7 +20,7 @@ public class CreateLotAdjustmentCommandHandler : IRequestHandler<CreateLotAdjust
         var lotAdjustment = await _lotAdjustmentRepository.GetAdjustmentByLotId(request.LotId);
         if (lotAdjustment is not null)
         {
-            throw new DuplicateRecordException($"Previous lotAdjustment with LotId {request.LotId} hasn't been confirmed yet.");
+            throw new DuplicateRecordException(nameof(LotAdjustment), lotAdjustment.LotId);
         }
 
         Item? item = await _itemRepository.GetItemById(request.ItemId, request.Unit);

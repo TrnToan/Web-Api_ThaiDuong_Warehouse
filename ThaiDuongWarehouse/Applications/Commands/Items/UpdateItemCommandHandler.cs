@@ -16,13 +16,13 @@ public class UpdateItemCommandHandler : IRequestHandler<UpdateItemCommand, bool>
 
         if (item is null)
         {
-            throw new EntityNotFoundException("This Item doesn't exist in current context");
+            throw new EntityNotFoundException(nameof(Item), request.ItemId + " " + request.Unit);
         }
 
         var itemClass = await _itemClassRepository.GetById(request.ItemClassId);
         if (itemClass is null)
         {
-            throw new EntityNotFoundException($"This ItemClass {request.ItemClassId} doesn't exist in current context");
+            throw new EntityNotFoundException(nameof(ItemClass), request.ItemClassId);
         }
 
         item.Update(request.ItemName, request.Unit, request.MinimumStockLevel, request.Price, request.ItemClassId, request.PacketSize,

@@ -32,7 +32,7 @@ public class RemoveGoodsReceiptLotsCommandHandler : IRequestHandler<RemoveGoodsR
             var isExportedLot = await _goodsIssueRepository.GetGoodsIssueLotById(lotId);
             if (isExportedLot is not null)
             {
-                throw new InvalidItemLotException($"Exported itemlot {lotId} is not allowed to be removed.");
+                throw new ExportedItemLotException(isExportedLot.GoodsIssueLotId);
             }
 
             removedLots.Add(lot);

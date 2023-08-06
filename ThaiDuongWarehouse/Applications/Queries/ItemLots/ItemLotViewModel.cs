@@ -22,7 +22,7 @@ public class ItemLotViewModel
         Item = item;
         if (item.PacketSize > 0)
         {
-            NumOfPackets = quantity/item.PacketSize;
+            NumOfPackets = Math.Round((double)(quantity / item.PacketSize), 2);
         }
         else
             NumOfPackets = null;

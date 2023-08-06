@@ -21,13 +21,16 @@ public class UpdateInventoryOnCreateProductIssueDomainEventHandler : INotificati
             throw new EntityNotFoundException($"Product with item {notification.Item.ItemId} & {notification.PurchaseOrderNumber} does not exist.");
         }
 
+        double productInventoryQuantity = productInventory.Quantity;
+
         productInventory.UpdateQuantity(-notification.Quantity);
         if (productInventory.Quantity == 0)
         {
             _finishedProductInventoryRepository.Remove(productInventory);
         }
         else if (productInventory.Quantity < 0)
-            throw new InvalidQuantityException($"Invalid Quantity of ProductInventory.");
+            throw new InvalidProductIssueQuantityException(notification.Item.ItemId, notification.Item.Unit, 
+                notification.PurchaseOrderNumber, productInventoryQuantity, notification.Quantity);
 
         else
             _finishedProductInventoryRepository.Update(productInventory);

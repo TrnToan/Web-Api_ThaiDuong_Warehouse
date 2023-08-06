@@ -1,7 +1,5 @@
 using System.Reflection;
 using ThaiDuongWarehouse.Api.Applications.Mapping;
-using ThaiDuongWarehouse.Api.Applications.Queries.FinishedProductInventories;
-using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductInventoryAggregate;
 
 var builder = WebApplication.CreateBuilder(args);
 

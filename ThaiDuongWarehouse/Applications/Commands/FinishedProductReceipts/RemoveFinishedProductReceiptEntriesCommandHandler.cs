@@ -16,7 +16,7 @@ public class RemoveFinishedProductReceiptEntriesCommandHandler : IRequestHandler
         var goodsReceipt = await _finishedProductReceiptRepository.GetReceiptById(request.FinishedProductReceiptId);
         if (goodsReceipt is null)
         {
-            throw new EntityNotFoundException($"GoodsReceipt {request.FinishedProductReceiptId} not found.");
+            throw new EntityNotFoundException(nameof(FinishedProductReceipt), request.FinishedProductReceiptId);
         }
 
         foreach (var entry in request.Entries)
@@ -24,12 +24,10 @@ public class RemoveFinishedProductReceiptEntriesCommandHandler : IRequestHandler
             var item = await _itemRepository.GetItemById(entry.ItemId, entry.Unit);
             if (item is null)
             {
-                throw new EntityNotFoundException($"Item, {entry.ItemId}");
+                throw new EntityNotFoundException(nameof(Item), entry.ItemId + " with unit: " + entry.Unit);
             }
 
-            //goodsReceipt.RemoveLogEntry(item.Id, entry.PurchaseOrderNumber, goodsReceipt.Timestamp);
             goodsReceipt.RemoveFinishedProductInventory(item, entry.PurchaseOrderNumber);
-
             goodsReceipt.RemoveReceiptEntry(item, entry.PurchaseOrderNumber);                    
         }
 

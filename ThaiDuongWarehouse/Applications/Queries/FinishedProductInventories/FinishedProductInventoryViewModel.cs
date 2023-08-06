@@ -14,7 +14,7 @@ public class FinishedProductInventoryViewModel
         Item = item;
         if (item.PacketSize > 0)
         {
-            NumOfPackets = Quantity / item.PacketSize;
+            NumOfPackets = Math.Round((double)(Quantity / item.PacketSize), 2);
         }
         else
         {

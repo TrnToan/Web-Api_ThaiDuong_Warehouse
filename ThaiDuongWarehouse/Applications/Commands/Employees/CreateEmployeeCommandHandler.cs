@@ -10,9 +10,15 @@ public class CreateEmployeeCommandHandler : IRequestHandler<CreateEmployeeComman
 
     public async Task<bool> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
     {
-        var employee = new Employee(request.EmployeeId, request.EmployeeName);
+        var employee = await _employeeRepository.GetEmployeeById(request.EmployeeId);
+        if (employee is not null)
+        {
+            throw new DuplicateRecordException(nameof(Employee), employee.EmployeeId);
+        }
 
-        _employeeRepository.Add(employee);
+        var newEmployee = new Employee(request.EmployeeId, request.EmployeeName);
+
+        _employeeRepository.Add(newEmployee);
         return await _employeeRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
     }
 }

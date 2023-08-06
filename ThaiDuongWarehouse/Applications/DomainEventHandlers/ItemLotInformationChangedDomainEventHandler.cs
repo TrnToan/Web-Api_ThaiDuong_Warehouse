@@ -51,8 +51,8 @@ public class ItemLotInformationChangedDomainEventHandler : INotificationHandler<
                 itemLot.RemoveItemLotLocation(itemLotLocation);
             }
             else
-                throw new InvalidItemLotException($"GoodsIssuelot's sublotSize {goodsIssueSublot.QuantityPerLocation} larger than " +
-                    $"itemlot's sublotsize {subItemLot.QuantityPerLocation}");
+                throw new InvalidSublotQuantityException($"GoodsIssuelot's sublotSize {goodsIssueSublot.QuantityPerLocation} " +
+                    $"larger than itemlot's sublotsize {subItemLot.QuantityPerLocation}");
         }
 
         _itemLotRepository.UpdateLot(itemLot);

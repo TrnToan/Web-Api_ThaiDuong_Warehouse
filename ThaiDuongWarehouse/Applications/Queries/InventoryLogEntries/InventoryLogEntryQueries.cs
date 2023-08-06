@@ -162,7 +162,7 @@ public class InventoryLogEntryQueries : IInventoryLogEntryQueries
             double? numOfPackets;
             if (item.PacketSize > 0)
             {
-                numOfPackets = totalLotQuantity / item.PacketSize;
+                numOfPackets = Math.Round((double)(totalLotQuantity / item.PacketSize), 2);
             }
             else
                 numOfPackets = null;

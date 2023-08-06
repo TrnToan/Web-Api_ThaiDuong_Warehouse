@@ -14,7 +14,7 @@ public class DeleteGoodsReceiptCommandHandler : IRequestHandler<DeleteGoodsRecei
         var removedGoodsReceipt = await _goodsReceiptRepository.GetGoodsReceiptById(request.GoodsReceiptId);
         if (removedGoodsReceipt is null)
         {
-            throw new EntityNotFoundException($"GoodsReceipt with Id {request.GoodsReceiptId} does not exist.");
+            throw new EntityNotFoundException(nameof(GoodsReceipt), request.GoodsReceiptId);
         }
 
         foreach (var lot in removedGoodsReceipt.Lots)

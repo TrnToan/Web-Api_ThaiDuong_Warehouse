@@ -97,7 +97,7 @@ public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsI
             var isExistedLocation = itemLot.ItemLotLocations.Find(ill => ill.Location.LocationId == sub.LocationId);
             if (isExistedLocation == null)
             {
-                throw new InvalidItemLotException($"Cannot found itemlot {itemLot.LotId} with locationId {sub.LocationId}");
+                throw new EntityNotFoundException($"Cannot found itemlot {itemLot.LotId} with locationId {sub.LocationId}");
             }
 
             GoodsIssueSublot sublot = new (sub.LocationId, sub.QuantityPerLocation);

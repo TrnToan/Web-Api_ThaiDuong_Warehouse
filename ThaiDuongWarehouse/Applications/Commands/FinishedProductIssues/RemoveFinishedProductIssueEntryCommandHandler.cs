@@ -17,13 +17,13 @@ public class RemoveFinishedProductIssueEntryCommandHandler : IRequestHandler<Rem
         var productIssue = await _finishedProductIssueRepository.GetIssueById(request.FinishedProductIssueId);
         if (productIssue is null)
         {
-            throw new EntityNotFoundException($"FinishedProductIssue with Id {request.FinishedProductIssueId} not found.");
+            throw new EntityNotFoundException(nameof(FinishedProductIssue), request.FinishedProductIssueId);
         }
 
         var item = await _itemRepository.GetItemById(request.ItemId, request.Unit);
         if (item is null)
         {
-            throw new EntityNotFoundException($"Item with Id {request.ItemId} not found.");
+            throw new EntityNotFoundException(nameof(Item), request.ItemId + "with unit: " + request.Unit);
         }
 
         productIssue.RestoreProductInventory(item, request.PurchaseOrderNumber);

@@ -24,7 +24,7 @@ public class CreateGoodsReceiptCommandHandler : IRequestHandler<CreateGoodsRecei
         var existedGoodsReceipt = await _goodsReceiptRepository.GetGoodsReceiptById(request.GoodsReceiptId);
         if (existedGoodsReceipt is not null)
         {
-            throw new DuplicateRecordException($"GoodsReceipt with Id {existedGoodsReceipt.GoodsReceiptId} already existed.");
+            throw new DuplicateRecordException(nameof(GoodsReceipt), existedGoodsReceipt.GoodsReceiptId);
         }
    
         var goodsReceipt = new GoodsReceipt(request.GoodsReceiptId, request.Supplier, DateTime.UtcNow.AddHours(7), goodsReceiptEmployee);

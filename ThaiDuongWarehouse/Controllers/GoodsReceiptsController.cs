@@ -1,5 +1,4 @@
 ﻿using ThaiDuongWarehouse.Api.Applications.Commands.GoodsReceipts;
-using ThaiDuongWarehouse.Api.Applications.Queries;
 
 namespace ThaiDuongWarehouse.Api.Controllers;
 

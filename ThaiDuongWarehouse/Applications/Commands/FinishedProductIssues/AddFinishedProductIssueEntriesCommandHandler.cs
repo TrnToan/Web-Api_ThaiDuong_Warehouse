@@ -17,7 +17,7 @@ public class AddFinishedProductIssueEntriesCommandHandler : IRequestHandler<AddF
         var productIssue = await _finishedProductIssueRepository.GetIssueById(request.FinishedProductIssueId);
         if (productIssue is null)
         {
-            throw new EntityNotFoundException($"FinishedProductIssue with Id {request.FinishedProductIssueId} not found.");
+            throw new EntityNotFoundException(nameof(FinishedProductIssue), request.FinishedProductIssueId);
         }
 
         foreach (var entry in request.Entries)
@@ -25,11 +25,11 @@ public class AddFinishedProductIssueEntriesCommandHandler : IRequestHandler<AddF
             var item = await _itemRepository.GetItemById(entry.ItemId, entry.Unit);
             if (item is null)
             {
-                throw new EntityNotFoundException($"Item with Id {entry.ItemId} does not exist.");
+                throw new EntityNotFoundException(nameof(Item), entry.ItemId + "with unit: " + entry.Unit);
             }
 
-            FinishedProductIssueEntry addedEntry = new FinishedProductIssueEntry(entry.PurchaseOrderNumber, entry.Quantity,
-                entry.Note, productIssue.Id, item);
+            FinishedProductIssueEntry addedEntry = new (entry.PurchaseOrderNumber, entry.Quantity, entry.Note, productIssue.Id, 
+                item);
 
             productIssue.AddIssueEntry(addedEntry);
             productIssue.UpdateFinishedProductInventory(item, entry.PurchaseOrderNumber, entry.Quantity);

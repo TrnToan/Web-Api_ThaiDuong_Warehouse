@@ -39,6 +39,7 @@ public class FinishedProductInventoriesController : ControllerBase
     [Route("extendedProductLogEntries")]
     public async Task<IEnumerable<ExtendedProductInventoryLogEntryViewModel>> GetLogsAsync([FromQuery] TimeRangeQuery query)
     {
+        query.EndTime = query.EndTime.AddHours(23).AddMinutes(59).AddSeconds(59);
         return await _queries.GetProductInventoryLogs(query);
     }
 

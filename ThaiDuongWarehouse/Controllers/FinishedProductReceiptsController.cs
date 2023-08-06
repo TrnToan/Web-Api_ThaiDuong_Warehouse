@@ -4,14 +4,12 @@ namespace ThaiDuongWarehouse.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class FinishedProductReceiptsController : ControllerBase
+public class FinishedProductReceiptsController : ApiControllerBase
 {
-    private readonly IMediator _mediator;
     private readonly IFinishedProductReceiptQueries _queries;
 
-    public FinishedProductReceiptsController(IMediator mediator, IFinishedProductReceiptQueries queries)
+    public FinishedProductReceiptsController(IMediator mediator, IFinishedProductReceiptQueries queries) : base(mediator)
     {
-        _mediator = mediator;
         _queries = queries;
     }
 
@@ -49,41 +47,15 @@ public class FinishedProductReceiptsController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> PostAsync([FromBody] CreateFinishedProductReceiptCommand cmd)
     {
-        try
-        {
-            var result = await _mediator.Send(cmd);
-
-            if (!result)
-            {
-                return BadRequest();
-            }
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        return await CommandAsync(cmd);
     }
 
     [HttpPatch]
     [Route("{productReceiptId}/updatedEntry")]
-    public async Task<IActionResult> PatchAsync(string productReceiptId, List<UpdateFinishedProductReceiptEntryViewModel> entries)
+    public async Task<IActionResult> UpdateEntryAsync(string productReceiptId, List<UpdateFinishedProductReceiptEntryViewModel> entries)
     {
         UpdateFinishedProductReceiptEntryCommand cmd = new (productReceiptId, entries);
-        try
-        {
-            var result = await _mediator.Send(cmd);
-
-            if (!result)
-            {
-                return BadRequest();
-            }
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        return await CommandAsync(cmd);
     }
 
     [HttpPatch]
@@ -91,20 +63,7 @@ public class FinishedProductReceiptsController : ControllerBase
     public async Task<IActionResult> AddEntryAsync(string productReceiptId, List<CreateFinishedProductReceiptEntryViewModel> entries)
     {
         AddEntryToFinishedProductReceiptCommand command = new (productReceiptId, entries);
-        try
-        {
-            var result = await _mediator.Send(command);
-
-            if (!result)
-            {
-                return BadRequest();
-            }
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        return await CommandAsync(command);
     }
 
     [HttpPatch]
@@ -112,39 +71,13 @@ public class FinishedProductReceiptsController : ControllerBase
     public async Task<IActionResult> RemoveEntryAsync(string productReceiptId, List<RemoveFinishedProductEntryViewModel> entries)
     {
         RemoveFinishedProductReceiptEntriesCommand command = new (productReceiptId, entries);
-        try
-        {
-            var result = await _mediator.Send(command);
-
-            if (!result)
-            {
-                return BadRequest();
-            }
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        return await CommandAsync(command);
     }
 
     [HttpDelete]
     public async Task<IActionResult> RemoveAsync(string productReceiptId)
     {
         DeleteFinishedProductReceiptCommand command = new DeleteFinishedProductReceiptCommand(productReceiptId);
-        try
-        {
-            var result = await _mediator.Send(command);
-
-            if (!result)
-            {
-                return BadRequest();
-            }
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        return await CommandAsync(command);
     }
 }

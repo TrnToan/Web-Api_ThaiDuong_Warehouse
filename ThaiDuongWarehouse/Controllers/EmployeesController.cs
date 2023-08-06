@@ -1,17 +1,14 @@
 ﻿using ThaiDuongWarehouse.Api.Applications.Commands.Employees;
-using ThaiDuongWarehouse.Api.Applications.Queries.Employees;
 
 namespace ThaiDuongWarehouse.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class EmployeesController : ControllerBase
+public class EmployeesController : ApiControllerBase
 {
 	private readonly IEmployeeQueries _queries;
-    private readonly IMediator _mediator;
-	public EmployeesController(IMediator mediator, IEmployeeQueries queries)
+	public EmployeesController(IMediator mediator, IEmployeeQueries queries) : base(mediator)
 	{
-		_mediator = mediator;
 		_queries = queries;
 	}
 	[HttpGet]
@@ -30,18 +27,6 @@ public class EmployeesController : ControllerBase
 	[HttpPost]
 	public async Task<IActionResult> PostAsync([FromBody] CreateEmployeeCommand command)
 	{
-		try
-		{
-			var result = await _mediator.Send(command);
-			if(result != true)
-			{
-				return BadRequest();
-			}
-			return Ok();
-		}
-		catch (Exception ex)
-		{
-			return BadRequest(ex.Message);
-		}
+		return await CommandAsync(command);
 	}
 }

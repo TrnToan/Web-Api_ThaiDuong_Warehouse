@@ -37,3 +37,6 @@ global using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductIssueAggre
 global using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
 global using ThaiDuongWarehouse.Api.Applications.Queries.GoodsReceipts;
 global using ThaiDuongWarehouse.Api.Applications.Queries.FinishedProductIssues;
+global using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductInventoryAggregate;
+global using ThaiDuongWarehouse.Api.Applications.Queries.FinishedProductInventories;
+global using ThaiDuongWarehouse.Api.Applications.ErrorNotifications;

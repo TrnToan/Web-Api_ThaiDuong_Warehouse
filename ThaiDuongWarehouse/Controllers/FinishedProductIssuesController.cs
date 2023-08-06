@@ -4,13 +4,11 @@ namespace ThaiDuongWarehouse.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class FinishedProductIssuesController : ControllerBase
+public class FinishedProductIssuesController : ApiControllerBase
 {
-    private readonly IMediator _mediator;
     private readonly IFinishedProductIssueQueries _queries;
-    public FinishedProductIssuesController(IMediator mediator, IFinishedProductIssueQueries queries)
+    public FinishedProductIssuesController(IMediator mediator, IFinishedProductIssueQueries queries) : base(mediator)
     {
-        _mediator = mediator;
         _queries = queries;
     }
 
@@ -61,20 +59,7 @@ public class FinishedProductIssuesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> PostAsync(CreateFinishedProductIssueCommand command)
     {
-        try
-        {
-            var result = await _mediator.Send(command);
-
-            if (!result)
-            {
-                return BadRequest();
-            }
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        return await CommandAsync(command);
     }
 
     [HttpPatch]
@@ -82,39 +67,13 @@ public class FinishedProductIssuesController : ControllerBase
     public async Task<IActionResult> AddEntriesAsync(string finishedProductIssueId, List<CreateFinishedProductIssueEntryViewModel> entries)
     {
         AddFinishedProductIssueEntriesCommand command = new(finishedProductIssueId, entries);
-        try
-        {
-            var result = await _mediator.Send(command);
-
-            if (!result)
-            {
-                return BadRequest();
-            }
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        return await CommandAsync(command);
     }
 
     [HttpPatch]
     [Route("removedEntry")]
     public async Task<IActionResult> PatchAsync(RemoveFinishedProductIssueEntryCommand command)
     {
-        try
-        {
-            var result = await _mediator.Send(command);
-
-            if (!result)
-            {
-                return BadRequest();
-            }
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(ex.Message);
-        }
+        return await CommandAsync(command);
     }
 }

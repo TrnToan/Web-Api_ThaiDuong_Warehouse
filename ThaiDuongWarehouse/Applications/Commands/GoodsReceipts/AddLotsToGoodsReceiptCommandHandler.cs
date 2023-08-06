@@ -19,7 +19,7 @@ public class AddLotsToGoodsReceiptCommandHandler : IRequestHandler<AddLotsToGood
         var goodsReceipt = await _goodsReceiptRepository.GetGoodsReceiptById(request.GoodsReceiptId);
         if (goodsReceipt is null)
         {
-            throw new EntityNotFoundException($"GoodsReceipt with Id {request.GoodsReceiptId} does not exist.");
+            throw new EntityNotFoundException(nameof(GoodsReceipt), request.GoodsReceiptId);
         }
 
         List<ItemLot> itemLots = new List<ItemLot>();

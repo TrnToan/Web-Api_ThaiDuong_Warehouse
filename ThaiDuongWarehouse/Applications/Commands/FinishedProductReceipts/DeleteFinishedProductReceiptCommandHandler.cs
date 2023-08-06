@@ -14,12 +14,11 @@ public class DeleteFinishedProductReceiptCommandHandler : IRequestHandler<Delete
         var goodsReceipt = await _finishedProductReceiptRepository.GetReceiptById(request.FinishedProductReceiptId);
         if (goodsReceipt is null)
         {
-            throw new EntityNotFoundException($"GoodsReceipt with Id {request.FinishedProductReceiptId} not found.");
+            throw new EntityNotFoundException(nameof(FinishedProductReceipt), request.FinishedProductReceiptId);
         }
 
         foreach (var entry in goodsReceipt.Entries)
         {
-            //goodsReceipt.RemoveLogEntry(entry.Item.Id, entry.PurchaseOrderNumber, goodsReceipt.Timestamp);
             goodsReceipt.RemoveFinishedProductInventory(entry.Item, entry.PurchaseOrderNumber);
         }
 

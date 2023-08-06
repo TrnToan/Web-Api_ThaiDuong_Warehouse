@@ -23,7 +23,7 @@ public class UpdateInventoryOnModifyProductReceiptEntryDomainEventHandler : INot
 
         if (oldProductEntry is null)
         {
-            throw new EntityNotFoundException($"Not found product entry with {notification.Item.ItemId} & {notification.OldPurchaseOrderNumber}");
+            throw new EntityNotFoundException(nameof(FinishedProductReceiptEntry), notification.Item.ItemId + " with PO: " + notification.OldPurchaseOrderNumber);
         }
 
         if (notification.NewPurchaseOrderNumber != null && notification.NewPurchaseOrderNumber != notification.OldPurchaseOrderNumber)
@@ -43,7 +43,11 @@ public class UpdateInventoryOnModifyProductReceiptEntryDomainEventHandler : INot
                 oldProductEntry.UpdateQuantity(-notification.OldQuantity);
                 newProductEntry.UpdateQuantity(notification.OldQuantity);
 
-                _finishedProductInventoryRepository.Update(oldProductEntry);
+                if (oldProductEntry.Quantity > 0)
+                    _finishedProductInventoryRepository.Update(oldProductEntry);
+                else
+                    _finishedProductInventoryRepository.Remove(oldProductEntry);
+
                 _finishedProductInventoryRepository.Update(newProductEntry);
             }
             flag = true;

@@ -43,30 +43,6 @@ public class FinishedProductReceipt : Entity, IAggregateRoot
         Entries.Remove(entry);
     }
 
-    public void AddLogEntry(string purchaseOrderNumber, int itemId, double changedQuantity, double receivedQuantity, DateTime timestamp)
-    {
-        double shippedQuantity = 0;
-        AddDomainEvent(new InventoryLogEntryAddedDomainEvent(purchaseOrderNumber, changedQuantity, receivedQuantity, shippedQuantity,
-            itemId, timestamp));
-    }
-
-    public void UpdateQuantityLogEntry(string purchaseOrderNumber, int itemId, double changedQuantity, double receivedQuantity, DateTime timestamp)
-    {
-        double shippedQuantity = 0;
-        AddDomainEvent(new UpdateInventoryLogEntriesDomainEvent(purchaseOrderNumber, changedQuantity, receivedQuantity, 
-            shippedQuantity, itemId, timestamp));
-    }
-
-    public void ModifyLogEntry(string oldPO, string newPO, int itemId, DateTime timestamp)
-    {
-        AddDomainEvent(new InventoryLogEntryChangedDomainEvent(oldPO, newPO, itemId, timestamp));
-    }
-
-    public void RemoveLogEntry(int itemId, string purchaseOrderNumber, DateTime timestamp)
-    {
-        AddDomainEvent(new DeleteInventoryLogEntryDomainEvent(itemId, purchaseOrderNumber, timestamp)); 
-    }
-
     public void AddFinishedProductInventory(Item item, string purchaseOrderNumber, double quantity, DateTime timestamp)
     {
         AddDomainEvent(new UpdateInventoryOnCreateProductReceiptDomainEvent(purchaseOrderNumber, quantity, timestamp, item));

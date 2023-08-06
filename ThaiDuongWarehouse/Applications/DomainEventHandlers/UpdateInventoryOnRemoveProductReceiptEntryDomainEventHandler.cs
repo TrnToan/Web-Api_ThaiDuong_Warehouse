@@ -18,7 +18,7 @@ public class UpdateInventoryOnRemoveProductReceiptEntryDomainEventHandler : INot
 
         if (productInventory is null) 
         {
-            throw new EntityNotFoundException($"FinishedProductInventory, {notification.Item.ItemName} & {notification.PurchaseOrderNumber}");
+            throw new EntityNotFoundException(nameof(FinishedProductReceiptEntry), notification.Item.ItemId + " with PO " + notification.Item.Unit);
         }
 
         productInventory.UpdateQuantity(-notification.Quantity);

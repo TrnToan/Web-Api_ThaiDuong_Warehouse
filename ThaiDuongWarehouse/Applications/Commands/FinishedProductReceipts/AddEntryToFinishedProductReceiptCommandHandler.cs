@@ -1,4 +1,6 @@
-﻿namespace ThaiDuongWarehouse.Api.Applications.Commands.FinishedProductReceipts;
+﻿using ThaiDuongWarehouse.Domain.Seedwork;
+
+namespace ThaiDuongWarehouse.Api.Applications.Commands.FinishedProductReceipts;
 
 public class AddEntryToFinishedProductReceiptCommandHandler : IRequestHandler<AddEntryToFinishedProductReceiptCommand, bool>
 {
@@ -17,7 +19,7 @@ public class AddEntryToFinishedProductReceiptCommandHandler : IRequestHandler<Ad
         var goodsReceipt = await _finishedProductReceiptRepository.GetReceiptById(request.FinishedProductReceiptId);
         if (goodsReceipt is null)
         {
-            throw new EntityNotFoundException($"FinishedProductReceipt with Id {request.FinishedProductReceiptId}.");
+            throw new EntityNotFoundException(nameof(FinishedProductReceipt), request.FinishedProductReceiptId);
         }
 
         foreach (var addedEntry in request.Entries)
@@ -25,7 +27,7 @@ public class AddEntryToFinishedProductReceiptCommandHandler : IRequestHandler<Ad
             var item = await _itemRepository.GetItemById(addedEntry.ItemId, addedEntry.Unit);
             if (item is null)
             {
-                throw new EntityNotFoundException($"Item, {addedEntry.ItemId}");
+                throw new EntityNotFoundException(nameof(Item), addedEntry.ItemId + " with unit: " + addedEntry.Unit);
             }
 
             var finishedProductEntry = new FinishedProductReceiptEntry(addedEntry.PurchaseOrderNumber, addedEntry.Quantity,
