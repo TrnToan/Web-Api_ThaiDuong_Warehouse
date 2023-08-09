@@ -1,4 +1,5 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
+﻿using ThaiDuongWarehouse.Api.Applications.DomainEventHandlers.DataTransactionServices;
+using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
 
 namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 

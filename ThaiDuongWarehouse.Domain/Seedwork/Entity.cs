@@ -41,7 +41,7 @@ public abstract class Entity
 
     public override bool Equals(object? obj)
     {
-        if (obj == null || obj is not Entity)
+        if (obj is null || obj is not Entity)
             return false;
 
         if (Object.ReferenceEquals(this, obj))

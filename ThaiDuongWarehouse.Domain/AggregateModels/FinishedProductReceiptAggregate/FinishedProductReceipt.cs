@@ -28,7 +28,7 @@ public class FinishedProductReceipt : Entity, IAggregateRoot
         Entries.Add(entry);
     }
 
-    public void UpdateReceiptEntry(FinishedProductReceiptEntry entry, string purchaseOrderNumber, double quantity)
+    public static void UpdateReceiptEntry(FinishedProductReceiptEntry entry, string purchaseOrderNumber, double quantity)
     {
         entry.UpdateEntry(purchaseOrderNumber, quantity);
     }
@@ -41,6 +41,24 @@ public class FinishedProductReceipt : Entity, IAggregateRoot
             throw new WarehouseDomainException($"Entry with item {item.ItemName} & {purchaseOrderNumber} not found.");
         }
         Entries.Remove(entry);
+    }
+
+    public List<FinishedProductReceiptEntry> GroupAndSumEntries()
+    {
+        var groupedEntries = Entries
+            .GroupBy(entry => new { entry.PurchaseOrderNumber, entry.ItemId })
+            .Select(group => new FinishedProductReceiptEntry
+            (
+                group.Key.PurchaseOrderNumber,
+                group.Sum(entry => entry.Quantity),
+                group.First().Note,
+                Entries[0].FinishedProductReceiptId,
+                group.First().Item
+            ))
+            .ToList();
+
+        Entries = groupedEntries;
+        return groupedEntries;
     }
 
     public void AddFinishedProductInventory(Item item, string purchaseOrderNumber, double quantity, DateTime timestamp)

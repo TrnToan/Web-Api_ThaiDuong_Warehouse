@@ -6,6 +6,7 @@ public class FinishedProductIssueEntry
     public double Quantity { get; private set; }
     public string? Note { get; private set; }
 
+    public int ItemId { get; private set; }
     public int FinishedProductIssueId { get; private set; }
     public Item Item { get; private set; }
 

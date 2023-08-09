@@ -1,4 +1,5 @@
 using System.Reflection;
+using ThaiDuongWarehouse.Api.Applications.DomainEventHandlers.DataTransactionServices;
 using ThaiDuongWarehouse.Api.Applications.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -60,6 +61,7 @@ builder.Services.AddScoped<IFinishedProductReceiptQueries, FinishedProductReceip
 builder.Services.AddScoped<IFinishedProductIssueQueries, FinishedProductIssueQueries>();
 builder.Services.AddScoped<IFinishedProductInventoryQueries, FinishedProductInventoryQueries>();
 
+builder.Services.AddScoped<FinishedProductInventoryService>();
 builder.Services.AddScoped<ItemLotLocationRepository>();
 builder.Services.AddScoped<InventoryLogEntryService>();
 

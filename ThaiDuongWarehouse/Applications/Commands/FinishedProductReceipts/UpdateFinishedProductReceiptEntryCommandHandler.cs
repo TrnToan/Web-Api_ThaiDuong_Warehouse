@@ -34,12 +34,13 @@ public class UpdateFinishedProductReceiptEntryCommandHandler : IRequestHandler<U
             {
                 throw new EntityNotFoundException(nameof(FinishedProductReceiptEntry), entry.ItemId + " with PO: " + entry.OldPurchaseOrderNumber);
             }
-                         
+
             goodsReceipt.UpdateFinishedProductInventory(item, entry.OldPurchaseOrderNumber, entry.NewPurchaseOrderNumber, 
                 entry.Quantity, goodsReceipt.Timestamp);
 
-            goodsReceipt.UpdateReceiptEntry(oldEntry, entry.NewPurchaseOrderNumber ?? entry.OldPurchaseOrderNumber, entry.Quantity);
+            FinishedProductReceipt.UpdateReceiptEntry(oldEntry, entry.NewPurchaseOrderNumber ?? entry.OldPurchaseOrderNumber, entry.Quantity);
         }
+        goodsReceipt.GroupAndSumEntries();
 
         _finishedProductReceiptRepository.Update(goodsReceipt);
         return await _finishedProductReceiptRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);

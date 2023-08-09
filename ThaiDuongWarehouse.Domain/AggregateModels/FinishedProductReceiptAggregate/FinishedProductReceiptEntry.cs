@@ -6,6 +6,7 @@ public class FinishedProductReceiptEntry
     public double Quantity { get; private set; }
     public string? Note { get; private set; }
 
+    public int ItemId { get; private set; }
     public int FinishedProductReceiptId { get; private set; }
     public Item Item { get; private set; }
 

@@ -1,25 +1,28 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductInventoryAggregate;
-using ThaiDuongWarehouse.Domain.AggregateModels.ProductInventoryAggregate;
+﻿using ThaiDuongWarehouse.Domain.AggregateModels.ProductInventoryAggregate;
 
 namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 
 public class UpdateInventoryOnModifyProductReceiptEntryDomainEventHandler : INotificationHandler<UpdateInventoryOnModifyProductReceiptEntryDomainEvent>
 {
     private readonly IFinishedProductInventoryRepository _finishedProductInventoryRepository;
-    private bool flag = false;
+    private readonly FinishedProductInventoryService _service;
+    private bool poFlag = false;
 
-    public UpdateInventoryOnModifyProductReceiptEntryDomainEventHandler(IFinishedProductInventoryRepository finishedProductInventoryRepository)
+    public UpdateInventoryOnModifyProductReceiptEntryDomainEventHandler(IFinishedProductInventoryRepository finishedProductInventoryRepository,
+        FinishedProductInventoryService finishedProductInventoryService)
     {
         _finishedProductInventoryRepository = finishedProductInventoryRepository;
+        _service = finishedProductInventoryService;
     }
 
     public async Task Handle(UpdateInventoryOnModifyProductReceiptEntryDomainEvent notification, CancellationToken cancellationToken)
     {
+        bool existedProductEntryFlag = false;
         var oldProductEntry = await _finishedProductInventoryRepository.GetFinishedProductInventory(notification.Item.ItemId,
                 notification.Item.Unit, notification.OldPurchaseOrderNumber);
 
         var newProductEntry = await _finishedProductInventoryRepository.GetFinishedProductInventory(notification.Item.ItemId,
-            notification.Item.Unit, notification.NewPurchaseOrderNumber);
+            notification.Item.Unit, notification.NewPurchaseOrderNumber);      
 
         if (oldProductEntry is null)
         {
@@ -27,39 +30,49 @@ public class UpdateInventoryOnModifyProductReceiptEntryDomainEventHandler : INot
         }
 
         if (notification.NewPurchaseOrderNumber != null && notification.NewPurchaseOrderNumber != notification.OldPurchaseOrderNumber)
-        {          
+        {
+            oldProductEntry.UpdateQuantity(-notification.OldQuantity);
+
+            if (oldProductEntry.Quantity > 0)
+                _finishedProductInventoryRepository.Update(oldProductEntry);
+            else
+                _finishedProductInventoryRepository.Remove(oldProductEntry);
+
             if (newProductEntry is null)
             {
-                FinishedProductInventory productInventory = new FinishedProductInventory(notification.NewPurchaseOrderNumber,
+                newProductEntry = _service.GetInventory(notification.Item.ItemId, notification.Item.Unit, 
+                    notification.NewPurchaseOrderNumber);
+
+                if (newProductEntry is null)
+                {
+                    FinishedProductInventory productInventory = new FinishedProductInventory(notification.NewPurchaseOrderNumber,
                     notification.NewQuantity, notification.Item);
 
-                oldProductEntry.UpdateQuantity(-notification.OldQuantity);
-
-                await _finishedProductInventoryRepository.Add(productInventory);
-                _finishedProductInventoryRepository.Update(oldProductEntry);
+                    await _finishedProductInventoryRepository.Add(productInventory);
+                    _service.Add(productInventory);
+                }
+                else
+                {
+                    newProductEntry.UpdateQuantity(notification.OldQuantity);
+                    existedProductEntryFlag = true;
+                }
             }
             else
             {
-                oldProductEntry.UpdateQuantity(-notification.OldQuantity);
                 newProductEntry.UpdateQuantity(notification.OldQuantity);
-
-                if (oldProductEntry.Quantity > 0)
-                    _finishedProductInventoryRepository.Update(oldProductEntry);
-                else
-                    _finishedProductInventoryRepository.Remove(oldProductEntry);
-
                 _finishedProductInventoryRepository.Update(newProductEntry);
             }
-            flag = true;
+            poFlag = true;
         }
 
         if (notification.NewQuantity != notification.OldQuantity && newProductEntry is not null)
         {
             double changedQuantity = notification.NewQuantity - notification.OldQuantity;
-            if (flag)
+            if (poFlag)
             {
                 newProductEntry.UpdateQuantity(changedQuantity);
-                _finishedProductInventoryRepository.Update(newProductEntry);
+                if (!existedProductEntryFlag)
+                    _finishedProductInventoryRepository.Update(newProductEntry);
             }                
             else
             {

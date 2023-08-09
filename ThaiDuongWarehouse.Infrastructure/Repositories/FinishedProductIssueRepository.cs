@@ -27,6 +27,14 @@ public class FinishedProductIssueRepository : BaseRepository, IFinishedProductIs
             .FirstOrDefaultAsync(gi => gi.FinishedProductIssueId == id);
     }
 
+    public async Task<FinishedProductIssueEntry?> GetProductIssueEntry(string itemId, string unit, string purchaseOrderNumber)
+    {
+        return await _context.FinisedProductIssues
+            .AsNoTracking()
+            .SelectMany(p => p.Entries)
+            .FirstOrDefaultAsync(e => e.PurchaseOrderNumber == purchaseOrderNumber && e.Item.ItemId == itemId && e.Item.Unit == unit);
+    }
+
     public void Update(FinishedProductIssue finishedProductIssue)
     {
         _context.FinisedProductIssues.Update(finishedProductIssue);
