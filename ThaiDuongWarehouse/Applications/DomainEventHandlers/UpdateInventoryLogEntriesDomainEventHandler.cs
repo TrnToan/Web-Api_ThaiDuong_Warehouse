@@ -1,7 +1,4 @@
-﻿using ThaiDuongWarehouse.Api.Applications.DomainEventHandlers.DataTransactionServices;
-using ThaiDuongWarehouse.Domain.AggregateModels.LogAggregate;
-
-namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
+﻿namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 
 public class UpdateInventoryLogEntriesDomainEventHandler : INotificationHandler<UpdateInventoryLogEntriesDomainEvent>
 {

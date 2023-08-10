@@ -12,7 +12,7 @@ public class ExportHistoryQueries : IExportHistoryQueries
 
     public async Task<IEnumerable<GoodsIssueHistoryViewModel>> GetByClassOrItem(TimeRangeQuery query, string? itemClassId, string? itemId)
     {
-        List<GoodsIssue> goodsIssues = new();
+        List<GoodsIssue> goodsIssues;
         if (itemClassId == null && itemId != null)
         {
             goodsIssues = await _context.GoodsIssues
@@ -48,20 +48,6 @@ public class ExportHistoryQueries : IExportHistoryQueries
 
         return _mapper.Map<IEnumerable<GoodsIssueHistoryViewModel>>(goodsIssues);
     }
-
-    //public async Task<IEnumerable<GoodsIssuesHistoryViewModel>> GetByPO(string purchaseOrderNumber)
-    //{
-    //    var goodsIssues = await _context.GoodsIssues
-    //        .AsNoTracking()
-    //        .Where(g => g.PurchaseOrderNumber == purchaseOrderNumber)
-    //        .Include(g => g.Entries)
-    //        .ThenInclude(e => e.Lots)
-    //        .Include(g => g.Entries)
-    //        .ThenInclude(e => e.Item)
-    //        .ToListAsync();
-
-    //    return _mapper.Map<IEnumerable<GoodsIssuesHistoryViewModel>>(goodsIssues);
-    //}
 
     public async Task<IEnumerable<GoodsIssueHistoryViewModel>> GetByReceiver(TimeRangeQuery query, string receiver)
     {

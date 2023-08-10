@@ -66,7 +66,7 @@ public class GoodsIssueQueries : IGoodsIssueQueries
         return _mapper.Map<IEnumerable<GoodsIssue>, IEnumerable<GoodsIssueViewModel>>(goodsIssues);
     }
 
-    public async Task<IList<string>> GetReceivers()
+    public async Task<List<string>> GetReceivers()
     {
         var goodsIssueReceivers = await _context.GoodsIssues
             .AsNoTracking()
@@ -80,7 +80,7 @@ public class GoodsIssueQueries : IGoodsIssueQueries
         
         var allReceivers = new List<string>();
         if (goodsIssueReceivers is not null)
-            allReceivers.AddRange(goodsIssueReceivers);
+            allReceivers.AddRange(goodsIssueReceivers!);
 
         allReceivers.AddRange(departmentReceivers);
 
@@ -96,7 +96,8 @@ public class GoodsIssueQueries : IGoodsIssueQueries
         if (isExported)
         {
             goodsIssueIds = await _goodsIssues
-                .Where(gi => gi.Entries.All(gie => gie.Lots.Count != 0) && 
+                .Where(gi => gi.Entries.Count > 0 &&
+                             gi.Entries.All(gie => gie.Lots.Count != 0) && 
                              gi.Entries.All(gie => gie.RequestedQuantity <= gie.Lots.Sum(lot => lot.Quantity)))
                 .Select(gi => gi.GoodsIssueId)
                 .ToListAsync();
@@ -104,7 +105,8 @@ public class GoodsIssueQueries : IGoodsIssueQueries
         else
         {
             goodsIssueIds = await _goodsIssues
-                .Where(gi => gi.Entries.Any(gie => gie.Lots.Count == 0) || 
+                .Where(gi => gi.Entries.Count == 0 ||
+                             gi.Entries.Any(gie => gie.Lots.Count == 0) || 
                              gi.Entries.Any(gie => gie.RequestedQuantity > gie.Lots.Sum(lot => lot.Quantity)))
                 .Select(gi => gi.GoodsIssueId)
                 .ToListAsync();

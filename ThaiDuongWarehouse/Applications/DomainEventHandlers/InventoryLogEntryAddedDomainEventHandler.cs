@@ -1,6 +1,4 @@
-﻿using ThaiDuongWarehouse.Api.Applications.DomainEventHandlers.DataTransactionServices;
-
-namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
+﻿namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 
 public class InventoryLogEntryAddedDomainEventHandler : INotificationHandler<InventoryLogEntryAddedDomainEvent>
 {

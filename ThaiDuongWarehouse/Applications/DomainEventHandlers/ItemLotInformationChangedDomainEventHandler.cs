@@ -1,5 +1,4 @@
 ﻿using ThaiDuongWarehouse.Domain.AggregateModels;
-using ThaiDuongWarehouse.Domain.DomainEvents;
 
 namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ThaiDuongWarehouse.Api.Applications.Commands.Warehouses;
+﻿using ThaiDuongWarehouse.Api.Applications.Commands.Warehouses;
 
 namespace ThaiDuongWarehouse.Api.Controllers;
 
@@ -40,7 +39,7 @@ public class WarehousesController : ControllerBase
         try
         {
             var result = await _mediator.Send(command);
-            if (result != true)
+            if (!result)
             {
                 return BadRequest();
             }

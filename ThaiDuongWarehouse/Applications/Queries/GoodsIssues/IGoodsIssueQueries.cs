@@ -6,5 +6,5 @@ public interface IGoodsIssueQueries
     Task<IEnumerable<string>> GetAllGoodsIssueIds(bool isExported);
     Task<GoodsIssueViewModel?> GetGoodsIssueById(string id);
     Task<IEnumerable<GoodsIssueViewModel>> GetGoodsIssuesByTime(TimeRangeQuery query, bool isExported);
-    Task<IList<string>> GetReceivers();
+    Task<List<string>> GetReceivers();
 }

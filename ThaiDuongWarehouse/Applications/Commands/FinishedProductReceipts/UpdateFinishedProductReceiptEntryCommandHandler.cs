@@ -35,7 +35,7 @@ public class UpdateFinishedProductReceiptEntryCommandHandler : IRequestHandler<U
                 throw new EntityNotFoundException(nameof(FinishedProductReceiptEntry), entry.ItemId + " with PO: " + entry.OldPurchaseOrderNumber);
             }
 
-            goodsReceipt.UpdateFinishedProductInventory(item, entry.OldPurchaseOrderNumber, entry.NewPurchaseOrderNumber, 
+            goodsReceipt.UpdateFinishedProductInventory(item, entry.OldPurchaseOrderNumber, entry.NewPurchaseOrderNumber!, 
                 entry.Quantity, goodsReceipt.Timestamp);
 
             FinishedProductReceipt.UpdateReceiptEntry(oldEntry, entry.NewPurchaseOrderNumber ?? entry.OldPurchaseOrderNumber, entry.Quantity);

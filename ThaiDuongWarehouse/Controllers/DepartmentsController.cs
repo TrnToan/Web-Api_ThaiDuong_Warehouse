@@ -23,7 +23,7 @@ public class DepartmentsController : ControllerBase
     public async Task<IActionResult> AddDepartment([FromBody] CreateDepartmentCommand command) 
     {
         var result = await _mediator.Send(command);
-        if (result == true)
+        if (result)
         {
             return Ok();
         }

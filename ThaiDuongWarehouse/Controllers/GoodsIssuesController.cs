@@ -44,7 +44,7 @@ public class GoodsIssuesController : ControllerBase
 
     [HttpGet]
     [Route("Receivers")]
-    public async Task<IList<string>> GetReceiversAsync()
+    public async Task<List<string>> GetReceiversAsync()
     {
         return await _queries.GetReceivers();
     }

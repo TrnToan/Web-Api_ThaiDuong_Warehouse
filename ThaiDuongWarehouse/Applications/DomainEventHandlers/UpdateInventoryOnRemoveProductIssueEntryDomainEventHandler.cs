@@ -1,5 +1,4 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductInventoryAggregate;
-using ThaiDuongWarehouse.Domain.AggregateModels.ProductInventoryAggregate;
+﻿using ThaiDuongWarehouse.Domain.AggregateModels.ProductInventoryAggregate;
 
 namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 

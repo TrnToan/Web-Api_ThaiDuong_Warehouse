@@ -25,7 +25,7 @@ public class LotAdjustmentRepository : BaseRepository, ILotAdjustmentRepository
     public async Task<IEnumerable<LotAdjustment>> GetUnConfirmedAdjustments()
     {
         return await _context.LotAdjustments
-            .Where(la => la.IsConfirmed == false)
+            .Where(la => !la.IsConfirmed)
             .ToListAsync();
     }
 

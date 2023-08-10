@@ -1,6 +1,4 @@
-﻿using ThaiDuongWarehouse.Api.Applications.DomainEventHandlers.DataTransactionServices;
-
-namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
+﻿namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
 
 public class DeleteInventoryLogEntryDomainEventHandler : INotificationHandler<DeleteInventoryLogEntryDomainEvent>
 {
@@ -47,17 +45,20 @@ public class DeleteInventoryLogEntryDomainEventHandler : INotificationHandler<De
             else
             {
                 var preFixedLogEntries = await _inventoryLogEntryRepository.GetLatestLogEntries(removedLogEntry.ItemId, removedLogEntry.TrackingTime);
-                preFixedLogEntries.Remove(removedLogEntry);
+                preFixedLogEntries.Remove(removedLogEntry);               
 
                 fixedLogEntries.AddRange(preFixedLogEntries);
-                fixedLogEntries[0].ResetQuantity();
-                if (fixedLogEntries.Count > 1)
+                if (fixedLogEntries.Count > 0)
                 {
-                    for (int i = 0; i < fixedLogEntries.Count - 1; i++)
+                    fixedLogEntries[0].ResetQuantity();
+                    if (fixedLogEntries.Count > 1)
                     {
-                        fixedLogEntries[i + 1].UpdateEntry(fixedLogEntries[i].BeforeQuantity, fixedLogEntries[i].ChangedQuantity);
+                        for (int i = 0; i < fixedLogEntries.Count - 1; i++)
+                        {
+                            fixedLogEntries[i + 1].UpdateEntry(fixedLogEntries[i].BeforeQuantity, fixedLogEntries[i].ChangedQuantity);
+                        }
                     }
-                }
+                }               
             }
             _service.AddEntries(fixedLogEntries);
         }
@@ -91,19 +92,24 @@ public class DeleteInventoryLogEntryDomainEventHandler : INotificationHandler<De
                 preFixedLogEntries.Remove(removedLogEntry);
 
                 fixedLogEntries = preFixedLogEntries;
-                fixedLogEntries[0].ResetQuantity();
-                if (fixedLogEntries.Count > 1)
+                if (fixedLogEntries.Count > 0)
                 {
-                    for (int i = 0; i < fixedLogEntries.Count - 1; i++)
+                    fixedLogEntries[0].ResetQuantity();
+                    if (fixedLogEntries.Count > 1)
                     {
-                        fixedLogEntries[i + 1].UpdateEntry(fixedLogEntries[i].BeforeQuantity, fixedLogEntries[i].ChangedQuantity);
+                        for (int i = 0; i < fixedLogEntries.Count - 1; i++)
+                        {
+                            fixedLogEntries[i + 1].UpdateEntry(fixedLogEntries[i].BeforeQuantity, fixedLogEntries[i].ChangedQuantity);
+                        }
                     }
-                }
+                }            
             }
             _service.AddEntries(fixedLogEntries);
         }
 
         _inventoryLogEntryRepository.Delete(removedLogEntry);
-        _inventoryLogEntryRepository.UpdateEntries(fixedLogEntries);
+
+        if (fixedLogEntries.Count > 0)
+            _inventoryLogEntryRepository.UpdateEntries(fixedLogEntries);
     }
 }
