@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace ThaiDuongWarehouse.Api.Applications.Commands.ItemLots;
+﻿namespace ThaiDuongWarehouse.Api.Applications.Commands.ItemLots;
 
 [DataContract]
 public class RemoveItemLotCommand : IRequest<bool>

@@ -40,7 +40,8 @@ public class GoodsIssueQueries : IGoodsIssueQueries
         if (isExported)
         {
             goodsIssues = await _goodsIssues
-                .Where(gi => gi.Entries.All(gie => gie.Lots.Count != 0) &&
+                .Where(gi => gi.Entries.Count > 0 &&
+                             gi.Entries.All(gie => gie.Lots.Count != 0) &&
                              gi.Entries.All(gie => gie.RequestedQuantity <= gie.Lots.Sum(lot => lot.Quantity)))
                 .Where(g => g.Timestamp >= query.StartTime &&
                             g.Timestamp <= query.EndTime)
@@ -49,7 +50,8 @@ public class GoodsIssueQueries : IGoodsIssueQueries
         else
         {
             goodsIssues = await _goodsIssues
-                .Where(gi => gi.Entries.Any(gie => gie.Lots.Count == 0) ||
+                .Where(gi => gi.Entries.Count == 0 ||
+                             gi.Entries.Any(gie => gie.Lots.Count == 0) ||
                              gi.Entries.Any(gie => gie.RequestedQuantity > gie.Lots.Sum(lot => lot.Quantity)))
                 .Where(g => g.Timestamp >= query.StartTime &&
                             g.Timestamp <= query.EndTime)

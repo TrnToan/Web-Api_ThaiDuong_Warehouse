@@ -144,10 +144,15 @@ public class InventoryLogEntryQueries : IInventoryLogEntryQueries
             .Where(log => log.TrackingTime.CompareTo(trackingTime) <= 0)
             .ToListAsync();
 
-        if (filteredLogEntries.Count == 0)
-            throw new EntityNotFoundException($"Could not found itemlots with itemId {itemId} in this timerange.");
+        List<ItemLotLogEntryViewModel> lotViewModels = new();
 
-        List<ItemLotLogEntryViewModel> lotViewModels = new ();
+        if (filteredLogEntries.Count == 0)
+        {
+            Item? existedItem = await _context.Items.FirstOrDefaultAsync(i => i.ItemId == itemId);
+            ItemViewModel itemVM = _mapper.Map<ItemViewModel>(existedItem);             
+            ItemLogEntryViewModel viewModel = new (itemVM, 0, lotViewModels);
+            return viewModel;
+        }
 
         var groupEntries = filteredLogEntries.GroupBy(log => log.ItemLotId);
         ItemViewModel item = _mapper.Map<ItemViewModel>(groupEntries.First().First().Item);
