@@ -27,7 +27,7 @@ public class InventoryLogEntriesController : ControllerBase
 
 	[HttpGet]
 	[Route("extendedLogEntries")]
-	public async Task<IEnumerable<ExtendedInventoryLogEntryViewModel>> GetLogEntriesByItemClassAsync(string? itemClassId, string? itemId, [FromQuery]TimeRangeQuery query) 
+	public async Task<QueryResult<ExtendedInventoryLogEntryViewModel>> GetLogEntriesByItemClassAsync(string? itemClassId, string? itemId, [FromQuery]TimeRangeQuery query) 
 	{
         query.EndTime = query.EndTime.AddHours(23).AddMinutes(59).AddSeconds(59);
         return await _queries.GetExtendedLogEntries(query, itemClassId, itemId);
