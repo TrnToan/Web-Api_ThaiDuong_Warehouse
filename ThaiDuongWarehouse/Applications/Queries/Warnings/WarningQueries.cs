@@ -28,29 +28,20 @@ public class WarningQueries : IWarningQueries
 
     public async Task<IEnumerable<ItemLotViewModel>> StockLevelWarnings(string itemClassId)
     {
-        List<Item> items = await _context.Items
-            .AsNoTracking()
-            .Where(gi => gi.ItemClassId == itemClassId)
-            .ToListAsync();
+        var itemLots = await _context.ItemLots
+        .AsNoTracking()
+        .Include(il => il.ItemLotLocations)
+            .ThenInclude(il => il.Location)
+        .Include(il => il.Item)
+        .Where(il => il.Item.ItemClassId == itemClassId)
+        .ToListAsync();
 
-        List<ItemLot> itemLots = new();
-        foreach (Item item in items)
-        {
-            List<ItemLot> lots = await _context.ItemLots
-                .AsNoTracking()
-                .Include(il => il.ItemLotLocations)
-                    .ThenInclude(il => il.Location)
-                .Include(il => il.Item)
-                .Where(il => il.Item.ItemId == item.ItemId)
-                .ToListAsync();
+        var lowStockItemLots = itemLots
+            .GroupBy(il => il.Item)
+            .Where(group => group.Sum(il => il.Quantity) <= group.Key.MinimumStockLevel)
+            .SelectMany(group => group)
+            .ToList();
 
-            double totalQuantity = lots.Sum(l => l.Quantity);           
-            if (totalQuantity <= item.MinimumStockLevel)
-            {
-                itemLots.AddRange(lots);
-            }
-        }
-
-        return _mapper.Map<IEnumerable<ItemLot>, IEnumerable<ItemLotViewModel>>(itemLots);
+        return _mapper.Map<IEnumerable<ItemLot>, IEnumerable<ItemLotViewModel>>(lowStockItemLots);
     }
 }
