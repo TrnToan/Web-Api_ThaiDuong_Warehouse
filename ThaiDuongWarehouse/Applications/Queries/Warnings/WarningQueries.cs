@@ -12,26 +12,18 @@ public class WarningQueries : IWarningQueries
 
     public async Task<IEnumerable<ItemLotViewModel>> ExpirationWarnings(int months)
     {
-        List<ItemLot> lots = await _context.ItemLots
+        DateTime warningDateThreshold = DateTime.UtcNow.AddHours(7).AddMonths(months);
+
+        List<ItemLotViewModel> warningLots = await _context.ItemLots
             .AsNoTracking()
             .Include(il => il.ItemLotLocations)
                 .ThenInclude(il => il.Location)
             .Include(il => il.Item)
+            .Where(il => il.ExpirationDate.HasValue && il.ExpirationDate.Value <= warningDateThreshold)
+            .Select(il => _mapper.Map<ItemLot, ItemLotViewModel>(il))
             .ToListAsync();
 
-        List<ItemLot> warningLots = new();
-        foreach (ItemLot lot in lots)
-        {
-            if (lot.ExpirationDate == null)
-                continue;
-            DateTime warningDate = lot.ExpirationDate.Value.AddMonths(-months);
-            if (DateTime.UtcNow.AddHours(7) - warningDate > TimeSpan.Zero)
-            {
-                warningLots.Add(lot);
-            }
-        }
-
-        return _mapper.Map<IEnumerable<ItemLot>, IEnumerable<ItemLotViewModel>>(warningLots);
+        return warningLots;
     }
 
     public async Task<IEnumerable<ItemLotViewModel>> StockLevelWarnings(string itemClassId)

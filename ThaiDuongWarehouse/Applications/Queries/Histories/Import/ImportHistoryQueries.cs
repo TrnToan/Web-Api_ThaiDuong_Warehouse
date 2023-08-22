@@ -13,7 +13,7 @@ public class ImportHistoryQueries : IImportHistoryQueries
     public async Task<IEnumerable<GoodsReceiptHistoryViewModel>> GetByClassOrItem(TimeRangeQuery query, string? itemClassId, string? itemId)
     {
         var goodsReceipts = new List<Domain.AggregateModels.GoodsReceiptAggregate.GoodsReceipt>();
-        if (itemClassId == null && itemId != null)
+        if (itemId != null)
         {
             goodsReceipts = await _context.GoodsReceipts
                 .AsNoTracking()
