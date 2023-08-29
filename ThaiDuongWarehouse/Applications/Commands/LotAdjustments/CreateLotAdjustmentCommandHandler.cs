@@ -26,19 +26,19 @@ public class CreateLotAdjustmentCommandHandler : IRequestHandler<CreateLotAdjust
         Item? item = await _itemRepository.GetItemById(request.ItemId, request.Unit);
         if (item is null)
         {
-            throw new EntityNotFoundException("Item does not exist.");
+            throw new EntityNotFoundException(nameof(Item), request.ItemId + "with unit " + request.Unit);
         }
 
         var itemLot = await _itemLotRepository.GetLotByLotId(request.LotId);
         if (itemLot is null)
         {
-            throw new EntityNotFoundException($"Itemlot {request.LotId} does not exist");
+            throw new EntityNotFoundException(nameof(ItemLot), request.LotId);
         }
 
         var employee = await _employeeRepository.GetEmployeeByName(request.EmployeeName);
         if (employee is null)
         {
-            throw new EntityNotFoundException($"Employee {request.EmployeeName} does not exist");
+            throw new EntityNotFoundException(nameof(Employee), request.EmployeeName);
         }
         
         var newLotAdjustment = new LotAdjustment(request.LotId, itemLot.Quantity, request.Note, DateTime.UtcNow.AddHours(7), 

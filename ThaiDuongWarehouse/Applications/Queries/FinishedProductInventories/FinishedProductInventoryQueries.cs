@@ -10,6 +10,10 @@ public class FinishedProductInventoryQueries : IFinishedProductInventoryQueries
     private IQueryable<FinishedProductInventory> _productInventories => _context.FinishedProductInventories
         .AsNoTracking()
         .Include(p => p.Item);
+    private IQueryable<FinishedProductIssue> _productIssues => _context.FinisedProductIssues
+        .AsNoTracking();
+    private IQueryable<FinishedProductReceipt> _productReceipts => _context.FinishedProductReceipts
+        .AsNoTracking();
 
     public FinishedProductInventoryQueries(WarehouseDbContext context, IMapper mapper)
     {
@@ -36,42 +40,30 @@ public class FinishedProductInventoryQueries : IFinishedProductInventoryQueries
         return POs;
     }
 
-    public async Task<ExtendedProductInventoryLogEntryViewModel> GetProductInventoryLog(string itemId, string unit, TimeRangeQuery query)
+    private async Task<ExtendedProductInventoryLogEntryViewModel> GetProductInventoryLog(Item item,
+        IEnumerable<FinishedProductIssueEntry> previousProductIssueEntries, IEnumerable<FinishedProductReceiptEntry> previousProductReceiptEntries,
+        IEnumerable<FinishedProductIssueEntry> productIssueEntries, IEnumerable<FinishedProductReceiptEntry> productReceiptEntries)
     {
         double beforeQuantity, receivedQuantity, shippedQuantity, afterQuantity;
-        Item? item = await _context.Items.FirstOrDefaultAsync(i => i.ItemId == itemId && i.Unit == unit);
-        if (item is null)
-        {
-            throw new EntityNotFoundException($"Item with Id {itemId} & unit {unit} not found.");
-        }
         var itemViewModel = _mapper.Map<Item, ItemViewModel>(item);
 
-        IQueryable<FinishedProductReceipt> productReceipts = _context.FinishedProductReceipts
-            .AsNoTracking();
-        IQueryable<FinishedProductIssue> productIssues = _context.FinisedProductIssues
-            .AsNoTracking();
+        double previousProductReceiptsQuantity = previousProductIssueEntries
+            .Where(e => e.Item.Id == item.Id)
+            .Sum(e => e.Quantity);
 
-        double previousProductReceiptsQuantity = await productReceipts
-            .Where(p => p.Timestamp < query.StartTime)
-            .SelectMany(p => p.Entries.Where(e => e.Item.Id == item.Id))
-            .SumAsync(e => e.Quantity);
-
-        double previousProductIssuesQuantity = await productIssues
-            .Where(p => p.Timestamp < query.StartTime)
-            .SelectMany(p => p.Entries.Where(e => e.Item.Id == item.Id))
-            .SumAsync(e => e.Quantity);
+        double previousProductIssuesQuantity = previousProductReceiptEntries
+            .Where(e => e.Item.Id == item.Id)
+            .Sum(e => e.Quantity);
 
         beforeQuantity = previousProductReceiptsQuantity - previousProductIssuesQuantity;
 
-        receivedQuantity = await productReceipts
-            .Where(p => p.Timestamp >= query.StartTime && p.Timestamp <= query.EndTime)
-            .SelectMany(p => p.Entries.Where(e => e.Item.Id == item.Id))
-            .SumAsync(p => p.Quantity);
+        receivedQuantity = productIssueEntries
+            .Where(e => e.Item.Id == item.Id)
+            .Sum(p => p.Quantity);
 
-        shippedQuantity = await productIssues
-            .Where(p => p.Timestamp >= query.StartTime && p.Timestamp <= query.EndTime)
-            .SelectMany(p => p.Entries.Where(e => e.Item.Id == item.Id))
-            .SumAsync(p => p.Quantity);
+        shippedQuantity = productReceiptEntries
+            .Where(e => e.Item.Id == item.Id)
+            .Sum(p => p.Quantity);
 
         afterQuantity = beforeQuantity + receivedQuantity - shippedQuantity;
         ExtendedProductInventoryLogEntryViewModel log = new(itemViewModel, beforeQuantity, receivedQuantity, shippedQuantity,
@@ -80,24 +72,54 @@ public class FinishedProductInventoryQueries : IFinishedProductInventoryQueries
         return log;
     }
 
-    public async Task<IEnumerable<ExtendedProductInventoryLogEntryViewModel>> GetProductInventoryLogs(TimeRangeQuery query)
+    public async Task<QueryResult<ExtendedProductInventoryLogEntryViewModel>> GetProductInventoryLogs(TimeRangeQuery query, 
+        string? itemId, string? unit)
     {
-        var items = await _context.Items
-            .AsNoTracking()
-            .Where(i => i.ItemClassId == "TP")
-            .Skip(query.ItemsPerPage * (query.Page - 1))
-            .Take(query.ItemsPerPage)
+        List<ExtendedProductInventoryLogEntryViewModel> logs = new List<ExtendedProductInventoryLogEntryViewModel>();
+        var previousProductReceiptEntries = await _productReceipts
+            .Where(p => p.Timestamp < query.StartTime)
+            .SelectMany(p => p.Entries)
             .ToListAsync();
 
-        List<ExtendedProductInventoryLogEntryViewModel> logs = new List<ExtendedProductInventoryLogEntryViewModel>();
-        foreach(var item in items)
+        var previousProductIssueEntries = await _productIssues
+            .Where(p => p.Timestamp < query.StartTime)
+            .SelectMany(p => p.Entries)
+            .ToListAsync();
+
+        var productReceiptEntries = await _productReceipts
+            .Where(p => p.Timestamp >= query.StartTime && p.Timestamp <= query.EndTime)
+            .SelectMany(p => p.Entries)
+            .ToListAsync();
+
+        var productIssueEntries = await _productIssues
+            .Where(p => p.Timestamp >= query.StartTime && p.Timestamp <= query.EndTime)
+            .SelectMany(p => p.Entries)
+            .ToListAsync();
+
+        IQueryable<Item> items = _context.Items
+            .AsNoTracking()
+            .Where(i => i.ItemClassId == "TP");
+
+        if (itemId is not null && unit is not null)
         {
-            var log = await GetProductInventoryLog(item.ItemId, item.Unit, query);
-            if (log.BeforeQuantity == 0 && log.ReceivedQuantity == 0 && log.ShippedQuantity == 0)
-                continue;
+            items = items.Where(i => i.ItemId == itemId && i.Unit == unit);
+        } 
+
+        foreach (var item in items)
+        {
+            var log = await GetProductInventoryLog(item, previousProductIssueEntries, previousProductReceiptEntries,
+                productIssueEntries, productReceiptEntries);
             logs.Add(log);
         }
-        return logs;
+
+        int totalNumOfEntries = logs.Count;
+        var logVMs = logs
+            .Skip((query.Page - 1) * query.ItemsPerPage)
+            .Take(query.ItemsPerPage)
+            .ToList();
+
+        QueryResult<ExtendedProductInventoryLogEntryViewModel> viewModels = new (logVMs, totalNumOfEntries);
+        return viewModels;
     }
 
     public async Task<IEnumerable<FinishedProductInventoryViewModel>> GetProductInventoryRecords(DateTime timestamp, string itemId, string unit)
@@ -124,7 +146,7 @@ public class FinishedProductInventoryQueries : IFinishedProductInventoryQueries
         {
             var matchingProductIssueEntries = productIssueEntries.Where(p => p.PurchaseOrderNumber == group.Key);
             double quantity = group.Sum(gr => gr.Quantity) - matchingProductIssueEntries.Sum(gr => gr.Quantity);
-            FinishedProductInventoryViewModel viewModel = new(group.Key, quantity, itemVM);
+            FinishedProductInventoryViewModel viewModel = new (group.Key, quantity, itemVM);
             viewModels.Add(viewModel);
         }
         return viewModels;

@@ -29,9 +29,12 @@ public class UpdateInventoryLogEntriesDomainEventHandler : INotificationHandler<
             logEntry.UpdateQuantity(notification.ChangedQuantity, notification.ReceivedQuantity);
             fixedLogEntries = await _inventoryLogEntryRepository.GetLatestLogEntries(notification.ItemId, logEntry.TrackingTime);
             
-            for (int i = 0; i < fixedLogEntries.Count - 1; i++)
+            if (fixedLogEntries.Count > 1)
             {
-                fixedLogEntries[i + 1].UpdateEntry(fixedLogEntries[i].BeforeQuantity, fixedLogEntries[i].ChangedQuantity);
+                for (int i = 0; i < fixedLogEntries.Count - 1; i++)
+                {
+                    fixedLogEntries[i + 1].UpdateEntry(fixedLogEntries[i].BeforeQuantity, fixedLogEntries[i].ChangedQuantity);
+                }
             }
             _service.AddEntries(fixedLogEntries);
         }

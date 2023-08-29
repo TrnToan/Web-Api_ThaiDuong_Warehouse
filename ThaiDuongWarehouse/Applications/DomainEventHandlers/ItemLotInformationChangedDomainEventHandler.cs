@@ -28,7 +28,7 @@ public class ItemLotInformationChangedDomainEventHandler : INotificationHandler<
                 throw new EntityNotFoundException($"LocationId {goodsIssueSublot.LocationId} not found.");
             }
 
-            var subItemLot = itemLot.ItemLotLocations?.FirstOrDefault(il => il.LocationId == location.Id);
+            var subItemLot = itemLot.ItemLotLocations?.Find(il => il.LocationId == location.Id);
             if (subItemLot == null)
             {
                 throw new EntityNotFoundException($"Itemlot with locationId {location.LocationId} not found.");

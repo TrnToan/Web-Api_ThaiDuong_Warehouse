@@ -1,6 +1,4 @@
-﻿using ThaiDuongWarehouse.Api.Applications.Queries.FinishedProductInventories;
-
-namespace ThaiDuongWarehouse.Api.Controllers;
+﻿namespace ThaiDuongWarehouse.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -27,20 +25,14 @@ public class FinishedProductInventoriesController : ControllerBase
         return await _queries.GetPOs();
     }
 
-    [HttpGet]
-    [Route("extendedProductLogEntry")]
-    public async Task<ExtendedProductInventoryLogEntryViewModel> GetLogAsync([FromQuery]string itemId, [FromQuery] string unit, [FromQuery] TimeRangeQuery query)
-    {
-        query.EndTime = query.EndTime.AddHours(23).AddMinutes(59).AddSeconds(59);
-        return await _queries.GetProductInventoryLog(itemId, unit, query);
-    }
 
     [HttpGet]
     [Route("extendedProductLogEntries")]
-    public async Task<IEnumerable<ExtendedProductInventoryLogEntryViewModel>> GetLogsAsync([FromQuery] TimeRangeQuery query)
+    public async Task<QueryResult<ExtendedProductInventoryLogEntryViewModel>> GetLogsAsync([FromQuery] TimeRangeQuery query,
+        string? itemId, string? unit)
     {
         query.EndTime = query.EndTime.AddHours(23).AddMinutes(59).AddSeconds(59);
-        return await _queries.GetProductInventoryLogs(query);
+        return await _queries.GetProductInventoryLogs(query, itemId, unit);
     }
 
     [HttpGet]

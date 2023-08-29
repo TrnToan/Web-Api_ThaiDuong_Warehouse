@@ -63,7 +63,7 @@ public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsI
             {
                 throw new EntityNotFoundException($"Itemlot with id {lotViewmodel.GoodsIssueLotId} is isolated.");
             }
-
+            
             double quantity = lotViewmodel.ItemLotLocations.Sum(sub => sub.QuantityPerLocation);
 
             GoodsIssueLot goodsIssueLot = await CreateGoodsIssueLotAsync(lotViewmodel, quantity, employee.Id, itemLot);
