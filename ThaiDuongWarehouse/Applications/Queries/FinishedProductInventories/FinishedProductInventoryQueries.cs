@@ -1,4 +1,5 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels.ProductInventoryAggregate;
+﻿using System.Diagnostics;
+using ThaiDuongWarehouse.Domain.AggregateModels.ProductInventoryAggregate;
 
 namespace ThaiDuongWarehouse.Api.Applications.Queries.FinishedProductInventories;
 
@@ -100,7 +101,7 @@ public class FinishedProductInventoryQueries : IFinishedProductInventoryQueries
             .AsNoTracking()
             .Where(i => i.ItemClassId == "TP");
 
-        if (itemId is not null && unit is not null)
+        if (itemId != null && unit != null)
         {
             items = items.Where(i => i.ItemId == itemId && i.Unit == unit);
         } 

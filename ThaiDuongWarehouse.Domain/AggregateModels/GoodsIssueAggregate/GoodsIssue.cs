@@ -1,4 +1,6 @@
-﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.GoodsIssueAggregate;
+﻿using System.Diagnostics;
+
+namespace ThaiDuongWarehouse.Domain.AggregateModels.GoodsIssueAggregate;
 public class GoodsIssue : Entity, IAggregateRoot
 {
     public string GoodsIssueId { get; private set; }
@@ -73,8 +75,10 @@ public class GoodsIssue : Entity, IAggregateRoot
         if (removedLots.Count > 0)
         {
             AddDomainEvent(new ItemLotExportedDomainEvent(removedLots));
-        }     
+        }
 
+        //var watch = new Stopwatch();
+        //watch.Start();
         foreach (GoodsIssueEntry entry in Entries)
         {
             foreach (GoodsIssueLot lot in entry.Lots)
@@ -84,8 +88,28 @@ public class GoodsIssue : Entity, IAggregateRoot
                 {
                     AddDomainEvent(new InventoryLogEntryAddedDomainEvent(lot.GoodsIssueLotId, -lot.Quantity, 0, lot.Quantity,
                     entry.Item.Id, Timestamp));
-                }               
+                }
             }
-        }       
+        }
+        //var domainEvents = Entries.SelectMany(entry =>
+        //    entry.Lots.Where(lot => itemLots.Exists(newLot => newLot.LotId == lot.GoodsIssueLotId))
+        //    .Select(lot =>
+        //        new InventoryLogEntryAddedDomainEvent(
+        //            lot.GoodsIssueLotId,
+        //            -lot.Quantity,
+        //            0,
+        //            lot.Quantity,
+        //            entry.Item.Id,
+        //            Timestamp
+        //        )
+        //    )
+        //);
+
+        //foreach (var domainEvent in domainEvents)
+        //{
+        //    AddDomainEvent(domainEvent);
+        //}
+        //watch.Stop();
+        //Console.WriteLine("It take " + watch.ElapsedMilliseconds + " ms to run.");
     }
 }

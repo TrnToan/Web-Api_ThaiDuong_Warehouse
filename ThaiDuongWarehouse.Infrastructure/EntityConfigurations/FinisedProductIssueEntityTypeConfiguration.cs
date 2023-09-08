@@ -13,7 +13,7 @@ public class FinisedProductIssueEntityTypeConfiguration : IEntityTypeConfigurati
             fpre.WithOwner().HasForeignKey(fpre => fpre.FinishedProductIssueId);
 
             fpre.HasKey(fpre => fpre.Id);
-            fpre.HasIndex(fpre => new { fpre.ItemId, fpre.PurchaseOrderNumber }).IsUnique();
+            fpre.HasIndex(fpre => new { fpre.ItemId, fpre.PurchaseOrderNumber, fpre.FinishedProductIssueId }).IsUnique();
             fpre.Property(fpre => fpre.Id).ValueGeneratedOnAdd().IsRequired();
             fpre.Property(fpre => fpre.PurchaseOrderNumber).IsRequired();
             fpre.Property(fpre => fpre.Quantity).IsRequired();

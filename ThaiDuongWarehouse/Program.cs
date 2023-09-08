@@ -67,6 +67,7 @@ builder.Services.AddScoped<InventoryLogEntryService>();
 
 builder.Services.AddAutoMapper(typeof(ModelToViewModelProfile).Assembly);
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 app.UseCors("AllowAll");

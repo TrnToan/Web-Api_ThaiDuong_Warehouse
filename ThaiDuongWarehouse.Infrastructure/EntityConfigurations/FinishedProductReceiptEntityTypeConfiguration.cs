@@ -13,7 +13,7 @@ public class FinishedProductReceiptEntityTypeConfiguration : IEntityTypeConfigur
             fpre.WithOwner().HasForeignKey(fpre => fpre.FinishedProductReceiptId);
 
             fpre.HasKey(fpre => fpre.Id);
-            fpre.HasIndex(fpre => new { fpre.ItemId, fpre.PurchaseOrderNumber }).IsUnique();
+            fpre.HasIndex(fpre => new { fpre.ItemId, fpre.PurchaseOrderNumber, fpre.FinishedProductReceiptId }).IsUnique();
             fpre.Property(fpre => fpre.Id).ValueGeneratedOnAdd().IsRequired();
             fpre.Property(fpre => fpre.PurchaseOrderNumber).IsRequired();
             fpre.Property(fpre => fpre.Quantity).IsRequired();
