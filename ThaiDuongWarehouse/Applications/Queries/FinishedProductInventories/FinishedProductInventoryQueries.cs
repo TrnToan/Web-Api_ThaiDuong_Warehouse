@@ -58,11 +58,11 @@ public class FinishedProductInventoryQueries : IFinishedProductInventoryQueries
 
         beforeQuantity = previousProductReceiptsQuantity - previousProductIssuesQuantity;
 
-        receivedQuantity = productIssueEntries
+        shippedQuantity = productIssueEntries
             .Where(e => e.Item.Id == item.Id)
             .Sum(p => p.Quantity);
 
-        shippedQuantity = productReceiptEntries
+        receivedQuantity = productReceiptEntries
             .Where(e => e.Item.Id == item.Id)
             .Sum(p => p.Quantity);
 
@@ -80,21 +80,25 @@ public class FinishedProductInventoryQueries : IFinishedProductInventoryQueries
         var previousProductReceiptEntries = await _productReceipts
             .Where(p => p.Timestamp < query.StartTime)
             .SelectMany(p => p.Entries)
+            .Include(e => e.Item)
             .ToListAsync();
 
         var previousProductIssueEntries = await _productIssues
             .Where(p => p.Timestamp < query.StartTime)
             .SelectMany(p => p.Entries)
+            .Include(e => e.Item)
             .ToListAsync();
 
         var productReceiptEntries = await _productReceipts
             .Where(p => p.Timestamp >= query.StartTime && p.Timestamp <= query.EndTime)
             .SelectMany(p => p.Entries)
+            .Include(e => e.Item)
             .ToListAsync();
 
         var productIssueEntries = await _productIssues
             .Where(p => p.Timestamp >= query.StartTime && p.Timestamp <= query.EndTime)
             .SelectMany(p => p.Entries)
+            .Include(e => e.Item)
             .ToListAsync();
 
         IQueryable<Item> items = _context.Items
@@ -110,7 +114,8 @@ public class FinishedProductInventoryQueries : IFinishedProductInventoryQueries
         {
             var log = await GetProductInventoryLog(item, previousProductIssueEntries, previousProductReceiptEntries,
                 productIssueEntries, productReceiptEntries);
-            logs.Add(log);
+            if (log.ReceivedQuantity != 0 || log.ShippedQuantity != 0)
+                logs.Add(log);
         }
 
         int totalNumOfEntries = logs.Count;
