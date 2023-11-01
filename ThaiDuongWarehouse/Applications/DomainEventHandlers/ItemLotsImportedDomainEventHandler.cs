@@ -22,4 +22,3 @@ public class ItemLotsImportedDomainEventHandler : INotificationHandler<ItemLotsI
         await Task.CompletedTask;
     }
 }
- 

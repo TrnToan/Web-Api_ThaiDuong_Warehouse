@@ -1,4 +1,6 @@
-﻿namespace ThaiDuongWarehouse.Api.Applications.Queries.GoodsReceipt;
+﻿using System.Diagnostics;
+
+namespace ThaiDuongWarehouse.Api.Applications.Queries.GoodsReceipt;
 
 public class GoodsReceiptQueries : IGoodsReceiptQueries
 {
@@ -29,24 +31,17 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
     {
         var goodsReceipts = await _goodsReceipts
             .ToListAsync();
-
         var goodsReceiptViewModels = _mapper.Map<IEnumerable<GoodsReceiptViewModel>>(goodsReceipts);
-        foreach (var goodsReceipt in goodsReceiptViewModels)
-        {
-            foreach (var receiptLot in goodsReceipt.Lots)
-            {
-                var itemLot = await _goodsIssueLots
-                .FirstOrDefaultAsync(il => il.GoodsIssueLotId == receiptLot.GoodsReceiptLotId);
 
-                if (itemLot is not null)
-                    receiptLot.IsExported = true;
-            }
-        }
-        return goodsReceiptViewModels;
+        var results = await Filter(goodsReceiptViewModels, _goodsIssueLots);
+        return results;
     }
 
     public async Task<IEnumerable<GoodsReceiptViewModel>> GetCompletedGoodsReceipts()
     {
+        var watch = new Stopwatch();
+        watch.Start();
+
         var goodsReceipts = await _goodsReceipts
             .Where(g => g.Lots
                 .All(lot => lot.ProductionDate != null &&
@@ -56,18 +51,11 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
             .ToListAsync();
 
         var goodsReceiptViewModels = _mapper.Map<IEnumerable<GoodsReceiptViewModel>>(goodsReceipts);
-        foreach (var goodsReceipt in goodsReceiptViewModels)
-        {
-            foreach (var receiptLot in goodsReceipt.Lots)
-            {
-                var itemLot = await _goodsIssueLots
-                .FirstOrDefaultAsync(il => il.GoodsIssueLotId == receiptLot.GoodsReceiptLotId);
+        var results = await Filter(goodsReceiptViewModels, _goodsIssueLots);
 
-                if (itemLot is not null)
-                    receiptLot.IsExported = true;
-            }
-        }
-        return goodsReceiptViewModels;
+        watch.Stop();
+        Console.WriteLine(watch.ElapsedMilliseconds);
+        return results;
     }
 
     public async Task<GoodsReceiptViewModel?> GetGoodsReceiptById(string goodsReceiptId)
@@ -135,17 +123,29 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
             .ToListAsync();
 
         var goodsReceiptViewModels = _mapper.Map<IEnumerable<GoodsReceiptViewModel>>(goodsReceipts);
-        foreach (var goodsReceipt in goodsReceiptViewModels)
+        var results = await Filter(goodsReceiptViewModels, _goodsIssueLots);
+        return results;
+    }
+
+    private static async Task<IEnumerable<GoodsReceiptViewModel>> Filter(IEnumerable<GoodsReceiptViewModel>? goodsReceipts, 
+        IQueryable<GoodsIssueLot> goodsIssueLots)
+    {
+        var goodsReceiptLotIds = goodsReceipts.SelectMany(gr => gr.Lots.Select(lot => lot.GoodsReceiptLotId))
+            .ToList();
+        var exportedGoodsIssueLots = await goodsIssueLots
+            .Where(il => goodsReceiptLotIds.Contains(il.GoodsIssueLotId))
+            .ToListAsync();
+
+        foreach (var goodsReceipt in goodsReceipts)
         {
             foreach (var receiptLot in goodsReceipt.Lots)
             {
-                var itemLot = await _goodsIssueLots
-                .FirstOrDefaultAsync(il => il.GoodsIssueLotId == receiptLot.GoodsReceiptLotId);
-
-                if (itemLot is not null)
+                if (exportedGoodsIssueLots.Exists(il => il.GoodsIssueLotId == receiptLot.GoodsReceiptLotId))
+                {
                     receiptLot.IsExported = true;
+                }
             }
         }
-        return goodsReceiptViewModels;
+        return goodsReceipts;
     }
 }

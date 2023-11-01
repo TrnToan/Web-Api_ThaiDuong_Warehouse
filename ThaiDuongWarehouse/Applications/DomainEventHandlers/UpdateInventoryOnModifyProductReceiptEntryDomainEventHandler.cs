@@ -45,11 +45,11 @@ public class UpdateInventoryOnModifyProductReceiptEntryDomainEventHandler : INot
 
                 if (newProductEntry is null)
                 {
-                    FinishedProductInventory productInventory = new FinishedProductInventory(notification.NewPurchaseOrderNumber,
+                    FinishedProductInventory productInventory = new(notification.NewPurchaseOrderNumber,
                     notification.NewQuantity, notification.Item);
 
                     await _finishedProductInventoryRepository.Add(productInventory);
-                    _service.Add(productInventory);
+                        _service.Add(productInventory);
                 }
                 else
                 {
