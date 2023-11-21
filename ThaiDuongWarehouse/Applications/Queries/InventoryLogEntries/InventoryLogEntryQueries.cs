@@ -47,10 +47,11 @@ public class InventoryLogEntryQueries : IInventoryLogEntryQueries
         double beforeQuantity, receivedQuantity, shippedQuantity, afterQuantity;        
         var itemViewModel = _mapper.Map<Item, ItemViewModel>(item); 
 
-        var filteredLogEntries = logEntries
+        var filteredLogEntries = logEntries           
             .Where(log =>
             log.TrackingTime >= query.StartTime &&
             log.TrackingTime <= query.EndTime)
+            .OrderBy(log => log.TrackingTime)
             .ToList();
 
         if (filteredLogEntries.Any())
@@ -65,7 +66,8 @@ public class InventoryLogEntryQueries : IInventoryLogEntryQueries
         else
         {
             var latestEntry = logEntries
-                .Find(log => log.TrackingTime < query.StartTime);
+                .OrderBy(log => log.TrackingTime)
+                .LastOrDefault(log => log.TrackingTime < query.StartTime);
 
             if (latestEntry is null)
             {

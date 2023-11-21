@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 
 namespace ThaiDuongWarehouse.Api.Applications.Queries.GoodsReceipt;
 
@@ -39,9 +40,6 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
 
     public async Task<IEnumerable<GoodsReceiptViewModel>> GetCompletedGoodsReceipts()
     {
-        var watch = new Stopwatch();
-        watch.Start();
-
         var goodsReceipts = await _goodsReceipts
             .Where(g => g.Lots
                 .All(lot => lot.ProductionDate != null &&
@@ -52,9 +50,6 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
 
         var goodsReceiptViewModels = _mapper.Map<IEnumerable<GoodsReceiptViewModel>>(goodsReceipts);
         var results = await Filter(goodsReceiptViewModels, _goodsIssueLots);
-
-        watch.Stop();
-        Console.WriteLine(watch.ElapsedMilliseconds);
         return results;
     }
 
@@ -138,12 +133,9 @@ public class GoodsReceiptQueries : IGoodsReceiptQueries
 
         foreach (var goodsReceipt in goodsReceipts)
         {
-            foreach (var receiptLot in goodsReceipt.Lots)
+            foreach (var receiptLot in goodsReceipt.Lots.Where(receiptLot => exportedGoodsIssueLots.Exists(il => il.GoodsIssueLotId == receiptLot.GoodsReceiptLotId)))
             {
-                if (exportedGoodsIssueLots.Exists(il => il.GoodsIssueLotId == receiptLot.GoodsReceiptLotId))
-                {
-                    receiptLot.IsExported = true;
-                }
+                receiptLot.IsExported = true;
             }
         }
         return goodsReceipts;

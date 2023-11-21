@@ -1,5 +1,4 @@
 using System.Reflection;
-using ThaiDuongWarehouse.Api.Applications.DomainEventHandlers.DataTransactionServices;
 using ThaiDuongWarehouse.Api.Applications.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
