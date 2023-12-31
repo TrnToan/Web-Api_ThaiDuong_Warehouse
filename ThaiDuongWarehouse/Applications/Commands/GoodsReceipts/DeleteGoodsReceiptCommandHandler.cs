@@ -11,7 +11,7 @@ public class DeleteGoodsReceiptCommandHandler : IRequestHandler<DeleteGoodsRecei
 
     public async Task<bool> Handle(DeleteGoodsReceiptCommand request, CancellationToken cancellationToken)
     {
-        var removedGoodsReceipt = await _goodsReceiptRepository.GetGoodsReceiptById(request.GoodsReceiptId);
+        var removedGoodsReceipt = await _goodsReceiptRepository.GetGoodsReceiptByGoodsReceiptId(request.GoodsReceiptId);
         if (removedGoodsReceipt is null)
         {
             throw new EntityNotFoundException(nameof(GoodsReceipt), request.GoodsReceiptId);

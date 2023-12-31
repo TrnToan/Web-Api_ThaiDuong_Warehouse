@@ -1,4 +1,6 @@
-﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductIssueAggregate;
+﻿using ThaiDuongWarehouse.Domain.DomainEvents.FinishedProductIssueEvents;
+
+namespace ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductIssueAggregate;
 public class FinishedProductIssue : Entity, IAggregateRoot
 {
     public string FinishedProductIssueId { get; private set; }

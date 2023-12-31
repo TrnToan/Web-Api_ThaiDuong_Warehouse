@@ -13,7 +13,7 @@ public class RemoveGoodsReceiptLotsCommandHandler : IRequestHandler<RemoveGoodsR
 
     public async Task<bool> Handle(RemoveGoodsReceiptLotsCommand request, CancellationToken cancellationToken)
     {
-        var goodsReceipt = await _goodsReceiptRepository.GetGoodsReceiptById(request.GoodsReceiptId);
+        var goodsReceipt = await _goodsReceiptRepository.GetGoodsReceiptByGoodsReceiptId(request.GoodsReceiptId);
         if (goodsReceipt is null)
         {
             throw new EntityNotFoundException($"GoodsReceipt with {request.GoodsReceiptId} doesn't exist");

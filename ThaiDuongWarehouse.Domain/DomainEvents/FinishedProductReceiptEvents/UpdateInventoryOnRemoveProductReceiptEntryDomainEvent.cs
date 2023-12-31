@@ -1,4 +1,4 @@
-﻿namespace ThaiDuongWarehouse.Domain.DomainEvents;
+﻿namespace ThaiDuongWarehouse.Domain.DomainEvents.FinishedProductReceiptEvents;
 public class UpdateInventoryOnRemoveProductReceiptEntryDomainEvent : INotification
 {
     public Item Item { get; private set; }

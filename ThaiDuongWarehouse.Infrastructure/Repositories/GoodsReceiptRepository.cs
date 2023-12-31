@@ -14,7 +14,7 @@ public class GoodsReceiptRepository : BaseRepository, IGoodsReceiptRepository
             return goodsReceipt;
     }
 
-    public async Task<GoodsReceipt?> GetGoodsReceiptById(string goodsReceiptId)
+    public async Task<GoodsReceipt?> GetGoodsReceiptByGoodsReceiptId(string goodsReceiptId)
     {
         return await _context.GoodsReceipts
             .Include(gr => gr.Lots)
@@ -29,5 +29,19 @@ public class GoodsReceiptRepository : BaseRepository, IGoodsReceiptRepository
     public void Remove(GoodsReceipt goodsReceipt)
     {
         _context.GoodsReceipts.Remove(goodsReceipt);
+    }
+
+    public async Task<GoodsReceiptLot?> GetGoodsReceiptLotById(string goodsReceiptLotId)
+    {
+        return await _context.GoodsReceipts
+            .AsNoTracking()
+            .SelectMany(gr => gr.Lots)
+            .FirstOrDefaultAsync(lot => lot.GoodsReceiptLotId == goodsReceiptLotId);
+    }
+
+    public async Task<GoodsReceipt?> GetGoodsReceiptById(int id)
+    {
+        return await _context.GoodsReceipts
+            .FirstOrDefaultAsync(gr => gr.Id == id);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
+﻿using ThaiDuongWarehouse.Domain.DomainEvents.GoodsReceiptEvents;
+
+namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers.GoodsReceiptEventHandlers;
 
 public class ItemLotsImportedDomainEventHandler : INotificationHandler<ItemLotsImportedDomainEvent>
 {

@@ -1,4 +1,6 @@
-﻿namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
+﻿using ThaiDuongWarehouse.Domain.DomainEvents.FinishedProductIssueEvents;
+
+namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers.FinishedProductIssueEventHandlers;
 
 public class UpdateInventoryOnCreateProductIssueDomainEventHandler : INotificationHandler<UpdateInventoryOnCreateProductIssueDomainEvent>
 {
@@ -27,7 +29,7 @@ public class UpdateInventoryOnCreateProductIssueDomainEventHandler : INotificati
             _finishedProductInventoryRepository.Remove(productInventory);
         }
         else if (productInventory.Quantity < 0)
-            throw new InvalidProductIssueQuantityException(notification.Item.ItemId, notification.Item.Unit, 
+            throw new InvalidProductIssueQuantityException(notification.Item.ItemId, notification.Item.Unit,
                 notification.PurchaseOrderNumber, productInventoryQuantity, notification.Quantity);
 
         else

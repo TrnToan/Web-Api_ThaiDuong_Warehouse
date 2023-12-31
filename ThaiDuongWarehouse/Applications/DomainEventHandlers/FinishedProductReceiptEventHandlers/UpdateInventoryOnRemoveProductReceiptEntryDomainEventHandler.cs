@@ -1,4 +1,6 @@
-﻿namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
+﻿using ThaiDuongWarehouse.Domain.DomainEvents.FinishedProductReceiptEvents;
+
+namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers.FinishedProductReceiptEventHandlers;
 
 public class UpdateInventoryOnRemoveProductReceiptEntryDomainEventHandler : INotificationHandler<UpdateInventoryOnRemoveProductReceiptEntryDomainEvent>
 {
@@ -14,7 +16,7 @@ public class UpdateInventoryOnRemoveProductReceiptEntryDomainEventHandler : INot
         var productInventory = await _finishedProductInventoryRepository.GetFinishedProductInventory(
             notification.Item.ItemId, notification.Item.Unit, notification.PurchaseOrderNumber);
 
-        if (productInventory is null) 
+        if (productInventory is null)
         {
             throw new EntityNotFoundException(nameof(FinishedProductReceiptEntry), notification.Item.ItemId + " with PO " + notification.Item.Unit);
         }

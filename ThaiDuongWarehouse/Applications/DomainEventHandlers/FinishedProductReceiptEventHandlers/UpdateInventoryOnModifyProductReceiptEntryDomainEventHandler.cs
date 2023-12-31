@@ -1,6 +1,7 @@
 ﻿using ThaiDuongWarehouse.Domain.AggregateModels.ProductInventoryAggregate;
+using ThaiDuongWarehouse.Domain.DomainEvents.FinishedProductReceiptEvents;
 
-namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
+namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers.FinishedProductReceiptEventHandlers;
 
 public class UpdateInventoryOnModifyProductReceiptEntryDomainEventHandler : INotificationHandler<UpdateInventoryOnModifyProductReceiptEntryDomainEvent>
 {
@@ -22,7 +23,7 @@ public class UpdateInventoryOnModifyProductReceiptEntryDomainEventHandler : INot
                 notification.Item.Unit, notification.OldPurchaseOrderNumber);
 
         var newProductEntry = await _finishedProductInventoryRepository.GetFinishedProductInventory(notification.Item.ItemId,
-            notification.Item.Unit, notification.NewPurchaseOrderNumber);      
+            notification.Item.Unit, notification.NewPurchaseOrderNumber);
 
         if (oldProductEntry is null)
         {
@@ -40,7 +41,7 @@ public class UpdateInventoryOnModifyProductReceiptEntryDomainEventHandler : INot
 
             if (newProductEntry is null)
             {
-                newProductEntry = _service.GetInventory(notification.Item.ItemId, notification.Item.Unit, 
+                newProductEntry = _service.GetInventory(notification.Item.ItemId, notification.Item.Unit,
                     notification.NewPurchaseOrderNumber);
 
                 if (newProductEntry is null)
@@ -49,7 +50,7 @@ public class UpdateInventoryOnModifyProductReceiptEntryDomainEventHandler : INot
                     notification.NewQuantity, notification.Item);
 
                     await _finishedProductInventoryRepository.Add(productInventory);
-                        _service.Add(productInventory);
+                    _service.Add(productInventory);
                 }
                 else
                 {
@@ -73,7 +74,7 @@ public class UpdateInventoryOnModifyProductReceiptEntryDomainEventHandler : INot
                 newProductEntry.UpdateQuantity(changedQuantity);
                 if (!existedProductEntryFlag)
                     _finishedProductInventoryRepository.Update(newProductEntry);
-            }                
+            }
             else
             {
                 oldProductEntry.UpdateQuantity(changedQuantity);

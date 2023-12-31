@@ -32,6 +32,11 @@ public class GoodsIssueRepository : BaseRepository, IGoodsIssueRepository
         throw new NotImplementedException();
     }
 
+    public void Remove(GoodsIssue goodsIssue)
+    {
+        _context.GoodsIssues.Remove(goodsIssue);
+    }
+
     public GoodsIssue Update(GoodsIssue goodsIssue)
     {
         return _context.GoodsIssues.Update(goodsIssue).Entity;

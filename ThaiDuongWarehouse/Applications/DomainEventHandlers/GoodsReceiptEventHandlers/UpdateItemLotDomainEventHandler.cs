@@ -1,4 +1,6 @@
-﻿namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
+﻿using ThaiDuongWarehouse.Domain.DomainEvents.GoodsReceiptEvents;
+
+namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers.GoodsReceiptEventHandlers;
 
 public class UpdateItemLotDomainEventHandler : INotificationHandler<UpdateItemLotDomainEvent>
 {
@@ -11,7 +13,7 @@ public class UpdateItemLotDomainEventHandler : INotificationHandler<UpdateItemLo
 
     public async Task Handle(UpdateItemLotDomainEvent notification, CancellationToken cancellationToken)
     {
-        var itemLot = await _itemLotRepository.GetLotByLotId(notification.OldItemLotId);     
+        var itemLot = await _itemLotRepository.GetLotByLotId(notification.OldItemLotId);
 
         if (itemLot is null)
         {

@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace ThaiDuongWarehouse.Domain.AggregateModels.GoodsIssueAggregate;
+﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.GoodsIssueAggregate;
 public class GoodsIssue : Entity, IAggregateRoot
 {
     public string GoodsIssueId { get; private set; }
@@ -20,6 +18,7 @@ public class GoodsIssue : Entity, IAggregateRoot
         Entries = new List<GoodsIssueEntry>();
         EmployeeId = employeeId;
     }
+
     public void AddEntry(Item item, double requestedQuantity)
     {
         var newEntry = new GoodsIssueEntry(item, requestedQuantity);
@@ -32,6 +31,7 @@ public class GoodsIssue : Entity, IAggregateRoot
         }
         Entries.Add(newEntry);
     }
+
     public void UpdateEntry(string itemId, string unit, double quantity)
     {
         var entry = Entries.SingleOrDefault(entry => entry.Item.ItemId == itemId && entry.Item.Unit == unit);
@@ -41,6 +41,17 @@ public class GoodsIssue : Entity, IAggregateRoot
         }
         entry.UpdateEntry(quantity);
     }
+
+    public void RemoveEntry(string itemId, string unit)
+    {
+        var entry = Entries.SingleOrDefault(entry => entry.Item.ItemId == itemId && entry.Item.Unit == unit);
+        if (entry == null)
+        {
+            throw new WarehouseDomainException($"Entry having item {itemId} with unit {unit} doesn't exist in the current GoodsIssue.");
+        }
+        Entries.Remove(entry);
+    }
+
     public void Addlot(string itemId, string unit, GoodsIssueLot lot) 
     {
         var entry = Entries.Find(e => e.Item.ItemId == itemId && e.Item.Unit == unit);
@@ -74,11 +85,9 @@ public class GoodsIssue : Entity, IAggregateRoot
 
         if (removedLots.Count > 0)
         {
-            AddDomainEvent(new ItemLotExportedDomainEvent(removedLots));
+            AddDomainEvent(new ItemLotsExportedDomainEvent(removedLots));
         }
 
-        //var watch = new Stopwatch();
-        //watch.Start();
         foreach (GoodsIssueEntry entry in Entries)
         {
             foreach (GoodsIssueLot lot in entry.Lots)
@@ -91,25 +100,14 @@ public class GoodsIssue : Entity, IAggregateRoot
                 }
             }
         }
-        //var domainEvents = Entries.SelectMany(entry =>
-        //    entry.Lots.Where(lot => itemLots.Exists(newLot => newLot.LotId == lot.GoodsIssueLotId))
-        //    .Select(lot =>
-        //        new InventoryLogEntryAddedDomainEvent(
-        //            lot.GoodsIssueLotId,
-        //            -lot.Quantity,
-        //            0,
-        //            lot.Quantity,
-        //            entry.Item.Id,
-        //            Timestamp
-        //        )
-        //    )
-        //);
+    }
 
-        //foreach (var domainEvent in domainEvents)
-        //{
-        //    AddDomainEvent(domainEvent);
-        //}
-        //watch.Stop();
-        //Console.WriteLine("It take " + watch.ElapsedMilliseconds + " ms to run.");
+    public void RestoreGoodsIssueLots(GoodsIssueEntry entry, IEnumerable<GoodsIssueLot> goodsIssueLots, List<ItemLot> restoredItemLots, List<ItemLot> existingItemLots)
+    {
+        AddDomainEvent(new RestoreIssueLotsDomainEvent(existingItemLots, restoredItemLots));
+        foreach (var lot in goodsIssueLots)
+        {
+            AddDomainEvent(new DeleteInventoryLogEntryDomainEvent(entry.ItemId, lot.GoodsIssueLotId, Timestamp));
+        }
     }
 }

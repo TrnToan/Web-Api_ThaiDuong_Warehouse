@@ -14,3 +14,4 @@ global using ThaiDuongWarehouse.Domain.DomainEvents;
 global using ThaiDuongWarehouse.Domain.Exceptions;
 global using ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate;
 global using ThaiDuongWarehouse.Domain.AggregateModels;
+global using ThaiDuongWarehouse.Domain.DomainEvents.GoodsIssueEvents;

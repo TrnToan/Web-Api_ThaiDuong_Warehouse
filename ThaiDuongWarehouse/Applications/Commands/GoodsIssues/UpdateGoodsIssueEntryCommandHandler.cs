@@ -21,7 +21,7 @@ public class UpdateGoodsIssueEntryCommandHandler : IRequestHandler<UpdateGoodsIs
         foreach (var entry in request.Entries)
         {
             goodsIssue.UpdateEntry(entry.ItemId, entry.Unit, entry.RequestedQuantity);
-        }      
+        }
 
         _goodsIssueRepository.Update(goodsIssue);
         return await _goodsIssueRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);

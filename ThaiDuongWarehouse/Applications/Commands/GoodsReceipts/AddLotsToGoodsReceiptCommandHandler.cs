@@ -16,7 +16,7 @@ public class AddLotsToGoodsReceiptCommandHandler : IRequestHandler<AddLotsToGood
 
     public async Task<bool> Handle(AddLotsToGoodsReceiptCommand request, CancellationToken cancellationToken)
     {
-        var goodsReceipt = await _goodsReceiptRepository.GetGoodsReceiptById(request.GoodsReceiptId);
+        var goodsReceipt = await _goodsReceiptRepository.GetGoodsReceiptByGoodsReceiptId(request.GoodsReceiptId);
         if (goodsReceipt is null)
         {
             throw new EntityNotFoundException(nameof(GoodsReceipt), request.GoodsReceiptId);

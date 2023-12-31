@@ -1,4 +1,4 @@
-﻿namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
+﻿namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers.GoodsReceiptEventHandlers;
 
 public class RemoveItemLotsDomainEventHandler : INotificationHandler<RemoveItemLotsDomainEvent>
 {

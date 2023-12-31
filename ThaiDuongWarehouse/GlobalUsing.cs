@@ -41,3 +41,5 @@ global using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductInventoryA
 global using ThaiDuongWarehouse.Api.Applications.Queries.FinishedProductInventories;
 global using ThaiDuongWarehouse.Api.Applications.ErrorNotifications;
 global using ThaiDuongWarehouse.Api.Applications.DomainEventHandlers.DataTransactionServices;
+global using ThaiDuongWarehouse.Domain.DomainEvents.GoodsIssueEvents;
+global using ThaiDuongWarehouse.Domain.DomainEvents.GoodsReceiptEvents;

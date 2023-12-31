@@ -18,7 +18,7 @@ public class UpdateGoodsReceiptCommandHandler : IRequestHandler<UpdateGoodsRecei
 
     public async Task<bool> Handle(UpdateGoodsReceiptCommand request, CancellationToken cancellationToken)
     {
-        var goodsReceipt = await _goodsReceiptRepository.GetGoodsReceiptById(request.GoodsReceiptId);
+        var goodsReceipt = await _goodsReceiptRepository.GetGoodsReceiptByGoodsReceiptId(request.GoodsReceiptId);
         if (goodsReceipt is null)
         {
             throw new EntityNotFoundException($"GoodsReceipt with Id {request.GoodsReceiptId} doesn't exist.");

@@ -36,18 +36,6 @@ public class ItemLotQueries : IItemLotQueries
         return viewModel;
     }
 
-    public async Task<IEnumerable<ItemLotViewModel>> GetItemLotsByItemId(DateTime timestamp, string itemId)
-    {
-        var itemLots = await _itemLots
-            .Where(il => il.Item.ItemId == itemId)
-            .Where(il => il.Timestamp <= timestamp)
-            .Where(il => !il.IsIsolated)
-            .ToListAsync();
-
-        var viewModels = _mapper.Map<IEnumerable<ItemLot>, IEnumerable<ItemLotViewModel>>(itemLots);
-        return viewModels;
-    }
-
     public async Task<IEnumerable<ItemLotViewModel>> GetAll()
     {
         List<ItemLot> itemlots = await _itemLots

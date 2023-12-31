@@ -20,6 +20,12 @@ public class InventoryLogEntryService
         Entries.AddRange(entries);
     }
 
+    public void ReplaceEntries(IEnumerable<InventoryLogEntry> entries)
+    {
+        Entries = new();
+        Entries.AddRange(entries);
+    }
+
     public InventoryLogEntry? FindLatestServiceEntry(int itemId)
     {
         return Entries.LastOrDefault(e => e.ItemId == itemId);

@@ -1,4 +1,6 @@
-﻿namespace ThaiDuongWarehouse.Api.Applications.Queries.InventoryLogEntries;
+﻿using System.Diagnostics;
+
+namespace ThaiDuongWarehouse.Api.Applications.Queries.InventoryLogEntries;
 
 public class InventoryLogEntryQueries : IInventoryLogEntryQueries
 {
@@ -45,19 +47,20 @@ public class InventoryLogEntryQueries : IInventoryLogEntryQueries
         Item item, TimeRangeQuery query)
     {
         double beforeQuantity, receivedQuantity, shippedQuantity, afterQuantity;        
-        var itemViewModel = _mapper.Map<Item, ItemViewModel>(item); 
+        var itemViewModel = _mapper.Map<Item, ItemViewModel>(item);
 
-        var filteredLogEntries = logEntries           
+        var sortedLogEntries = logEntries
+            .OrderBy(log => log.TrackingTime);
+
+        var filteredLogEntries = sortedLogEntries
             .Where(log =>
             log.TrackingTime >= query.StartTime &&
-            log.TrackingTime <= query.EndTime)
-            .OrderBy(log => log.TrackingTime)
-            .ToList();
+            log.TrackingTime <= query.EndTime);
 
         if (filteredLogEntries.Any())
         {
-            beforeQuantity = filteredLogEntries[0].BeforeQuantity;
-            afterQuantity = filteredLogEntries[^1].BeforeQuantity + filteredLogEntries[^1].ChangedQuantity;
+            beforeQuantity = filteredLogEntries.First().BeforeQuantity;
+            afterQuantity = filteredLogEntries.Last().BeforeQuantity + filteredLogEntries.Last().ChangedQuantity;
             receivedQuantity = filteredLogEntries
                 .Sum(log => log.ReceivedQuantity);
             shippedQuantity = filteredLogEntries
@@ -65,8 +68,7 @@ public class InventoryLogEntryQueries : IInventoryLogEntryQueries
         }
         else
         {
-            var latestEntry = logEntries
-                .OrderBy(log => log.TrackingTime)
+            var latestEntry = sortedLogEntries
                 .LastOrDefault(log => log.TrackingTime < query.StartTime);
 
             if (latestEntry is null)

@@ -24,16 +24,6 @@ public class InventoryLogEntry : Entity, IAggregateRoot
         TrackingTime = DateTime.UtcNow.AddHours(7);
     }
 
-    public InventoryLogEntry(DateTime timestamp, string? itemLotId, double beforeQuantity, double changedQuantity, Item item)
-    {
-        Timestamp = timestamp;
-        ItemLotId = itemLotId;
-        BeforeQuantity = beforeQuantity;
-        ChangedQuantity = changedQuantity;
-        Item = item;
-        TrackingTime = DateTime.UtcNow.AddHours(7);
-    }
-
     public void ModifyLogEntry(string newLotId)
     {
         ItemLotId = newLotId;

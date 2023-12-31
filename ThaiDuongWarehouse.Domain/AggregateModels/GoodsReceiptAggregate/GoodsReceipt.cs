@@ -1,4 +1,6 @@
-﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate;
+﻿using ThaiDuongWarehouse.Domain.DomainEvents.GoodsReceiptEvents;
+
+namespace ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate;
 public class GoodsReceipt : Entity, IAggregateRoot
 {
     public string GoodsReceiptId { get; private set; }
@@ -85,7 +87,7 @@ public class GoodsReceipt : Entity, IAggregateRoot
         {
             double receivedQuantity = lot.Quantity;
             AddDomainEvent(new InventoryLogEntryAddedDomainEvent(lot.LotId, lot.Quantity, receivedQuantity, 0, 
-                lot.ItemId, lot.Timestamp));
+                lot.ItemId, Timestamp));
         }
     }
 }

@@ -20,18 +20,6 @@ public class InventoryLogEntryRepository : BaseRepository, IInventoryLogEntryRep
         _context.InventoryLogEntries.UpdateRange(entries);
     }
 
-    public async Task<IEnumerable<InventoryLogEntry>> GetByItem(string itemId)
-    {
-        return await _context.InventoryLogEntries
-            .Where(log => log.Item.ItemId == itemId)
-            .ToListAsync();
-    }
-
-    public Task<IEnumerable<InventoryLogEntry>> GetByTime(DateTime startTime, DateTime endTime)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<List<InventoryLogEntry>> GetLatestLogEntries(int itemId, DateTime timestamp)
     {
         return await _context.InventoryLogEntries
@@ -62,13 +50,6 @@ public class InventoryLogEntryRepository : BaseRepository, IInventoryLogEntryRep
             .Where(log => log.TrackingTime < trackingTime)
             .OrderBy(log => log.TrackingTime)
             .LastOrDefaultAsync(log => log.ItemId == itemId);
-    }
-
-    public async Task<InventoryLogEntry?> GetFinishedProductLogEntry(int itemId, string PO, DateTime timestamp)
-    {
-        return await _context.InventoryLogEntries
-            .Where(log => log.Timestamp == timestamp)
-            .SingleOrDefaultAsync(log => log.ItemId == itemId && log.ItemLotId == PO);
     }
 
     public void Delete(InventoryLogEntry logEntry)

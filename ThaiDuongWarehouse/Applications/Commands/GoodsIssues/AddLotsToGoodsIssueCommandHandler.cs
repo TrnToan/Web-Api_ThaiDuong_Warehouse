@@ -9,7 +9,7 @@ public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsI
     private readonly IItemLotRepository _itemLotRepository;
     private readonly IStorageRepository _storageRepository;
 
-    public AddLotsToGoodsIssueCommandHandler(IGoodsIssueRepository goodsIssueRepository, IEmployeeRepository employeeRepository, 
+    public AddLotsToGoodsIssueCommandHandler(IGoodsIssueRepository goodsIssueRepository, IEmployeeRepository employeeRepository,
         IItemLotRepository itemLotRepository, IStorageRepository storageRepository)
     {
         _goodsIssueRepository = goodsIssueRepository;
@@ -28,17 +28,17 @@ public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsI
         }
 
         List<CreateGoodsIssueLotViewModel> newGoodsIssueLots = new();
-        IEnumerable<GoodsIssueLot> existedGoodsIssueLots = goodsIssue.Entries.SelectMany(entry => entry.Lots);
-        if (existedGoodsIssueLots is not null)
+        IEnumerable<GoodsIssueLot> existingGoodsIssueLots = goodsIssue.Entries.SelectMany(entry => entry.Lots);
+        if (existingGoodsIssueLots.Any())
         {
             foreach (var lot in request.GoodsIssueLots)
             {
-                var existedLot = existedGoodsIssueLots.FirstOrDefault(l => l.GoodsIssueLotId == lot.GoodsIssueLotId);
+                var existedLot = existingGoodsIssueLots.FirstOrDefault(l => l.GoodsIssueLotId == lot.GoodsIssueLotId);
                 if (existedLot is null)
                     newGoodsIssueLots.Add(lot);
             }
         }
-        
+
         if (newGoodsIssueLots.Count == 0)
         {
             newGoodsIssueLots = request.GoodsIssueLots;
@@ -46,7 +46,7 @@ public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsI
 
         List<ItemLot> dispatchedItemLots = new();
 
-        foreach(var lotViewmodel in newGoodsIssueLots)
+        foreach (var lotViewmodel in newGoodsIssueLots)
         {
             var employee = await _employeeRepository.GetEmployeeById(lotViewmodel.EmployeeId);
             if (employee is null)
@@ -63,11 +63,11 @@ public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsI
             {
                 throw new EntityNotFoundException($"Itemlot with id {lotViewmodel.GoodsIssueLotId} is isolated.");
             }
-            
+
             double quantity = lotViewmodel.ItemLotLocations.Sum(sub => sub.QuantityPerLocation);
 
             GoodsIssueLot goodsIssueLot = await CreateGoodsIssueLotAsync(lotViewmodel, quantity, employee.Id, itemLot);
-            goodsIssue.Addlot(lotViewmodel.ItemId, lotViewmodel.Unit, goodsIssueLot);          
+            goodsIssue.Addlot(lotViewmodel.ItemId, lotViewmodel.Unit, goodsIssueLot);
 
             dispatchedItemLots.Add(itemLot);
         }
@@ -77,10 +77,10 @@ public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsI
         return await _goodsIssueRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
     }
 
-    private async Task<GoodsIssueLot> CreateGoodsIssueLotAsync(CreateGoodsIssueLotViewModel lotVM, double quantity, 
+    private async Task<GoodsIssueLot> CreateGoodsIssueLotAsync(CreateGoodsIssueLotViewModel lotVM, double quantity,
         int employeeId, ItemLot itemLot)
     {
-        List<GoodsIssueSublot> goodsIssueSublots = new ();
+        List<GoodsIssueSublot> goodsIssueSublots = new();
 
         if (lotVM.ItemLotLocations is null)
         {
@@ -100,10 +100,10 @@ public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsI
                 throw new EntityNotFoundException($"Cannot found itemlot {itemLot.LotId} with locationId {sub.LocationId}");
             }
 
-            GoodsIssueSublot sublot = new (sub.LocationId, sub.QuantityPerLocation);
+            GoodsIssueSublot sublot = new(sub.LocationId, sub.QuantityPerLocation);
             goodsIssueSublots.Add(sublot);
         }
-        GoodsIssueLot goodsIssueLot = new (lotVM.GoodsIssueLotId, quantity, lotVM.Note, employeeId, goodsIssueSublots);
+        GoodsIssueLot goodsIssueLot = new(lotVM.GoodsIssueLotId, quantity, lotVM.Note, employeeId, goodsIssueSublots);
 
         return goodsIssueLot;
     }

@@ -1,4 +1,6 @@
-﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductReceiptAggregate;
+﻿using ThaiDuongWarehouse.Domain.DomainEvents.FinishedProductReceiptEvents;
+
+namespace ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductReceiptAggregate;
 public class FinishedProductReceipt : Entity, IAggregateRoot
 {
     public string FinishedProductReceiptId { get; private set; }

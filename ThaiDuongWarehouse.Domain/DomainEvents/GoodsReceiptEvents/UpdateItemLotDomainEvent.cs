@@ -1,14 +1,14 @@
-﻿namespace ThaiDuongWarehouse.Domain.DomainEvents;
+﻿namespace ThaiDuongWarehouse.Domain.DomainEvents.GoodsReceiptEvents;
 public class UpdateItemLotDomainEvent : INotification
 {
     public string OldItemLotId { get; private set; }
     public string? NewItemLotId { get; private set; }
-    public List<ItemLotLocation>? ItemLotLocations { get; private set; }             
+    public List<ItemLotLocation>? ItemLotLocations { get; private set; }
     public double Quantity { get; private set; }
     public DateTime? ProductionDate { get; private set; }
     public DateTime? ExpirationDate { get; private set; }
 
-    public UpdateItemLotDomainEvent(string oldItemLotId, string? newItemLotId, List<ItemLotLocation>? itemLotLocations, 
+    public UpdateItemLotDomainEvent(string oldItemLotId, string? newItemLotId, List<ItemLotLocation>? itemLotLocations,
         double quantity, DateTime? productionDate, DateTime? expirationDate)
     {
         OldItemLotId = oldItemLotId;

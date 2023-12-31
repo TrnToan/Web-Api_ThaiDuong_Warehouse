@@ -8,7 +8,7 @@ public class ItemLot : Entity, IAggregateRoot
     public DateTime? ExpirationDate { get; private set; }
     public bool IsIsolated { get; private set; } = false;
     public int ItemId { get; private set; }                 // ForeignKey
-    public List<ItemLotLocation> ItemLotLocations { get; private set; }
+    public List<ItemLotLocation> ItemLotLocations { get; private set; } = new List<ItemLotLocation>();
     public Item Item { get; private set; }
 
     public ItemLot(string lotId, int itemId, double quantity, DateTime timestamp,
@@ -28,7 +28,6 @@ public class ItemLot : Entity, IAggregateRoot
         Quantity = quantity;
         Timestamp = timestamp;
         ItemId = itemId;
-        ItemLotLocations = new List<ItemLotLocation>();
     }
 
     public void SetQuantity(double quantity)
@@ -72,7 +71,7 @@ public class ItemLot : Entity, IAggregateRoot
         {
             throw new WarehouseDomainException($"ItemLotLocation not found.");
         }
-        subItemLot.UpdateQuantity(quantityPerLocation);
+        subItemLot.SetQuantity(quantityPerLocation);
     }
     public static void Reject(ItemLot lot)
     {

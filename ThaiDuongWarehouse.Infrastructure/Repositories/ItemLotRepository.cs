@@ -52,4 +52,9 @@ public class ItemLotRepository : BaseRepository, IItemLotRepository
     {
         _context.ItemLots.Update(itemLot);
     }
+
+    public void UpdateLots(IEnumerable<ItemLot> itemLots)
+    {
+        _context.ItemLots.UpdateRange(itemLots);
+    }
 }

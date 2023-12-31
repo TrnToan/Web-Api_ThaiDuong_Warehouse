@@ -1,6 +1,6 @@
 ﻿using ThaiDuongWarehouse.Domain.AggregateModels.GoodsIssueAggregate;
 
-namespace ThaiDuongWarehouse.Domain.DomainEvents;
+namespace ThaiDuongWarehouse.Domain.DomainEvents.GoodsIssueEvents;
 public class ItemLotInformationChangedDomainEvent : INotification
 {
     public ItemLot ItemLot { get; private set; }

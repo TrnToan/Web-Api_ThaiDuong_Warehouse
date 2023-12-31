@@ -1,4 +1,4 @@
-﻿namespace ThaiDuongWarehouse.Domain.DomainEvents;
+﻿namespace ThaiDuongWarehouse.Domain.DomainEvents.FinishedProductReceiptEvents;
 public class UpdateInventoryOnCreateProductReceiptDomainEvent : INotification
 {
     public string PurchaseOrderNumber { get; private set; }
@@ -6,7 +6,7 @@ public class UpdateInventoryOnCreateProductReceiptDomainEvent : INotification
     public DateTime Timestamp { get; private set; }
     public Item Item { get; private set; }
 
-    public UpdateInventoryOnCreateProductReceiptDomainEvent(string purchaseOrderNumber, double quantity, DateTime timestamp, 
+    public UpdateInventoryOnCreateProductReceiptDomainEvent(string purchaseOrderNumber, double quantity, DateTime timestamp,
         Item item)
     {
         PurchaseOrderNumber = purchaseOrderNumber;

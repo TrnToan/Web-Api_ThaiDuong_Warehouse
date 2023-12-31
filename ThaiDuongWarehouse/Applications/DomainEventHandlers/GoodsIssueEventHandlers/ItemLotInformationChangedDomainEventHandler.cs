@@ -1,6 +1,7 @@
 ﻿using ThaiDuongWarehouse.Domain.AggregateModels;
+using ThaiDuongWarehouse.Domain.DomainEvents.GoodsIssueEvents;
 
-namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
+namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers.GoodsIssueEventHandlers;
 
 public class ItemLotInformationChangedDomainEventHandler : INotificationHandler<ItemLotInformationChangedDomainEvent>
 {

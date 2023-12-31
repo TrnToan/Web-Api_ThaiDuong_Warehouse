@@ -22,10 +22,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<WarehouseDbContext>(opt =>
 {
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("CloudConnect"), b => 
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("LocalConnect"), b => 
     {
         b.MigrationsAssembly("ThaiDuongWarehouse.Api");
-        b.EnableRetryOnFailure(1, TimeSpan.FromSeconds(4), null);
+        b.EnableRetryOnFailure(2, TimeSpan.FromSeconds(4), null);
     });
     opt.EnableSensitiveDataLogging();
 });

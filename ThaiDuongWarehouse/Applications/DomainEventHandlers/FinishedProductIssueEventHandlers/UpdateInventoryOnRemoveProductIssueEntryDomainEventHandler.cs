@@ -1,6 +1,7 @@
 ﻿using ThaiDuongWarehouse.Domain.AggregateModels.ProductInventoryAggregate;
+using ThaiDuongWarehouse.Domain.DomainEvents.FinishedProductIssueEvents;
 
-namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers;
+namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers.FinishedProductIssueEventHandlers;
 
 public class UpdateInventoryOnRemoveProductIssueEntryDomainEventHandler : INotificationHandler<UpdateInventoryOnRemoveProductIssueEntryDomainEvent>
 {
@@ -17,7 +18,7 @@ public class UpdateInventoryOnRemoveProductIssueEntryDomainEventHandler : INotif
             notification.Item.Unit, notification.PurchaseOrderNumber);
         if (productInventory is null)
         {
-            var restoreProductInventory = new FinishedProductInventory(notification.PurchaseOrderNumber, notification.Quantity, 
+            var restoreProductInventory = new FinishedProductInventory(notification.PurchaseOrderNumber, notification.Quantity,
                 notification.Item);
 
             await _finishedProductInventoryRepository.Add(restoreProductInventory);
@@ -27,6 +28,6 @@ public class UpdateInventoryOnRemoveProductIssueEntryDomainEventHandler : INotif
             productInventory.UpdateQuantity(notification.Quantity);
             _finishedProductInventoryRepository.Update(productInventory);
         }
-        await Task.CompletedTask; 
+        await Task.CompletedTask;
     }
 }
