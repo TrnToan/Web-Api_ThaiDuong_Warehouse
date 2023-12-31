@@ -1,4 +1,5 @@
-﻿using ThaiDuongWarehouse.Domain.DomainEvents.GoodsReceiptEvents;
+﻿using ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate;
+using ThaiDuongWarehouse.Domain.DomainEvents.GoodsReceiptEvents;
 
 namespace ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate;
 public class GoodsReceipt : Entity, IAggregateRoot
@@ -70,9 +71,12 @@ public class GoodsReceipt : Entity, IAggregateRoot
         AddDomainEvent(new UpdateInventoryLogEntriesDomainEvent(lotId, changedQuantity, receivedQuantity, shippedQuantity, itemId, timestamp));
     }
 
-    public void DeletedGoodsReceiptLotLogEntry(int itemId, string lotId, DateTime timestamp)
+    public void DeletedGoodsReceiptLotLogEntry(IEnumerable<GoodsReceiptLot> goodsReceiptLots)
     {
-        AddDomainEvent(new DeleteInventoryLogEntryDomainEvent(itemId, lotId, timestamp));
+        foreach (var lot in goodsReceiptLots)
+        {
+            AddDomainEvent(new DeleteInventoryLogEntryDomainEvent(lot.ItemId, lot.GoodsReceiptLotId, Timestamp));
+        }      
     }
 
     public void ModifyLogEntry(string newLotId, string oldLotId, int itemId, DateTime timestamp)

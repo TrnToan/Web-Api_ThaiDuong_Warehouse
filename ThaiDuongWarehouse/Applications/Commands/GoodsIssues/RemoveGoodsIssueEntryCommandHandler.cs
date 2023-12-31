@@ -106,7 +106,8 @@ public class RemoveGoodsIssueEntryCommandHandler : IRequestHandler<RemoveGoodsIs
     {
         foreach (var lot in goodsIssueEntry.Lots)
         {
-            var logEntry = await _inventoryLogEntryRepository.GetLogEntry(goodsIssueEntry.ItemId, lot.GoodsIssueLotId, goodsIssue.Timestamp);
+            var logEntry = await _inventoryLogEntryRepository.GetLogEntry(goodsIssueEntry.ItemId, lot.GoodsIssueLotId, 
+                goodsIssue.Timestamp);
             logEntries.Add(logEntry);
         }
         var orderedGoodsIssueLots = goodsIssueEntry.Lots

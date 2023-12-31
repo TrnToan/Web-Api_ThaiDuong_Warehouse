@@ -5,10 +5,14 @@ public class RemoveGoodsReceiptLotsCommandHandler : IRequestHandler<RemoveGoodsR
 {
     private readonly IGoodsReceiptRepository _goodsReceiptRepository;
     private readonly IGoodsIssueRepository _goodsIssueRepository;
-    public RemoveGoodsReceiptLotsCommandHandler(IGoodsReceiptRepository goodsReceiptRepository, IGoodsIssueRepository goodsIssueRepository)
+    private readonly IInventoryLogEntryRepository _inventoryLogEntryRepository;
+    public RemoveGoodsReceiptLotsCommandHandler(IGoodsReceiptRepository goodsReceiptRepository, 
+        IGoodsIssueRepository goodsIssueRepository,
+        IInventoryLogEntryRepository inventoryLogEntryRepository)
     {
         _goodsReceiptRepository = goodsReceiptRepository;
         _goodsIssueRepository = goodsIssueRepository;
+        _inventoryLogEntryRepository = inventoryLogEntryRepository;
     }
 
     public async Task<bool> Handle(RemoveGoodsReceiptLotsCommand request, CancellationToken cancellationToken)
@@ -20,6 +24,7 @@ public class RemoveGoodsReceiptLotsCommandHandler : IRequestHandler<RemoveGoodsR
         }
 
         var removedLots = new List<GoodsReceiptLot>();
+        var logEntries = new List<InventoryLogEntry>();
         // Duyệt từng mã lô trong danh sách lô cần xoá
         foreach (string lotId in request.GoodsReceiptLotIds)
         {
@@ -35,15 +40,26 @@ public class RemoveGoodsReceiptLotsCommandHandler : IRequestHandler<RemoveGoodsR
                 throw new ExportedItemLotException(isExportedLot.GoodsIssueLotId);
             }
 
+            var logEntry = await _inventoryLogEntryRepository.GetLogEntry(lot.ItemId, lotId, goodsReceipt.Timestamp);
+
+            logEntries.Add(logEntry);
             removedLots.Add(lot);
             goodsReceipt.RemoveLot(lot);    // Xoá lô khỏi lịch sử nhập
-            // InventoryLogEntry - DomainEvent
-            goodsReceipt.DeletedGoodsReceiptLotLogEntry(lot.ItemId, lotId, goodsReceipt.Timestamp);
         }
+
+        // InventoryLogEntry - DomainEvent
+        var orderedReceiptLots = OrderGoodsReceiptLots(removedLots, logEntries);
+        goodsReceipt.DeletedGoodsReceiptLotLogEntry(orderedReceiptLots);
 
         // Cập nhật lại phần tồn kho sau khi xoá lô - DomainEvent
         goodsReceipt.RemoveItemLotEntities(removedLots);
         _goodsReceiptRepository.Update(goodsReceipt);
         return await _goodsReceiptRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+    }
+
+    private IEnumerable<GoodsReceiptLot> OrderGoodsReceiptLots(List<GoodsReceiptLot> goodsReceiptLots, 
+        List<InventoryLogEntry> logEntries)
+    {
+        return goodsReceiptLots.OrderBy(lot => logEntries.Find(e => e.ItemLotId == lot.GoodsReceiptLotId)?.TrackingTime);
     }
 }
