@@ -42,14 +42,17 @@ public class RemoveGoodsIssueEntryCommandHandler : IRequestHandler<RemoveGoodsIs
             throw new EntityNotFoundException(nameof(GoodsIssueEntry), request.ItemId);
         }
 
-        var restoredItemLots = new List<ItemLot>();
-        var existingItemLots = new List<ItemLot>();
-        var logEntries = new List<InventoryLogEntry>();
+        if (goodsIssueEntry.Lots.Count > 0)
+        {
+            var restoredItemLots = new List<ItemLot>();
+            var existingItemLots = new List<ItemLot>();
+            var logEntries = new List<InventoryLogEntry>();
 
-        await ClassifyItemLots(goodsIssue, goodsIssueEntry.Lots, restoredItemLots, existingItemLots);
-        var orderedGoodsIssueLots = await OrderGoodsIssueLots(goodsIssue, goodsIssueEntry, logEntries);
-
-        goodsIssue.RestoreGoodsIssueLots(goodsIssueEntry, orderedGoodsIssueLots, restoredItemLots, existingItemLots);
+            await ClassifyItemLots(goodsIssue, goodsIssueEntry.Lots, restoredItemLots, existingItemLots);
+            var orderedGoodsIssueLots = await OrderGoodsIssueLots(goodsIssue, goodsIssueEntry, logEntries);
+            goodsIssue.RestoreGoodsIssueLots(goodsIssueEntry, orderedGoodsIssueLots, restoredItemLots, existingItemLots);
+        }   
+        
         goodsIssue.RemoveEntry(request.ItemId, request.Unit);
         _goodsIssueRepository.Update(goodsIssue);
         return await _goodsIssueRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);

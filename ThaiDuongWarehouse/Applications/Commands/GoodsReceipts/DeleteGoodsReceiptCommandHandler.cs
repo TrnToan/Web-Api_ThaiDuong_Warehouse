@@ -17,10 +17,7 @@ public class DeleteGoodsReceiptCommandHandler : IRequestHandler<DeleteGoodsRecei
             throw new EntityNotFoundException(nameof(GoodsReceipt), request.GoodsReceiptId);
         }
 
-        foreach (var lot in removedGoodsReceipt.Lots)
-        {
-            removedGoodsReceipt.DeletedGoodsReceiptLotLogEntry(lot.ItemId, lot.GoodsReceiptLotId, removedGoodsReceipt.Timestamp);
-        }
+        removedGoodsReceipt.DeletedGoodsReceiptLotLogEntry(removedGoodsReceipt.Lots);
         removedGoodsReceipt.RemoveItemLotEntities(removedGoodsReceipt.Lots);
 
         _goodsReceiptRepository.Remove(removedGoodsReceipt);

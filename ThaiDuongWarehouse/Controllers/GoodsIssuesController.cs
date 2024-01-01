@@ -134,4 +134,26 @@ public class GoodsIssuesController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
+    [HttpDelete]
+    [Route("{goodsIssueId}")]
+    public async Task<IActionResult> RemoveAsync(string goodsIssueId)
+    {
+        RemoveGoodsIssueCommand command = new RemoveGoodsIssueCommand(goodsIssueId);
+        try
+        {
+            var result = await _mediator.Send(command);
+
+            if (!result)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }
