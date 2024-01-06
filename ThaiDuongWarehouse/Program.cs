@@ -43,6 +43,8 @@ builder.Services.AddScoped<IFinishedProductReceiptRepository, FinishedProductRec
 builder.Services.AddScoped<IFinishedProductInventoryRepository, FinishedProductInventoryRepository>();
 builder.Services.AddScoped<IFinishedProductIssueRepository, FinishedProductIssueRepository>();
 builder.Services.AddScoped<IItemClassRepository, ItemClassRepository>();
+builder.Services.AddScoped<IIsolatedItemLotRepository, IsolatedItemLotRepository>();
+builder.Services.AddScoped<IItemLotLocationRepository, ItemLotLocationRepository>();
 
 builder.Services.AddScoped<IEmployeeQueries, EmployeeQueries>();
 builder.Services.AddScoped<IItemQueries, ItemQueries>();

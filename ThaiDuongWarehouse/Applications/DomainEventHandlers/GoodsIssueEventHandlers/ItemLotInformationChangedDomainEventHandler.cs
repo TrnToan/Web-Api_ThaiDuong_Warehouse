@@ -1,4 +1,4 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels;
+﻿using ThaiDuongWarehouse.Domain.AggregateModels.ItemLotLocationAggregate;
 using ThaiDuongWarehouse.Domain.DomainEvents.GoodsIssueEvents;
 
 namespace ThaiDuongWarehouse.Api.Applications.DomainEventHandlers.GoodsIssueEventHandlers;
@@ -36,7 +36,7 @@ public class ItemLotInformationChangedDomainEventHandler : INotificationHandler<
             }
 
             double locationQuantity = subItemLot.QuantityPerLocation - goodsIssueSublot.QuantityPerLocation;
-            ItemLotLocation? itemLotLocation = await _itemLotLocationRepository.GetById(subItemLot.ItemLotId, subItemLot.LocationId);
+            ItemLotLocation? itemLotLocation = await _itemLotLocationRepository.GetByIdAsync(subItemLot.ItemLotId, subItemLot.LocationId);
             if (itemLotLocation is null)
             {
                 throw new EntityNotFoundException($"SubItemLot not found, {goodsIssueSublot.LocationId} & {itemLot.LotId}");

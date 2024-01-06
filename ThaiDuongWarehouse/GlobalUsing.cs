@@ -43,3 +43,6 @@ global using ThaiDuongWarehouse.Api.Applications.ErrorNotifications;
 global using ThaiDuongWarehouse.Api.Applications.DomainEventHandlers.DataTransactionServices;
 global using ThaiDuongWarehouse.Domain.DomainEvents.GoodsIssueEvents;
 global using ThaiDuongWarehouse.Domain.DomainEvents.GoodsReceiptEvents;
+global using ThaiDuongWarehouse.Api.Applications.Commands.ItemLots;
+global using ThaiDuongWarehouse.Domain.AggregateModels.IsolatedItemLotAggregate;
+global using ThaiDuongWarehouse.Domain.AggregateModels.ItemLotLocationAggregate;

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Storage;
+using ThaiDuongWarehouse.Domain.AggregateModels.ItemLotLocationAggregate;
 using ThaiDuongWarehouse.Infrastructure.EntityConfigurations;
 
 namespace ThaiDuongWarehouse.Infrastructure;
@@ -15,6 +16,7 @@ public class WarehouseDbContext : DbContext, IUnitOfWork
     public DbSet<Item> Items { get; set; }
     public DbSet<ItemClass> ItemClasses { get; set; }
     public DbSet<ItemLot> ItemLots { get; set; }
+    public DbSet<IsolatedItemLot> IsolatedItemLots { get; set; }
     public DbSet<FinishedProductInventory> FinishedProductInventories { get; set; }
     public DbSet<Warehouse> Warehouses { get; set; }
     public DbSet<Location> Locations { get; set; }

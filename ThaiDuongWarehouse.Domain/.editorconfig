@@ -5,3 +5,6 @@ dotnet_diagnostic.CS8618.severity = none
 
 # IDE0055: Fix formatting
 dotnet_diagnostic.IDE0055.severity = none
+
+# S1125: Boolean literals should not be redundant
+dotnet_diagnostic.S1125.severity = silent

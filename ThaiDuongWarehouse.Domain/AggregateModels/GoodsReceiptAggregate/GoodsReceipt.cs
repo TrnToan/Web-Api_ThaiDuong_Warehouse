@@ -1,4 +1,5 @@
 ﻿using ThaiDuongWarehouse.Domain.AggregateModels.ItemAggregate;
+using ThaiDuongWarehouse.Domain.AggregateModels.ItemLotLocationAggregate;
 using ThaiDuongWarehouse.Domain.DomainEvents.GoodsReceiptEvents;
 
 namespace ThaiDuongWarehouse.Domain.AggregateModels.GoodsReceiptAggregate;

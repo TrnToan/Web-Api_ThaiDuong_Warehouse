@@ -1,4 +1,6 @@
-﻿namespace ThaiDuongWarehouse.Infrastructure.EntityConfigurations;
+﻿using ThaiDuongWarehouse.Domain.AggregateModels.ItemLotLocationAggregate;
+
+namespace ThaiDuongWarehouse.Infrastructure.EntityConfigurations;
 public class ItemLotLocationEntityTypeConfiguration : IEntityTypeConfiguration<ItemLotLocation>
 {
     public void Configure(EntityTypeBuilder<ItemLotLocation> builder)

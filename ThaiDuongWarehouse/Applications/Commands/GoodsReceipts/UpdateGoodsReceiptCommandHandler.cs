@@ -1,4 +1,4 @@
-﻿using ThaiDuongWarehouse.Domain.AggregateModels;
+﻿using ThaiDuongWarehouse.Domain.AggregateModels.ItemLotLocationAggregate;
 
 namespace ThaiDuongWarehouse.Api.Applications.Commands.GoodsReceipts;
 

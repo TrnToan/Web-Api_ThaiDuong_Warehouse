@@ -1,4 +1,6 @@
-﻿namespace ThaiDuongWarehouse.Domain.DomainEvents.GoodsReceiptEvents;
+﻿using ThaiDuongWarehouse.Domain.AggregateModels.ItemLotLocationAggregate;
+
+namespace ThaiDuongWarehouse.Domain.DomainEvents.GoodsReceiptEvents;
 public class UpdateItemLotDomainEvent : INotification
 {
     public string OldItemLotId { get; private set; }

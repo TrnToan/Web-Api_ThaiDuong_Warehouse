@@ -58,11 +58,7 @@ public class AddLotsToGoodsIssueCommandHandler : IRequestHandler<AddLotsToGoodsI
             if (itemLot is null)
             {
                 throw new EntityNotFoundException($"Itemlot with id {lotViewmodel.GoodsIssueLotId} doesn't exist.");
-            }
-            if (itemLot.IsIsolated)
-            {
-                throw new EntityNotFoundException($"Itemlot with id {lotViewmodel.GoodsIssueLotId} is isolated.");
-            }
+            }            
 
             double quantity = lotViewmodel.ItemLotLocations.Sum(sub => sub.QuantityPerLocation);
 

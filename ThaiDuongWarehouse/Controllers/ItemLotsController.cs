@@ -1,6 +1,4 @@
-﻿using ThaiDuongWarehouse.Api.Applications.Commands.ItemLots;
-
-namespace ThaiDuongWarehouse.Api.Controllers;
+﻿namespace ThaiDuongWarehouse.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -49,10 +47,10 @@ public class ItemLotsController : ControllerBase
     }
 
     [HttpPatch]
-	[Route("{itemLotId}")]
-	public async Task<IActionResult> UpdateItemLotStateAsync([FromRoute] string itemLotId, bool isIsolated)
+	[Route("{itemLotId}/Isolate")]
+	public async Task<IActionResult> UpdateItemLotStateAsync([FromRoute]string itemLotId, [FromBody]List<IsolatedItemSublotViewModel> isolatedItemSublots)
 	{
-		var command = new UpdateItemLotCommand(itemLotId, isIsolated);
+		var command = new IsolateItemLotCommand(itemLotId, isolatedItemSublots);
 		try
 		{
 			var result = await _mediator.Send(command);

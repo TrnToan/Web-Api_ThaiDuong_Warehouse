@@ -1,5 +1,5 @@
-﻿namespace ThaiDuongWarehouse.Domain.AggregateModels;
-public class ItemLotLocation
+﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.ItemLotLocationAggregate;
+public class ItemLotLocation : IAggregateRoot
 {
     public int ItemLotId { get; private set; }
     public int LocationId { get; private set; }

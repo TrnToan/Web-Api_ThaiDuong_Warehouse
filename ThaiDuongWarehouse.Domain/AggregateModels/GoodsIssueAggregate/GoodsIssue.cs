@@ -73,7 +73,7 @@ public class GoodsIssue : Entity, IAggregateRoot
             {
                 throw new WarehouseDomainException($"Invalid goodsIssueLot quantity, {goodsIssueLot.Quantity}");
             }
-            else if (goodsIssueLot.Quantity == itemLot.Quantity)
+            else if (goodsIssueLot.Quantity == itemLot.Quantity && itemLot.IsIsolated == false)
             {
                 removedLots.Add(itemLot);
             }

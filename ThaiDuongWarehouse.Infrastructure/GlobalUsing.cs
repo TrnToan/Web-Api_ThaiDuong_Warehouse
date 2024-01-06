@@ -24,6 +24,6 @@ global using ThaiDuongWarehouse.Domain.AggregateModels.FinishedProductReceiptAgg
 global using ThaiDuongWarehouse.Domain.AggregateModels.ProductInventoryAggregate;
 global using ChaWarehouseMicroservice.Infrastructure;
 global using ThaiDuongWarehouse.Domain.AggregateModels;
-
+global using ThaiDuongWarehouse.Domain.AggregateModels.IsolatedItemLotAggregate;
 
 

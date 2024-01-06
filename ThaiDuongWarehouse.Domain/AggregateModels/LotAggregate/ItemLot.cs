@@ -1,4 +1,8 @@
-﻿namespace ThaiDuongWarehouse.Domain.AggregateModels.LotAggregate;
+﻿using System.Linq;
+using ThaiDuongWarehouse.Domain.AggregateModels.ItemLotLocationAggregate;
+using ThaiDuongWarehouse.Domain.DomainEvents.ItemLotEvents;
+
+namespace ThaiDuongWarehouse.Domain.AggregateModels.LotAggregate;
 public class ItemLot : Entity, IAggregateRoot
 {
     public string LotId { get; private set; }   
@@ -54,9 +58,16 @@ public class ItemLot : Entity, IAggregateRoot
         if (expirationDate is not null)
             ExpirationDate = expirationDate;
     }
-    public void UpdateState(bool isIsolated)
+    public void Isolate(double isolatedQuantity)
     {
-        IsIsolated = isIsolated;
+        IsIsolated = true;
+        Quantity -= isolatedQuantity;
+        AddDomainEvent(new IsolateItemLotsDomainEvent(LotId, isolatedQuantity, ProductionDate, ExpirationDate, ItemId));
+    }
+
+    public void Unisolate() 
+    { 
+        IsIsolated = false; 
     }
 
     public void RemoveItemLotLocation (ItemLotLocation itemLotLocation)
